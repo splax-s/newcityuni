@@ -120,12 +120,12 @@ const contentMap = {
       <p>
         Discover sports at New City University. Visit{" "}
         <a
-          href="https://www.newcityuniversity.edu.ng/sports"
+          href="https://www.newcity.edu.ng/sports"
           target="_blank"
           rel="noopener noreferrer"
           className="text-black underline hover:text-[#61213C] hover:cursor-pointer"
         >
-          www.newcityuniversity.edu.ng/sports
+          www.newcity.edu.ng/sports
         </a>{" "}
         to learn more and join a team. Let’s make history together!
       </p>
@@ -239,7 +239,7 @@ const contentMap = {
         academic pressure. This support helps students thrive emotionally and
         academically, ensuring parents that their loved ones are cared for
         holistically in a nurturing environment. For more details or to book an
-        appointment, visit www.newcityuniversity.edu.ng/healthcentre.
+        appointment, visit www.newcity.edu.ng/healthcentre.
       </p>
       <br />
       <div className="relative w-full h-[300px]">
@@ -366,12 +366,12 @@ const contentMap = {
         children’s education remains uninterrupted in any circumstance. For more
         details on our ICT services,{" "}
         <a
-          href="https://www.newcityuniversity.edu.ng/ict"
+          href="https://www.newcity.edu.ng/ict"
           target="_blank"
           rel="noopener noreferrer"
           className="text-black underline hover:text-[#61213C] hover:cursor-pointer"
         >
-          www.newcityuniversity.edu.ng/ict
+          www.newcity.edu.ng/ict
         </a>{" "}
       </p>
       <br />
@@ -414,12 +414,12 @@ const contentMap = {
       <p>
         Click to visit the e-library Page at &apos;
         <a
-          href="https://www.newcityuniversity.edu.ng/"
+          href="https://www.newcity.edu.ng/"
           target="_blank"
           rel="noopener noreferrer"
           className="text-black underline hover:text-[#61213C] hover:cursor-pointer"
         >
-          www.newcityuniversity.edu.ng/
+          www.newcity.edu.ng/
         </a>{" "}
         &apos;
       </p>

@@ -123,7 +123,7 @@ export default function Career() {
                 <li>
                   <strong>Reasonable Adjustment: </strong>
                   If you need assistance during the application or interview
-                  process, contact recruitment@newcityuniversity.edu.ng.
+                  process, contact recruitment@newcity.edu.ng.
                 </li>
                 <li>
                   <strong>Technical Support: </strong>
