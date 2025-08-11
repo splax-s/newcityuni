@@ -8,12 +8,12 @@ import { usePathname } from "next/navigation";
 const navLinks = [
   { label: "Home", path: "/" },
   { label: "Academics", path: "/academics/FTundergraduate" },
-  { label: "Campus Life", path: "/campus/accomodation" },
+  { label: "Campus Life", path: "/campus" },
   { label: "Admissions", path: "/admissions/undergraduate" },
   { label: "News & Events", path: "/news" },
   { label: "Careers", path: "/career" },
   { label: "Portals", path: "/portals" },
-  { label: "About Us", path: "/about-us/history" },
+  { label: "About Us", path: "/about-us" },
 ];
 
 const Navbar: React.FC = () => {
