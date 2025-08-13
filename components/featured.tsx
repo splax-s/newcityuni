@@ -42,15 +42,18 @@ export default function Feature() {
           {[
             {
               mediaSrc: '/feature1.png',
-              title: 'Electrical Engineering',
+              title: 'Accounting',
+              description: 'Providing a robust academic and professional foundation in financial reporting, auditing, taxation, and accounting systems. The program is tailored to meet the standards of top accounting bodies and prepare students for national and international certifications.'
             },
             {
               mediaSrc: '/feature2.png',
-              title: 'Digital Marketing',
+              title: 'Computer Science',
+              description: 'Delivers a rigorous curriculum focused on algorithms, programming, software systems, and artificial intelligence. Students are trained to design and build innovative software solutions that address today’s technological challenges.'
             },
             {
               mediaSrc: '/feature3.png',
               title: 'Micro Biology',
+              description: 'Exploring the world of microorganisms and their effects on health, agriculture, and the environment. The program trains students in both industrial and medical microbiology through rigorous lab-based education.'
             },
           ].map((course, index) => (
             <div
@@ -61,7 +64,7 @@ export default function Feature() {
                 mediaSrc={course.mediaSrc}
                 mediaType="image"
                 title={course.title}
-                description="Learn all about our Computer Science programme, your vision for a degree in Computer Sciences."
+                description={course.description}
                 buttonText="Apply Now"
                 layout="left"
               />

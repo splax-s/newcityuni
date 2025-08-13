@@ -211,13 +211,13 @@ const contentMap = {
         <br /> <br /> We look forward to seeing your smiling faces during your
         daily campus life activities on our beautiful campus! <br /> <br />{" "}
         Sincerely yours, <br /> <br />
-        <strong>Mr. Akin M. Akingbesote </strong>
+        <strong>Prof. Ralph A. Akinfeleye, Ph.D, FNIPR, FNGE, FCIDS</strong>
         <br />
         Chancellor
       </p>
       <br />
       <Image
-        src="/team1.png"
+        src="/team3.jpeg"
         alt="chancellor"
         width={120}
         height={120}
@@ -271,14 +271,14 @@ const contentMap = {
         See you at the topmost top.
         <br />
         <br />
-        <strong>Prof. Ralph A. Akinfeleye, Ph.D, FNIPR, FNGE, FCIDS</strong>
+        <strong>Mr. Akin M. Akingbesote</strong>
         <br />
         <br />
         Pro-Chancellor and Chairman of Council
       </p>
       <br />
       <Image
-        src="/team3.png"
+        src="/team1.png"
         alt="prochancellor"
         width={120}
         height={120}
@@ -347,7 +347,7 @@ const contentMap = {
       </p>
       <br />
       <Image
-        src="/team3.png"
+        src="/team3.jpeg"
         alt="prochancellor"
         width={120}
         height={120}

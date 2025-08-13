@@ -25,7 +25,7 @@ const contentMap = {
       <br />
       <CategoryCard
         icon="/medlab.svg"
-        title="Basic Medical & Aplied Sciences"
+        title="Faculty of Basic Medical and Allied Sciences"
         items={[
           "Medical Laboratory Science",
           "Nursing",
@@ -36,13 +36,13 @@ const contentMap = {
       <br />
       <CategoryCard
         icon="/sms.svg"
-        title="Social & Management Sciences"
+        title="Faculty of Social and Management Sciences"
         items={["Accounting", "Economics", "Business Admin"]}
       />
       <br />
       <CategoryCard
         icon="/masscom.svg"
-        title="Communication & Media Studies"
+        title="Faculty of Communication & Media Studies"
         items={[
           "Mass Communication",
           "Public Relations",
@@ -55,7 +55,7 @@ const contentMap = {
       <br />
       <CategoryCard
         icon="/comp.svg"
-        title="Computer Science"
+        title="Faculty of Computing and Sciences"
         items={[
           "Computer Science",
           "Information Technology",
@@ -67,7 +67,7 @@ const contentMap = {
       <br />
       <CategoryCard
         icon="/law.svg"
-        title="Law"
+        title="Faculty of Law"
         items={[
           "Private & Property Law",
           "Public Law",
@@ -95,13 +95,13 @@ const contentMap = {
       <br />
       <CategoryCard
         icon="/sms.svg"
-        title="Social & Management Sciences"
+        title="Faculty of Social & Management Sciences"
         items={["Accounting", "Economics", "Business Admin"]}
       />
       <br />
       <CategoryCard
         icon="/masscom.svg"
-        title="Communication & Media Studies"
+        title="Faculty of Communication & Media Studies"
         items={[
           "Mass Communication",
           "Public Relations",
@@ -112,7 +112,7 @@ const contentMap = {
       <br />
       <CategoryCard
         icon="/comp.svg"
-        title="Computer Science"
+        title="Faculty of Computing and Sciences"
         items={["Computer Science", "Information Technology"]}
       />
       <br />

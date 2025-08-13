@@ -9,17 +9,17 @@ export default function AppBanner() {
       <div className="flex-col flex lg:flex-row space-y-[12px] lg:space-y-0 justify-between">
         <p className="flex gap-[10px] py-[10px] text-[16px]">
           <Image src="/globed.svg" alt="globe" width={24} height={24} />
-          adms.nuc.edu.edu.ng
+          admissions@newcity.edu.ng
         </p>
         <p className="flex gap-[10px] py-[10px] text-[16px]">
           {" "}
           <Image src="/letter.svg" alt="letter" width={24} height={24} />
-          info.adms@nuc.edu.ng
+          info@newcity.edu.ng
         </p>
         <p className="flex gap-[10px] py-[10px] text-[16px]">
           {" "}
           <Image src="/phone.svg" alt="phone" width={24} height={24} />
-          +234 810 2849 247
+          +234 708 5530 656
         </p>
       </div>
     </div>

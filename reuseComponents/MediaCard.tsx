@@ -51,7 +51,7 @@ const MediaCard: React.FC<MediaCardProps> = ({
     >
       <div>
         <h2 className="text-2xl font-bold mb-2 w-full">{title}</h2>
-        <p className="mb-[20px] text-[16px] text-gray-700 w-full">
+        <p className="mb-[20px] text-[14px] text-gray-700 w-full">
           {description}
         </p>
       </div>

@@ -1,4 +1,5 @@
 import TeamCard from "@/reuseComponents/TeamCard";
+import Link from "next/link";
 
 export default function Team() {
   return (
@@ -12,32 +13,32 @@ export default function Team() {
         {[
           {
             imageSrc: "/team1.png",
-            name: "Prof James",
-            position: "Vice Chancellor",
+            name: "Chief Akingbesote",
+            position: "Pro Chancellor",
             description:
               "A visionary leader committed to academic excellence and community development.",
           },
+          // {
+          //   imageSrc: "/team2.png",
+          //   name: "Prof Ralph Akinfeleye",
+          //   position: "Dean Faculty",
+          //   description:
+          //     "Passionate about innovative teaching methods and student engagement.",
+          // },
           {
-            imageSrc: "/team2.png",
-            name: "Prof. Sarah",
-            position: "Dean Faculty",
-            description:
-              "Passionate about innovative teaching methods and student engagement.",
-          },
-          {
-            imageSrc: "/team3.png",
-            name: "Dr. Michael",
-            position: "Head Research",
+            imageSrc: "/team3.jpeg",
+            name: "Prof Akinfeleye",
+            position: "Chancellor",
             description:
               "Driving research initiatives that impact local and global communities.",
           },
-          {
-            imageSrc: "/team4.png",
-            name: "Dr. Samuel",
-            position: "Chief Administrator",
-            description:
-              "Overseeing university operations and strategic planning for future growth.",
-          },
+          // {
+          //   imageSrc: "/team4.png",
+          //   name: "Dr. Samuel",
+          //   position: "Chief Administrator",
+          //   description:
+          //     "Overseeing university operations and strategic planning for future growth.",
+          // },
         ].map((member, index) => (
           <div key={index} className=" snap-start md:w-auto  w-[280px]">
             <TeamCard {...member} />
@@ -53,9 +54,11 @@ export default function Team() {
         <p className="font-[400] text-[14px] mb-2">
           Join our dynamic team and make a difference.
         </p>
+        <Link href="/career" className="cursor-pointer">
         <button className="border border-[#61213C] px-[24px] py-[12px] text-sm">
           Open Positions
         </button>
+        </Link>
       </div>
     </div>
   );

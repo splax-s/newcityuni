@@ -27,10 +27,10 @@ const Footer: React.FC = () => {
           </p>
           <h1 className="font-semibold text-base leading-6">Contact</h1>
           <Link href="/" className="font-normal text-sm leading-5 block">
-            help@newcity.com
+            help@newcity.edu.ng
           </Link>
           <Link href="/" className="font-normal text-sm leading-5 block mb-2">
-            admissions@newcity.com
+            admissions@newcity.edu.ng
           </Link>
 
           {/* Social Media Icons */}

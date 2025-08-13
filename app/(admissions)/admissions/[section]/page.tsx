@@ -110,7 +110,7 @@ const contentMap = {
             height={20}
             className="w-[24px]"
           />{" "}
-          registrar@newcity.com
+          registrar@newcity.edu.ng
         </p>
         <p className="flex  items-center gap-[16px]">
           <Image
@@ -120,7 +120,7 @@ const contentMap = {
             height={20}
             className="w-[24px]"
           />{" "}
-          +234 810 2849 247
+          +234 708 5530 656
         </p>
       </div>
       <br />
@@ -244,7 +244,7 @@ const contentMap = {
             height={20}
             className="w-[24px]"
           />{" "}
-          registrar@newcity.com
+          registrar@newcity.edu.ng
         </p>
         <p className="flex  items-center gap-[16px]">
           <Image
@@ -254,7 +254,7 @@ const contentMap = {
             height={20}
             className="w-[24px]"
           />{" "}
-          +234 810 2849 247
+          +234 708 5530 656
         </p>
       </div>
       <br />
