@@ -9,7 +9,7 @@ export default function Team() {
       </h1>
 
       {/* Carousel on Mobile, Flex on Desktop */}
-      <div className="flex md:gap-[20px] md:overflow-visible overflow-x-auto gap-4 snap-x snap-mandatory scroll-smooth  scrollbar-hide transition-all duration-300">
+      <div className="flex md:gap-[20px] md:overflow-visible overflow-x-auto gap-4 snap-x snap-mandatory scroll-smooth scrollbar-hide transition-all duration-300 touch-pan-x">
         {[
           {
             imageSrc: "/team1.png",
@@ -27,7 +27,7 @@ export default function Team() {
           //     "Passionate about innovative teaching methods and student engagement.",
           // },
           {
-            imageSrc: "/team3.jpeg",
+            imageSrc: "/team2.png",
             name: "Prof Akinfeleye",
             position: "Chancellor",
             description:
@@ -42,9 +42,13 @@ export default function Team() {
           //     "Overseeing university operations and strategic planning for future growth.",
           // },
         ].map((member, index) => (
-          <div key={index} className=" snap-start md:w-auto  w-[280px]">
+          <div key={index} className="snap-start md:w-auto w-[280px] flex-shrink-0">
             {member.link ? (
-              <Link href={member.link} className="block">
+              <Link 
+                href={member.link} 
+                className="block touch-manipulation active:opacity-70 transition-opacity duration-150"
+                style={{ touchAction: 'manipulation' }}
+              >
                 <TeamCard {...member} />
               </Link>
             ) : (

@@ -217,7 +217,7 @@ const contentMap = {
       </p>
       <br />
       <Image
-        src="/team3.jpeg"
+        src="/team2.png"
         alt="chancellor"
         width={120}
         height={120}
@@ -347,7 +347,7 @@ const contentMap = {
   //     </p>
   //     <br />
   //     <Image
-  //       src="/team3.jpeg"
+  //       src="/team2.png"
   //       alt="prochancellor"
   //       width={120}
   //       height={120}

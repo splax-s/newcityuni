@@ -17,14 +17,14 @@ const TeamCard: React.FC<TeamCardProps> = ({
   description,
 }) => {
   return (
-    <div className="flex flex-col text-left w-[280px] sm:w-auto rounded-md cursor-pointer hover:transform hover:scale-105 transition-all duration-300 group">
+    <div className="flex flex-col text-left w-[280px] sm:w-auto rounded-md cursor-pointer hover:transform hover:scale-105 transition-all duration-300 group touch-manipulation">
       {/* Circular Image with Border */}
       <div className="relative w-32 h-32 rounded-full border-4 border-[#61213C] overflow-hidden mb-4 group-hover:border-[#4a1930] transition-colors duration-300">
         <Image
           src={imageSrc}
           alt={name}
           fill
-          className="object-cover group-hover:scale-110 transition-transform duration-300"
+          className="object-cover transition-transform duration-300"
           sizes="128px"
           priority
         />
