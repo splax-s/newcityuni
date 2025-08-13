@@ -13,7 +13,7 @@ export default function Team() {
         {[
           {
             imageSrc: "/team1.png",
-            name: "Chief Akingbesote",
+            name: "Chief Akin Akingbesote",
             position: "Pro Chancellor",
             description:
               "A visionary leader committed to academic excellence and community development.",
