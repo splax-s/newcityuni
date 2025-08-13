@@ -11,8 +11,8 @@ const tabs = [
   { title: "Objectives", slug: "objectives" },
   { title: "Chancellor's Desk", slug: "chancellor" },
   { title: "Pro-Chancellor’s Pen", slug: "proChancellor" },
-  { title: "Vice-Chancellor’s Address", slug: "viceChancellor" },
-  { title: "Brand Story", slug: "brandstory" },
+  // { title: "Vice-Chancellor’s Address", slug: "viceChancellor" },
+  // { title: "Brand Story", slug: "brandstory" },
 ];
 
 export default function AboutTabs() {

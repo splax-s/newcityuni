@@ -286,82 +286,82 @@ const contentMap = {
       />
     </>
   ),
-  viceChancellor: (
-    <>
-      <p>
-        New City University (NCU) Information Handbook is a written guide,
-        carefully prepared and packaged, to serve as an indispensable compass
-        for all students as you navigate through this great intuition of
-        learning from the beginning of your sojourn at matriculation to the end
-        at convocation. New City University is a distinct God global-driven,
-        vision-propelled and value adding institution, committed to providing a
-        world class education to students from diverse in Nigeria and around the
-        globe. <br />
-        <br />
-        New City University was licensed in 2025 by the Federal Government of
-        Nigeria, with a clear, mandate of &apos;building a people of global
-        excellence&apos; through education of relevance. <br />
-        <br /> Our operations since conception and  inception clearly spotlight
-        the great potential we have as a University in attaining quite speedily,
-        the status of a world class University in view of the following
-        accomplishments among others: competent and highly committed staff,
-        hitch-free and flawless adherence to academic calendar approved by the
-        University Senate, <br />
-        <br /> This handbook is designed to educate you about the University and
-        its expectation from you as a stakeholder. It provides information on
-        some of the important places and people on campus, their functions and
-        other necessary details that will make your learning and living very
-        impactful and most productive. <br />
-        <br />
-        In this book, you will find information on Hall of Residence which are
-        under the governance of Hall Management Committee. The Halls are managed
-        by well-trained professionals who are saddled with the responsibilities
-        of their day-to-day running and administration. I assure you that New
-        City University is a home away - from home where every staff stands
-        in-loco parentis to every student. There is also information about the
-        Student Disciplinary Committee (SDC).
-        <br />
-        <br /> The SDC is a committee responsible for dealing with all forms of
-        misconduct by students, some of which are listed in this information
-        handbook. Our disciplinary posture as a University brings to the fore
-        the essential requirement of worthiness in character and learning for
-        any student to be awarded a degree at New City University. <br />
-        <br />
-        It is in view of the foregoing that I urge you to see this handbook as
-        an indispensable guide, the content of which should be read carefully
-        and thoroughly, from time to time, so as to ensure strict compliance
-        with the rules and regulations there-in contained. <br />
-        <br />I welcome you all to an exciting global adventure at New City
-        University, a unique place for making of champions of our generations.
-        It is my prayer that your great dreams and aspirations will find
-        fulfillment as you yield yourself totally to the limitless opportunities
-        and possibilities that abound in NCU. <br />
-        <br />
-        God bless you.
-        <br />
-        <br />
-        <strong> Prof. Ralph A. Akinfeleye, Ph.D, FNIPR, FNGE, FCIDS </strong>
-        <br />
-        <br />
-        Vice-Chancellor
-      </p>
-      <br />
-      <Image
-        src="/team3.jpeg"
-        alt="prochancellor"
-        width={120}
-        height={120}
-        className="w-[120px] h-[120px] rounded-full object-cover border-[#61213C] border-2"
-      />
-    </>
-  ),
-  brandstory: (
-    <>
-      <p className="text-[100px] text-center">
-        <strong>This is the Brand Story Page</strong>
-      </p>
-    </>
-  ),
+  // viceChancellor: (
+  //   <>
+  //     <p>
+  //       New City University (NCU) Information Handbook is a written guide,
+  //       carefully prepared and packaged, to serve as an indispensable compass
+  //       for all students as you navigate through this great intuition of
+  //       learning from the beginning of your sojourn at matriculation to the end
+  //       at convocation. New City University is a distinct God global-driven,
+  //       vision-propelled and value adding institution, committed to providing a
+  //       world class education to students from diverse in Nigeria and around the
+  //       globe. <br />
+  //       <br />
+  //       New City University was licensed in 2025 by the Federal Government of
+  //       Nigeria, with a clear, mandate of &apos;building a people of global
+  //       excellence&apos; through education of relevance. <br />
+  //       <br /> Our operations since conception and  inception clearly spotlight
+  //       the great potential we have as a University in attaining quite speedily,
+  //       the status of a world class University in view of the following
+  //       accomplishments among others: competent and highly committed staff,
+  //       hitch-free and flawless adherence to academic calendar approved by the
+  //       University Senate, <br />
+  //       <br /> This handbook is designed to educate you about the University and
+  //       its expectation from you as a stakeholder. It provides information on
+  //       some of the important places and people on campus, their functions and
+  //       other necessary details that will make your learning and living very
+  //       impactful and most productive. <br />
+  //       <br />
+  //       In this book, you will find information on Hall of Residence which are
+  //       under the governance of Hall Management Committee. The Halls are managed
+  //       by well-trained professionals who are saddled with the responsibilities
+  //       of their day-to-day running and administration. I assure you that New
+  //       City University is a home away - from home where every staff stands
+  //       in-loco parentis to every student. There is also information about the
+  //       Student Disciplinary Committee (SDC).
+  //       <br />
+  //       <br /> The SDC is a committee responsible for dealing with all forms of
+  //       misconduct by students, some of which are listed in this information
+  //       handbook. Our disciplinary posture as a University brings to the fore
+  //       the essential requirement of worthiness in character and learning for
+  //       any student to be awarded a degree at New City University. <br />
+  //       <br />
+  //       It is in view of the foregoing that I urge you to see this handbook as
+  //       an indispensable guide, the content of which should be read carefully
+  //       and thoroughly, from time to time, so as to ensure strict compliance
+  //       with the rules and regulations there-in contained. <br />
+  //       <br />I welcome you all to an exciting global adventure at New City
+  //       University, a unique place for making of champions of our generations.
+  //       It is my prayer that your great dreams and aspirations will find
+  //       fulfillment as you yield yourself totally to the limitless opportunities
+  //       and possibilities that abound in NCU. <br />
+  //       <br />
+  //       God bless you.
+  //       <br />
+  //       <br />
+  //       <strong> Prof. Ralph A. Akinfeleye, Ph.D, FNIPR, FNGE, FCIDS </strong>
+  //       <br />
+  //       <br />
+  //       Vice-Chancellor
+  //     </p>
+  //     <br />
+  //     <Image
+  //       src="/team3.jpeg"
+  //       alt="prochancellor"
+  //       width={120}
+  //       height={120}
+  //       className="w-[120px] h-[120px] rounded-full object-cover border-[#61213C] border-2"
+  //     />
+  //   </>
+  // ),
+  // brandstory: (
+  //   <>
+  //     <p className="text-[100px] text-center">
+  //       <strong>This is the Brand Story Page</strong>
+  //     </p>
+  //   </>
+  // ),
   // } as const;
 } satisfies Record<string, React.ReactNode>;
 
