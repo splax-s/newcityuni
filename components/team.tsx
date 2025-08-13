@@ -17,6 +17,7 @@ export default function Team() {
             position: "Pro Chancellor",
             description:
               "A visionary leader committed to academic excellence and community development.",
+            link: "/about-us/proChancellor",
           },
           // {
           //   imageSrc: "/team2.png",
@@ -31,6 +32,7 @@ export default function Team() {
             position: "Chancellor",
             description:
               "Driving research initiatives that impact local and global communities.",
+            link: "/about-us/chancellor",
           },
           // {
           //   imageSrc: "/team4.png",
@@ -41,7 +43,13 @@ export default function Team() {
           // },
         ].map((member, index) => (
           <div key={index} className=" snap-start md:w-auto  w-[280px]">
-            <TeamCard {...member} />
+            {member.link ? (
+              <Link href={member.link} className="block">
+                <TeamCard {...member} />
+              </Link>
+            ) : (
+              <TeamCard {...member} />
+            )}
           </div>
         ))}
       </div>
