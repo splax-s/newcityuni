@@ -271,7 +271,7 @@ const contentMap = {
         See you at the topmost top.
         <br />
         <br />
-        <strong>Mr. Akin M. Akingbesote</strong>
+        <strong>Chief. Akin M. Akingbesote</strong>
         <br />
         <br />
         Pro-Chancellor and Chairman of Council
