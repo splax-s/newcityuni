@@ -107,14 +107,22 @@ const Navbar: React.FC = () => {
       ) {
         return;
       }
-      setShowResults(false);
-      setSearchOpen(false);
+      
+      // Only close search results, not the mobile search container itself
+      if (showResults) {
+        setShowResults(false);
+      }
+      
+      // Only close desktop search dropdown, not mobile search
+      if (searchOpen && desktopSearchRef.current) {
+        setSearchOpen(false);
+      }
     };
 
     // use 'click' instead of 'mousedown' so navigation/clicks aren't pre-empted
     document.addEventListener("click", handleClickOutside);
     return () => document.removeEventListener("click", handleClickOutside);
-  }, []);
+  }, [showResults, searchOpen]);
 
   // Handle search submit
   const handleSearchSubmit = (e: React.FormEvent) => {
@@ -124,15 +132,28 @@ const Navbar: React.FC = () => {
 
   // Toggle search on mobile
   const toggleSearch = () => {
-    setSearchOpen(!searchOpen);
-    if (!searchOpen) {
-      setTimeout(() => inputRef.current?.focus(), 100);
+    const newSearchOpen = !searchOpen;
+    setSearchOpen(newSearchOpen);
+    
+    if (newSearchOpen) {
+      // Clear any existing search state when opening
+      setSearchQuery("");
+      setShowResults(false);
+      // Focus input after a small delay to ensure it's rendered
+      setTimeout(() => {
+        const input = document.querySelector('input[placeholder="Search university content..."]') as HTMLInputElement;
+        if (input) input.focus();
+      }, 100);
+    } else {
+      // Clean up when closing
+      setSearchQuery("");
+      setShowResults(false);
     }
   };
 
   return (
     <>
-      {(menuOpen || searchOpen) && (
+      {menuOpen && (
         <div
           onClick={(e) => {
             // Only close if clicking directly on the backdrop, not on child elements
@@ -290,7 +311,7 @@ const Navbar: React.FC = () => {
         </div>
 
         {searchOpen && (
-          <div className="lg:hidden bg-white border-b border-gray-200 p-4" ref={mobileSearchRef}>
+          <div className="lg:hidden bg-white border-b border-gray-200 p-4 relative z-50" ref={mobileSearchRef}>
             <form onSubmit={handleSearchSubmit}>
               <div className="flex items-center border border-gray-300 rounded-lg bg-gray-50">
                 <Image
@@ -301,7 +322,6 @@ const Navbar: React.FC = () => {
                   className="ml-3 w-[20px] h-[20px]"
                 />
                 <input
-                  ref={inputRef}
                   type="text"
                   placeholder="Search university content..."
                   value={searchQuery}
@@ -324,7 +344,7 @@ const Navbar: React.FC = () => {
             </form>
 
             {showResults && searchResults.length > 0 && (
-              <div className="mt-4 bg-white rounded-lg border border-gray-200 max-h-[300px] overflow-y-auto">
+              <div className="mt-4 bg-white rounded-lg border border-gray-200 max-h-[300px] overflow-y-auto relative z-50">
                 {searchResults.map((result, index) => (
                   <button
                     key={index}
