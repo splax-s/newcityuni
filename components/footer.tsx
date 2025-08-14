@@ -23,7 +23,7 @@ const Footer: React.FC = () => {
             />
           </div>
           <p className="mb-[24px]">
-            Km. 50, Lagos-Ibadan Expressway, Ayetoro, Ogun State, Nigeria
+            Km. 30, Lagos-Ibadan Expressway, Ayetoro, Ogun State, Nigeria
           </p>
           <h1 className="font-semibold text-base leading-6">Contact</h1>
           <Link href="/" className="font-normal text-sm leading-5 block">

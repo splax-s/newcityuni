@@ -20,7 +20,7 @@ const navLinks = [
 const searchData = [
     // Academic programs
   { title: "Undergraduate Programs", category: "Academics", path: "/academics/FTundergraduate", keywords: ["undergraduate", "bachelor", "degree", "studies"] },
-  { title: "Part-Time Programs", category: "Academics", path: "/academics/PTundergraduate", keywords: ["part-time", "evening", "working", "flexible"] },
+  // { title: "Part-Time Programs", category: "Academics", path: "/academics/PTundergraduate", keywords: ["part-time", "evening", "working", "flexible"] },
   { title: "Postgraduate Programs", category: "Academics", path: "/academics/PostGrad", keywords: ["master", "phd", "postgraduate", "msc", "ma", "doctorate"] },
   { title: "Foundation Programs", category: "Academics", path: "/academics/Foundation", keywords: ["foundation", "jupeb", "preparatory", "pre-degree"] },
   

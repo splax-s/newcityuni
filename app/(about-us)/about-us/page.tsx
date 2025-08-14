@@ -38,7 +38,7 @@ export default function About() {
               internationally aligned programmes across multiple disciplines:
             </p>
             <ul className="list-disc ml-6 space-y-1">
-              <li>Faculty of Basic Medical and Allied Sciences</li>
+              <li>Faculty of Basic Medical and Allied health Sciences</li>
               <li>Faculty of Communication and Media Studies</li>
               <li>Faculty of Computing and Sciences</li>
               <li>Faculty of Social and Management Sciences</li>

@@ -40,7 +40,7 @@ const courseData = [
     id: 4,
     title: "Medical Laboratory Science", 
     level: "Undergraduate", 
-    faculty: "Faculty of Basic Medical and Allied Sciences",
+    faculty: "Faculty of Basic Medical and Allied health Sciences",
     mode: "Full-Time",
     duration: "5 years",
     path: "/academics/FTundergraduate",
@@ -50,7 +50,7 @@ const courseData = [
     id: 5,
     title: "Nursing", 
     level: "Undergraduate", 
-    faculty: "Faculty of Basic Medical and Allied Sciences",
+    faculty: "Faculty of Basic Medical and Allied health Sciences",
     mode: "Full-Time",
     duration: "5 years",
     path: "/academics/FTundergraduate",
@@ -60,7 +60,7 @@ const courseData = [
     id: 6,
     title: "Physiotherapy", 
     level: "Undergraduate", 
-    faculty: "Faculty of Basic Medical and Allied Sciences",
+    faculty: "Faculty of Basic Medical and Allied health Sciences",
     mode: "Full-Time",
     duration: "5 years",
     path: "/academics/FTundergraduate",
@@ -128,36 +128,36 @@ const courseData = [
   },
   
   // Part-Time Undergraduate
-  { 
-    id: 13,
-    title: "Computer Science (Part-Time)", 
-    level: "Undergraduate", 
-    faculty: "Faculty of Computing and Sciences",
-    mode: "Part-Time",
-    duration: "5-6 years",
-    path: "/academics/PTundergraduate",
-    keywords: ["comp", "computer", "programming", "part-time", "evening", "working"]
-  },
-  { 
-    id: 14,
-    title: "Accounting (Part-Time)", 
-    level: "Undergraduate", 
-    faculty: "Faculty of Social and Management Sciences",
-    mode: "Part-Time",
-    duration: "5-6 years",
-    path: "/academics/PTundergraduate",
-    keywords: ["accounting", "part-time", "evening", "finance", "working"]
-  },
-  { 
-    id: 15,
-    title: "Mass Communication (Part-Time)", 
-    level: "Undergraduate", 
-    faculty: "Faculty of Communication & Media Studies",
-    mode: "Part-Time",
-    duration: "5-6 years",
-    path: "/academics/PTundergraduate",
-    keywords: ["communication", "media", "part-time", "evening", "journalism"]
-  },
+  // { 
+  //   id: 13,
+  //   title: "Computer Science (Part-Time)", 
+  //   level: "Undergraduate", 
+  //   faculty: "Faculty of Computing and Sciences",
+  //   mode: "Part-Time",
+  //   duration: "5-6 years",
+  //   path: "/academics/PTundergraduate",
+  //   keywords: ["comp", "computer", "programming", "part-time", "evening", "working"]
+  // },
+  // { 
+  //   id: 14,
+  //   title: "Accounting (Part-Time)", 
+  //   level: "Undergraduate", 
+  //   faculty: "Faculty of Social and Management Sciences",
+  //   mode: "Part-Time",
+  //   duration: "5-6 years",
+  //   path: "/academics/PTundergraduate",
+  //   keywords: ["accounting", "part-time", "evening", "finance", "working"]
+  // },
+  // { 
+  //   id: 15,
+  //   title: "Mass Communication (Part-Time)", 
+  //   level: "Undergraduate", 
+  //   faculty: "Faculty of Communication & Media Studies",
+  //   mode: "Part-Time",
+  //   duration: "5-6 years",
+  //   path: "/academics/PTundergraduate",
+  //   keywords: ["communication", "media", "part-time", "evening", "journalism"]
+  // },
 
   // Master's Programs
   { 

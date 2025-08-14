@@ -16,16 +16,15 @@ const contentMap = {
     <>
       <p>
         At New City University, a dynamic new institution in Nigeria, you can
-        pursue a part-time undergraduate degree tailored to your schedule,
-        exploring diverse disciplines across our five innovative faculties. With
-        9 undergraduate majors and programs, our flexible part-time offerings
-        allow you to combine courses that align with your passions, career
-        goals, and busy lifestyle, preparing you for global opportunities.
+        pursue an undergraduate degree exploring diverse disciplines across our 
+        five innovative faculties. With undergraduate majors and programs, our 
+        comprehensive offerings allow you to combine courses that align with your 
+        passions and career goals, preparing you for global opportunities.
       </p>
       <br />
       <CategoryCard
         icon="/medlab.svg"
-        title="Faculty of Basic Medical and Allied Sciences"
+        title="Faculty of Basic Medical and Allied health Sciences"
         items={[
           "Medical Laboratory Science",
           "Nursing",
@@ -81,46 +80,46 @@ const contentMap = {
       <Apply />
     </>
   ),
-  PTundergraduate: (
-    <>
-      <p>
-        At New City University, a dynamic new institution in Nigeria, you can
-        pursue a part-time undergraduate degree tailored to your schedule,
-        exploring diverse disciplines across our five innovative faculties. With
-        9 undergraduate majors and programs, our flexible part-time offerings
-        allow you to combine courses that align with your passions, career
-        goals, and busy lifestyle, preparing you for global opportunities.
-      </p>
-      <br />
-      <br />
-      <CategoryCard
-        icon="/sms.svg"
-        title="Faculty of Social & Management Sciences"
-        items={["Accounting", "Economics", "Business Admin"]}
-      />
-      <br />
-      <CategoryCard
-        icon="/masscom.svg"
-        title="Faculty of Communication & Media Studies"
-        items={[
-          "Mass Communication",
-          "Public Relations",
-          "Strategic Communication",
-          "Journalism",
-        ]}
-      />
-      <br />
-      <CategoryCard
-        icon="/comp.svg"
-        title="Faculty of Computing and Sciences"
-        items={["Computer Science", "Information Technology"]}
-      />
-      <br />
-      <AppBanner />
-      <br />
-      <Apply />
-    </>
-  ),
+  // PTundergraduate: (
+  //   <>
+  //     <p>
+  //       At New City University, a dynamic new institution in Nigeria, you can
+  //       pursue a part-time undergraduate degree tailored to your schedule,
+  //       exploring diverse disciplines across our five innovative faculties. With
+  //       undergraduate majors and programs, our flexible part-time offerings
+  //       allow you to combine courses that align with your passions, career
+  //       goals, and busy lifestyle, preparing you for global opportunities.
+  //     </p>
+  //     <br />
+  //     <br />
+  //     <CategoryCard
+  //       icon="/sms.svg"
+  //       title="Faculty of Social & Management Sciences"
+  //       items={["Accounting", "Economics", "Business Admin"]}
+  //     />
+  //     <br />
+  //     <CategoryCard
+  //       icon="/masscom.svg"
+  //       title="Faculty of Communication & Media Studies"
+  //       items={[
+  //         "Mass Communication",
+  //         "Public Relations",
+  //         "Strategic Communication",
+  //         "Journalism",
+  //       ]}
+  //     />
+  //     <br />
+  //     <CategoryCard
+  //       icon="/comp.svg"
+  //       title="Faculty of Computing and Sciences"
+  //       items={["Computer Science", "Information Technology"]}
+  //     />
+  //     <br />
+  //     <AppBanner />
+  //     <br />
+  //     <Apply />
+  //   </>
+  // ),
   PostGrad: (
     <>
       <p>
@@ -281,7 +280,7 @@ const contentMap = {
       <ol className="list-disc ml-8 space-y-2">
         <li>
           Candidates must obtain JAMB Direct Entry application form and choose
-          Redeemer’s University.
+          New City University.
         </li>
         <li>
           Candidates can only be offered admission into 200 level for courses
@@ -367,7 +366,7 @@ const contentMap = {
       <ol className="list-disc ml-8 space-y-2">
         <li>
           Candidates must obtain JAMB Direct Entry application form and choose
-          Redeemer’s University.
+          New City University.
         </li>
         <li>
           Candidates can only be offered admission into 200 level for courses
