@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import React, { useState, useEffect } from "react";
 
 const images = ["/landing.png", "/landing2.png", "/landing3.png"];
@@ -63,8 +64,8 @@ export default function Hero() {
         {/* Buttons container */}
         <div className="relative flex gap-3 ">
           {/* Apply Now */}
-          <button
-            onClick={() => setActiveIndex(0)}
+          <Link
+            href="/admissions"
             className="group bg-[#61213C] md:bg-[#61213C] flex justify-center items-center gap-2 w-full sm:w-[163px] h-[56px] rounded-[4px] hover:cursor-pointer hover:bg-white hover:text-[#61213C] transition-all duration-300"
           >
             <p>Apply Now</p>
@@ -82,7 +83,7 @@ export default function Hero() {
               height={20}
               className="w-[24px] h-[24px] hidden group-hover:block"
             />
-          </button>
+          </Link>
 
           {/* Learn More */}
           <button

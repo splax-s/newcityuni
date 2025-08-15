@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
 
 interface CompactMediaCardProps {
   mediaSrc: string;
@@ -35,10 +36,13 @@ const CompactMediaCard: React.FC<CompactMediaCardProps> = ({
           <h3 className="text-base font-semibold text-black">{title}</h3>
           <p className="text-sm text-gray-600 mt-1">{description}</p>
         </div>
-        <button className="mt-3 text-[#61213C] text-sm font-medium flex items-center gap-1 hover:underline">
+        <Link 
+          href={buttonText === "Apply Now" ? "/admissions" : "#"}
+          className="mt-3 text-[#61213C] text-sm font-medium flex items-center gap-1 hover:underline"
+        >
           {buttonText}
           <Image src="/arrowd.svg" alt="arrow" width={16} height={16} />
-        </button>
+        </Link>
       </div>
     </div>
   );

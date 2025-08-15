@@ -32,7 +32,7 @@ const searchData = [
   { title: "Faculty of Humanities", category: "Academics", path: "/academics/FTundergraduate", keywords: ["english", "literature", "languages", "humanities"] },
   
   // Admissions
-  { title: "Undergraduate Admissions", category: "Admissions", path: "/admissions/undergraduate", keywords: ["apply", "admission", "requirements", "application", "entry"] },
+  { title: "Undergraduate Admissions", category: "Admissions", path: "/admissions", keywords: ["apply", "admission", "requirements", "application", "entry"] },
   { title: "Postgraduate Admissions", category: "Admissions", path: "/admissions/PostGrad", keywords: ["masters", "phd", "graduate", "admission"] },
   
   // Campus Life
@@ -256,7 +256,7 @@ const Navbar: React.FC = () => {
                       <h5 className="text-xs font-semibold text-gray-600 mb-3 uppercase tracking-wide">Quick Links</h5>
                       <div className="space-y-2">
                         {[
-                          { label: 'Apply Now', path: '/admissions/undergraduate' },
+                          { label: 'Apply Now', path: '/admissions' },
                           { label: 'Academics', path: '/academics/FTundergraduate' },
                           { label: 'Career', path: '/career' },
                           { label: 'Student Portal', path: '/portals/student' },

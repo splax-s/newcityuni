@@ -11,7 +11,7 @@ const tabs = [
   { title: "Objectives", slug: "objectives" },
   { title: "Chancellor's Desk", slug: "chancellor" },
   { title: "Pro-Chancellor’s Pen", slug: "proChancellor" },
-  // { title: "Vice-Chancellor’s Address", slug: "viceChancellor" },
+  { title: "Chancellor’s Address", slug: "chancellor1" },
   // { title: "Brand Story", slug: "brandstory" },
 ];
 

@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 type LayoutType = "top" | "left" | "right" | "landscape";
@@ -55,10 +56,13 @@ const MediaCard: React.FC<MediaCardProps> = ({
           {description}
         </p>
       </div>
-      <button className="bg-white text-[#61213C] flex items-center py-2 rounded  transition-all duration-300 w-fit">
+      <Link 
+        href={buttonText === "Apply Now" ? "/admissions" : "#"}
+        className="bg-white text-[#61213C] flex items-center py-2 rounded  transition-all duration-300 w-fit hover:underline"
+      >
         {buttonText}
         <Image src="arrowd.svg" alt="arrow" width={20} height={20} />
-      </button>
+      </Link>
     </div>
   );
 

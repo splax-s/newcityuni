@@ -19,13 +19,14 @@ export default function Team() {
               "A visionary leader committed to academic excellence and community development.",
             link: "/about-us/proChancellor",
           },
-          // {
-          //   imageSrc: "/team2.png",
-          //   name: "Prof Ralph Akinfeleye",
-          //   position: "Dean Faculty",
-          //   description:
-          //     "Passionate about innovative teaching methods and student engagement.",
-          // },
+          {
+            imageSrc: "/team4.jpeg",
+            name: "Mrs Taiwo B. Akingbesote",
+            position: "Chancellor",
+            description:
+              "Passionate about innovative teaching methods and student engagement.",
+              link: "/about-us/chancellor1",
+          },
           {
             imageSrc: "/team2.png",
             name: "Prof Ralph Akinfeleye",

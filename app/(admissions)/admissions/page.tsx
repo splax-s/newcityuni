@@ -1,30 +1,378 @@
+"use client"
 import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
-import Breadcrumb from "@/reuseComponents/Breadcrumb";
-import TextImageBlock from "@/reuseComponents/TextImageBlock";
-import AdmissionsTab from "@/reuseComponents/AdmissionsTab";
+import { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
+import { programs } from "@/data/programs";
 
 export default function Admissions() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const [selectedLevel, setSelectedLevel] = useState("");
+  const [selectedDegreeType, setSelectedDegreeType] = useState("");
+  const [selectedArea, setSelectedArea] = useState("");
+  const [selectedMode, setSelectedMode] = useState("");
+  
+  // State for showing/hiding filter sections - Academic Level starts open
+  const [showAcademicLevel, setShowAcademicLevel] = useState(true);
+  const [showDegreeType, setShowDegreeType] = useState(false);
+  const [showAreasOfInterest, setShowAreasOfInterest] = useState(false);
+  const [showLectureMode, setShowLectureMode] = useState(false);
+  
+  // Mobile filter visibility state
+  const [showMobileFilters, setShowMobileFilters] = useState(false);
+
+  // Get unique values for filters
+  const uniqueDegreeTypes = [...new Set(programs.map(p => p.degreeType))];
+  const uniqueModes = [...new Set(programs.map(p => p.lectureMode))];
+
+  // Filter programs based on search and filters
+  const filteredPrograms = programs.filter(program => {
+    const matchesSearch = program.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         program.faculty.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                         program.department.toLowerCase().includes(searchQuery.toLowerCase());
+    const matchesLevel = !selectedLevel || program.level === selectedLevel;
+    const matchesDegreeType = !selectedDegreeType || program.degreeType === selectedDegreeType;
+    const matchesArea = !selectedArea || program.areaOfInterest === selectedArea;
+    const matchesMode = !selectedMode || program.lectureMode.includes(selectedMode);
+
+    return matchesSearch && matchesLevel && matchesDegreeType && matchesArea && matchesMode;
+  });
+
+  const clearFilters = () => {
+    setSearchQuery("");
+    setSelectedLevel("");
+    setSelectedDegreeType("");
+    setSelectedArea("");
+    setSelectedMode("");
+  };
+
   return (
     <>
       <Navbar />
-      <TextImageBlock
-        text="Admissions"
-        imageSrc="/admissions.png"
-        imageAlt="admissions view"
-      />
-      <Breadcrumb />
-      <div className="flex flex-col w-full   lg:py-[80px] gap-[40px] lg:gap-[88px] justify-center items-center">
-        <aside className="w-[50%] ">
-          <AdmissionsTab />
-        </aside>
-        <main className="w-[50%] text-black ">
-          <h2 className="text-xl font-bold ">Welcome to New City University</h2>
-          <p>
-            This is the Academics Page. Select a tab on the top to view details.
-          </p>
-        </main>
+      <div className="bg-[#61213C] text-white py-8 sm:py-16">
+        <div className="max-w-6xl mx-auto px-4">
+          <div className="flex items-center mb-4 text-xs sm:text-sm">
+            <span>Home</span>
+            <span className="mx-2">›</span>
+            <span>Admissions</span>
+            <span className="mx-2">›</span>
+            <span className="text-[#FFB800]">Programs & Eligibility</span>
+          </div>
+          <h1 className="text-2xl sm:text-4xl font-bold">Admissions</h1>
+        </div>
       </div>
+
+      <div className="max-w-6xl mx-auto px-4 py-8">
+        <div className="flex flex-col lg:flex-row gap-8">
+          {/* Mobile Filter Toggle Button */}
+          <div className="lg:hidden">
+            <button
+              onClick={() => setShowMobileFilters(!showMobileFilters)}
+              className="flex items-center gap-2 bg-[#E8EAEC] border border-gray-200 rounded-lg p-3 w-full"
+            >
+              <Image src="/filter.svg" alt="filter" width={20} height={20} />
+              <span className="text-gray-700 font-medium">Filters</span>
+              <span className="ml-auto text-gray-500">
+                {showMobileFilters ? '−' : '+'}
+              </span>
+            </button>
+          </div>
+
+          {/* Sidebar Filters */}
+          <div className={`w-full lg:max-w-[350px] lg:w-[350px] lg:flex-shrink-0 border border-gray-200 rounded-lg p-4 space-y-4 bg-[#FBFCFC] h-fit ${
+            showMobileFilters ? 'block' : 'hidden lg:block'
+          }`}>
+            {/* Search */}
+            <div className="mb-4">
+              <div className="relative">
+                <input
+                  type="text"
+                  placeholder="Search Programs/Courses, e.g Medicine..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg pr-10 text-gray-900 placeholder-gray-500"
+                />
+                <div className="absolute right-3 top-2.5">
+                  <Image src="/Mag.svg" alt="search" width={20} height={20} />
+                </div>
+              </div>
+            </div>
+
+            {/* Filters */}
+            <div className="space-y-4">
+              <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
+
+              {/* Academic Level */}
+              <div>
+                <button 
+                  onClick={() => setShowAcademicLevel(!showAcademicLevel)}
+                  className="w-full flex items-center justify-between font-medium mb-2 text-[#61213C] hover:bg-gray-50 p-2 rounded transition-colors"
+                >
+                  <div className="flex items-center">
+                    <span className={`w-4 h-4 rounded border-2 border-[#61213C] mr-2 flex items-center justify-center text-xs font-bold ${showAcademicLevel ? 'bg-[#61213C] text-white' : 'bg-white text-[#61213C]'}`}>
+                      {showAcademicLevel ? '−' : '+'}
+                    </span>
+                    Academic Level
+                  </div>
+                </button>
+                {showAcademicLevel && (
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    <button 
+                      onClick={() => setSelectedLevel(selectedLevel === "Graduate" ? "" : "Graduate")}
+                      className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                        selectedLevel === "Graduate" 
+                          ? "bg-[#61213C] text-white border-[#61213C]" 
+                          : "bg-white border-gray-300 text-gray-700 hover:border-[#61213C]"
+                      }`}
+                    >
+                      {selectedLevel === "Graduate" ? "− Graduate" : "+ Graduate"}
+                    </button>
+                    <button 
+                      onClick={() => setSelectedLevel(selectedLevel === "Undergraduate" ? "" : "Undergraduate")}
+                      className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                        selectedLevel === "Undergraduate" 
+                          ? "bg-[#61213C] text-white border-[#61213C]" 
+                          : "bg-white border-gray-300 text-gray-700 hover:border-[#61213C]"
+                      }`}
+                    >
+                      {selectedLevel === "Undergraduate" ? "− Undergraduate" : "+ Undergraduate"}
+                    </button>
+                  </div>
+                )}
+              </div>
+
+              {/* Degree Type */}
+              <div>
+                <button 
+                  onClick={() => setShowDegreeType(!showDegreeType)}
+                  className="w-full flex items-center justify-between font-medium mb-2 text-[#61213C] hover:bg-gray-50 p-2 rounded transition-colors"
+                >
+                  <div className="flex items-center">
+                    <span className={`w-4 h-4 rounded border-2 border-[#61213C] mr-2 flex items-center justify-center text-xs font-bold ${showDegreeType ? 'bg-[#61213C] text-white' : 'bg-white text-[#61213C]'}`}>
+                      {showDegreeType ? '−' : '+'}
+                    </span>
+                    Degree Type
+                  </div>
+                </button>
+                {showDegreeType && (
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {uniqueDegreeTypes.map((type) => (
+                      <button 
+                        key={type}
+                        onClick={() => setSelectedDegreeType(selectedDegreeType === type ? "" : type)}
+                        className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                          selectedDegreeType === type 
+                            ? "bg-[#61213C] text-white border-[#61213C]" 
+                            : "bg-white border-gray-300 text-gray-700 hover:border-[#61213C]"
+                        }`}
+                      >
+                        {selectedDegreeType === type ? `− ${type}` : `+ ${type}`}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+
+              {/* Areas of Interest */}
+              <div>
+                <button 
+                  onClick={() => setShowAreasOfInterest(!showAreasOfInterest)}
+                  className="w-full flex items-center justify-between font-medium mb-2 text-[#61213C] hover:bg-gray-50 p-2 rounded transition-colors"
+                >
+                  <div className="flex items-center">
+                    <span className={`w-4 h-4 rounded border-2 border-[#61213C] mr-2 flex items-center justify-center text-xs font-bold ${showAreasOfInterest ? 'bg-[#61213C] text-white' : 'bg-white text-[#61213C]'}`}>
+                      {showAreasOfInterest ? '−' : '+'}
+                    </span>
+                    Areas of Interest
+                  </div>
+                </button>
+                {showAreasOfInterest && (
+                  <div className="space-y-2 mb-2">
+                    <button 
+                      onClick={() => setSelectedArea(selectedArea === "Basic Medicine & Applied Sciences" ? "" : "Basic Medicine & Applied Sciences")}
+                      className={`block w-full text-left px-3 py-2 rounded-full text-sm border transition-colors ${
+                        selectedArea === "Basic Medicine & Applied Sciences" 
+                          ? "bg-[#61213C] text-white border-[#61213C]" 
+                          : "bg-white border-gray-300 text-gray-700 hover:border-[#61213C]"
+                      }`}
+                    >
+                      {selectedArea === "Basic Medicine & Applied Sciences" ? "− Basic Medicine & Applied Sciences" : "+ Basic Medicine & Applied Sciences"}
+                    </button>
+                    <div className="flex flex-wrap gap-2">
+                      <button 
+                        onClick={() => setSelectedArea(selectedArea === "Computing & Sciences" ? "" : "Computing & Sciences")}
+                        className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                          selectedArea === "Computing & Sciences" 
+                            ? "bg-[#61213C] text-white border-[#61213C]" 
+                            : "bg-white border-gray-300 text-gray-700 hover:border-[#61213C]"
+                        }`}
+                      >
+                        {selectedArea === "Computing & Sciences" ? "− Computing & Sciences" : "+ Computing & Sciences"}
+                      </button>
+                      <button 
+                        onClick={() => setSelectedArea(selectedArea === "Law" ? "" : "Law")}
+                        className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                          selectedArea === "Law" 
+                            ? "bg-[#61213C] text-white border-[#61213C]" 
+                            : "bg-white border-gray-300 text-gray-700 hover:border-[#61213C]"
+                        }`}
+                      >
+                        {selectedArea === "Law" ? "− Law" : "+ Law"}
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <button 
+                        onClick={() => setSelectedArea(selectedArea === "Social & Management" ? "" : "Social & Management")}
+                        className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                          selectedArea === "Social & Management" 
+                            ? "bg-[#61213C] text-white border-[#61213C]" 
+                            : "bg-white border-gray-300 text-gray-700 hover:border-[#61213C]"
+                        }`}
+                      >
+                        {selectedArea === "Social & Management" ? "− Social & Management" : "+ Social & Management"}
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2">
+                      <button 
+                        onClick={() => setSelectedArea(selectedArea === "Communication & Media Sciences" ? "" : "Communication & Media Sciences")}
+                        className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                          selectedArea === "Communication & Media Sciences" 
+                            ? "bg-[#61213C] text-white border-[#61213C]" 
+                            : "bg-white border-gray-300 text-gray-700 hover:border-[#61213C]"
+                        }`}
+                      >
+                        {selectedArea === "Communication & Media Sciences" ? "− Communication & Media Sciences" : "+ Communication & Media Sciences"}
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Lecture Delivery Mode */}
+              <div>
+                <button 
+                  onClick={() => setShowLectureMode(!showLectureMode)}
+                  className="w-full flex items-center justify-between font-medium mb-2 text-[#61213C] hover:bg-gray-50 p-2 rounded transition-colors"
+                >
+                  <div className="flex items-center">
+                    <span className={`w-4 h-4 rounded border-2 border-[#61213C] mr-2 flex items-center justify-center text-xs font-bold ${showLectureMode ? 'bg-[#61213C] text-white' : 'bg-white text-[#61213C]'}`}>
+                      {showLectureMode ? '−' : '+'}
+                    </span>
+                    Lecture Delivery Mode
+                  </div>
+                </button>
+                {showLectureMode && (
+                  <div className="flex flex-wrap gap-2 mb-2">
+                    {uniqueModes.slice(0, 6).map((mode) => (
+                      <button 
+                        key={mode}
+                        onClick={() => setSelectedMode(selectedMode === mode ? "" : mode)}
+                        className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                          selectedMode === mode 
+                            ? "bg-[#61213C] text-white border-[#61213C]" 
+                            : "bg-white border-gray-300 text-gray-700 hover:border-[#61213C]"
+                        }`}
+                      >
+                        {selectedMode === mode ? `− ${mode}` : `+ ${mode}`}
+                      </button>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div className="flex-1">
+            {filteredPrograms.length > 0 && (
+              <div className="mb-4 text-gray-600">
+                Showing {filteredPrograms.length} program{filteredPrograms.length !== 1 ? 's' : ''}
+              </div>
+            )}
+            
+            <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
+              {filteredPrograms.map((program) => (
+                <div key={program.id} className="border border-gray-200 rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-shadow">
+                  <div className="relative h-32 sm:h-48">
+                    <Image 
+                      src={program.image} 
+                      alt={program.title}
+                      fill
+                      className="object-cover"
+                    />
+                  </div>
+                  <div className="p-4 sm:p-6">
+                    <p className="text-xs sm:text-sm text-gray-600 mb-1">{program.faculty}</p>
+                    <p className="text-xs text-gray-500 mb-2">{program.department}</p>
+                    <h3 className="text-base sm:text-lg font-semibold mb-2 text-gray-900">{program.title}</h3>
+                    <p className="text-gray-600 text-xs sm:text-sm mb-3 line-clamp-2">{program.description}</p>
+                    
+                    <div className="mb-3">
+                      <p className="text-xs font-medium text-gray-700 mb-1">Key Features:</p>
+                      <ul className="text-xs text-gray-600 space-y-1">
+                        {program.keyFeatures?.slice(0, 2).map((feature, index) => (
+                          <li key={index} className="flex items-start">
+                            <span className="text-[#61213C] mr-1">•</span>
+                            {feature}
+                          </li>
+                        ))}
+                      </ul>
+                    </div>
+                    
+                    <div className="flex items-center gap-2 mb-4">
+                      {program.tags.map((tag, index) => (
+                        <span 
+                          key={index}
+                          className={`px-2 py-1 rounded text-xs ${
+                            index === 0 
+                              ? 'bg-purple-100 text-purple-700' 
+                              : 'bg-gray-100 text-gray-600'
+                          }`}
+                        >
+                          {tag}
+                        </span>
+                      ))}
+                      <span className="text-xs text-gray-500">
+                        {program.duration}
+                      </span>
+                    </div>
+
+                    <div className="flex flex-col sm:flex-row gap-2">
+                      <button className="flex-1 bg-[#61213C] text-white py-2 px-4 rounded hover:bg-[#724456] transition-colors text-xs sm:text-sm">
+                        Apply
+                      </button>
+                      <Link 
+                        href={`/admissions/courses/${program.id}`}
+                        className="flex-1 border border-gray-300 py-2 px-4 rounded hover:bg-gray-50 transition-colors text-xs sm:text-sm text-gray-700 text-center"
+                      >
+                        View Details
+                      </Link>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            {filteredPrograms.length === 0 && (
+              <div className="text-center py-12">
+                <div className="mb-4">
+                  <Image src="/Mag.svg" alt="No results" width={48} height={48} className="mx-auto opacity-50" />
+                </div>
+                <h3 className="text-lg font-medium text-gray-900 mb-2">No programs found</h3>
+                <p className="text-gray-500 mb-4">Try adjusting your search criteria or clearing filters.</p>
+                <button 
+                  onClick={clearFilters}
+                  className="bg-[#61213C] text-white px-4 py-2 rounded hover:bg-[#724456] transition-colors"
+                >
+                  Clear All Filters
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
       <Footer />
     </>
   );

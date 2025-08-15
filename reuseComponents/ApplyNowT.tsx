@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Applyy() {
   return (
@@ -19,7 +20,7 @@ export default function Applyy() {
         {/* <br/> */}
         <p>Visit the application portal to begin your journey</p>
         {/* <br/> */}
-        <button className="flex text-[#61213C] gap-[9px] items-center justify-start">
+        <Link href="/admissions" className="flex text-[#61213C] gap-[9px] items-center justify-start hover:underline">
           Apply Now
           <Image
             src="/arrowd.svg"
@@ -28,7 +29,7 @@ export default function Applyy() {
             height={20}
             className="w-[24px]"
           />
-        </button>
+        </Link>
       </div>
     </div>
   );
