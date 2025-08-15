@@ -13,7 +13,7 @@ export default function Team() {
         {[
           {
             imageSrc: "/team1.png",
-            name: "Chief Akin Akingbesote",
+            name: "Mr Akin Akingbesote",
             position: "Pro Chancellor",
             description:
               "A visionary leader committed to academic excellence and community development.",
@@ -28,7 +28,7 @@ export default function Team() {
           // },
           {
             imageSrc: "/team2.png",
-            name: "Prof Akinfeleye",
+            name: "Prof Ralph Akinfeleye",
             position: "Chancellor",
             description:
               "Driving research initiatives that impact local and global communities.",
