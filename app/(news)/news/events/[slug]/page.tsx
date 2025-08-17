@@ -5,13 +5,13 @@ import { eventsData } from "@/data/newsAndEvents";
 import Breadcrumb from "@/reuseComponents/Breadcrumb";
 
 interface EventDetailPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 export default async function EventDetailPage({ params }: EventDetailPageProps) {
-  const { slug } = params;
+  const { slug } = await params;
   
   // Find the event by slug
   const event = eventsData.find((item) => item.slug === slug);
@@ -198,7 +198,7 @@ export async function generateStaticParams() {
 
 // Generate metadata for SEO
 export async function generateMetadata({ params }: EventDetailPageProps) {
-  const { slug } = params;
+  const { slug } = await params;
   const event = eventsData.find((item) => item.slug === slug);
 
   if (!event) {
