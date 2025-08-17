@@ -31,9 +31,11 @@ const MediaCard: React.FC<MediaCardProps> = ({
   const media = (
     <div className={`w-full ${isHorizontal ? "md:w-1/2" : ""}`}>
       {mediaType === "image" ? (
-        <img
+        <Image
           src={mediaSrc}
           alt={title}
+          width={500}
+          height={300}
           className="w-full object-cover rounded-[4px]"
         />
       ) : (
