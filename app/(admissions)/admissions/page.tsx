@@ -556,12 +556,12 @@ export default function Admissions() {
                     </div>
 
                     <div className="flex flex-col sm:flex-row gap-2">
-                      <button className="flex-1 bg-[#61213C] text-white py-2 px-4 rounded hover:bg-[#724456] transition-colors text-xs sm:text-sm">
+                      <button className="flex-1 bg-[#61213C] text-white h-[44px] px-6 py-3 rounded-[4px] hover:bg-[#724456] transition-colors font-medium text-sm" style={{paddingTop: '12px', paddingBottom: '12px', paddingLeft: '24px', paddingRight: '24px'}}>
                         Apply
                       </button>
                       <Link 
                         href={`/admissions/courses/${program.slug}`}
-                        className="flex-1 border border-gray-300 py-2 px-4 rounded hover:bg-gray-50 transition-colors text-xs sm:text-sm text-gray-700 text-center"
+                        className="flex-1 border border-[#61213C] text-[#61213C] h-[44px] px-6 py-3 rounded-[4px] hover:bg-[#61213C] hover:text-white transition-colors font-medium text-sm flex items-center justify-center" style={{paddingTop: '12px', paddingBottom: '12px', paddingLeft: '24px', paddingRight: '24px'}}
                       >
                         View Details
                       </Link>
