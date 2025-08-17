@@ -3,19 +3,41 @@ import Footer from "@/components/footer";
 import Navbar from "@/components/navbar";
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { programs } from "@/data/programs";
 
 interface CourseDetailPageProps {
-  params: {
+  params: Promise<{
     id: string;
-  };
+  }>;
 }
 
 export default function CourseDetailPage({ params }: CourseDetailPageProps) {
   const [activeTab, setActiveTab] = useState("overview");
+  const [programId, setProgramId] = useState<string | null>(null);
   
-  const program = programs.find(p => p.id === parseInt(params.id));
+  useEffect(() => {
+    params.then((resolvedParams) => {
+      setProgramId(resolvedParams.id);
+    });
+  }, [params]);
+  
+  if (!programId) {
+    return (
+      <>
+        <Navbar />
+        <div className="min-h-screen flex items-center justify-center">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#61213C] mx-auto mb-4"></div>
+            <p>Loading...</p>
+          </div>
+        </div>
+        <Footer />
+      </>
+    );
+  }
+  
+  const program = programs.find(p => p.id === parseInt(programId));
   
   if (!program) {
     return (
