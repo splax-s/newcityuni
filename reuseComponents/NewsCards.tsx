@@ -2,6 +2,7 @@
 
 import Image, { StaticImageData } from "next/image";
 import React from "react";
+import Link from "next/link";
 
 interface NewsCardProps {
   image: string | StaticImageData;
@@ -9,6 +10,9 @@ interface NewsCardProps {
   subheader: string;
   date: string;
   category: string;
+  href?: string;
+  onClick?: () => void;
+  type?: 'news' | 'event';
 }
 
 export default function NewsCard({
@@ -17,6 +21,9 @@ export default function NewsCard({
   subheader,
   date,
   category,
+  href,
+  onClick,
+  type = 'news',
 }: NewsCardProps) {
   return (
     <div className="bg-white lg:w-[550px] flex flex-col justify-between">
@@ -58,9 +65,25 @@ export default function NewsCard({
         </div>
       </div>
       <div className="flex gap-2">
-        <button className="bg-[white]  text-[#61213C]   rounded  hover:text-[#ce5084] text-left transition-all">
-          Read Article
-        </button>
+        {type === 'news' && (
+          <>
+            {href ? (
+              <Link 
+                href={href}
+                className="bg-[white] text-[#61213C] rounded hover:text-[#ce5084] text-left transition-all"
+              >
+                Read Article
+              </Link>
+            ) : (
+              <button 
+                onClick={onClick}
+                className="bg-[white] text-[#61213C] rounded hover:text-[#ce5084] text-left transition-all"
+              >
+                Read Article
+              </button>
+            )}
+          </>
+        )}
       </div>
     </div>
   );
