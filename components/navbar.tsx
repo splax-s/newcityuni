@@ -46,6 +46,7 @@ const searchData = [
   // About & Leadership
   { title: "Chancellor", category: "About", path: "/about-us/chancellor", keywords: ["chancellor", "prof akinfeleye", "leadership"] },
   { title: "Pro Chancellor", category: "About", path: "/about-us/proChancellor", keywords: ["pro chancellor", "chief akingbesote", "chairman"] },
+  { title: "Member of B.O.T", category: "About", path: "/about-us/member-of-bot", keywords: ["member of bot", "board of trustees", "leadership"] },
   { title: "University History", category: "About", path: "/about-us/history", keywords: ["history", "founded", "establishment", "background"] },
   
   // News & Events

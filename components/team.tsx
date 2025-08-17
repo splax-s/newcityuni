@@ -22,10 +22,10 @@ export default function Team() {
           {
             imageSrc: "/team4.jpeg",
             name: "Mrs Taiwo B. Akingbesote",
-            position: "Chancellor",
+            position: "Member of B.O.T",
             description:
               "Passionate about innovative teaching methods and student engagement.",
-              link: "/about-us/chancellor1",
+              link: "/about-us/member-of-bot",
           },
           {
             imageSrc: "/team2.png",

@@ -286,7 +286,7 @@ const contentMap = {
       />
     </>
   ),
-  chancellor1: (
+  "member-of-bot": (
     <>
       <p>
         New City University (NCU) Information Handbook is a written guide,
@@ -343,7 +343,7 @@ const contentMap = {
         <strong> Mrs Taiwo B. Akingbesote </strong>
         <br />
         <br />
-        Chancellor
+        Member of B.O.T
       </p>
       <br />
       <Image
