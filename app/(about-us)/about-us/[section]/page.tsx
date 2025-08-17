@@ -194,7 +194,10 @@ const contentMap = {
         but care deeply about our neighbours, our environment, and each other,
         as well as no discrimination on account of gender, religion and social
         affiliations. This attitude of sensitivity and support affirms our
-        approach to daily campus life. <br /> <br />
+        approach to daily campus life.
+        Please note that we have instructed all our staff both academic and
+        non-academic to continue to play the role of in-loco parentis throughout
+        your studies in this University. <br /> <br />
         As part of our commitment in the promotion of pedagogical purity in
         higher education in Nigeria, we will provide adequate facilities for
         your general well-being including security, water, electricity, medical
@@ -211,13 +214,13 @@ const contentMap = {
         <br /> <br /> We look forward to seeing your smiling faces during your
         daily campus life activities on our beautiful campus! <br /> <br />{" "}
         Sincerely yours, <br /> <br />
-        <strong>Prof. Ralph A. Akinfeleye, Ph.D, FNIPR, FNGE, FCIDS</strong>
+        <strong>Chief. Akin M. Akingbesote</strong>
         <br />
         Chancellor
       </p>
       <br />
       <Image
-        src="/team2.png"
+        src="/team1.png"
         alt="chancellor"
         width={120}
         height={120}
@@ -271,14 +274,14 @@ const contentMap = {
         See you at the topmost top.
         <br />
         <br />
-        <strong>Chief. Akin M. Akingbesote</strong>
+        <strong>Prof. Ralph A. Akinfeleye, Ph.D, FNIPR, FNGE, FCIDS</strong>
         <br />
         <br />
         Pro-Chancellor and Chairman of Council
       </p>
       <br />
       <Image
-        src="/team1.png"
+        src="/team2.png"
         alt="prochancellor"
         width={120}
         height={120}
@@ -348,7 +351,7 @@ const contentMap = {
       <br />
       <Image
         src="/team4.jpeg"
-        alt="chancellor"
+        alt="member-of-bot"
         width={120}
         height={120}
         className="w-[120px] h-[120px] rounded-full object-cover border-[#61213C] border-2"
