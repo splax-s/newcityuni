@@ -65,25 +65,242 @@ export default function Admissions() {
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex flex-col lg:flex-row gap-8">
-          {/* Mobile Filter Toggle Button */}
+          {/* Mobile Filter Toggle Button & Search - Same style as career page */}
           <div className="lg:hidden">
-            <button
-              onClick={() => setShowMobileFilters(!showMobileFilters)}
-              className="flex items-center gap-2 bg-[#E8EAEC] border border-gray-200 rounded-lg p-3 w-full"
-            >
-              <Image src="/filter.svg" alt="filter" width={20} height={20} />
-              <span className="text-gray-700 font-medium">Filters</span>
-              <span className="ml-auto text-gray-500">
-                {showMobileFilters ? '−' : '+'}
-              </span>
-            </button>
+            <div className="flex gap-4 mb-4">
+              {/* Search input with icon */}
+              <div className="flex items-center rounded-[4px] border w-full border-[#919BA5] bg-[#F8F8F8] px-3">
+                <Image
+                  src="/mag2.svg"
+                  alt="Search"
+                  width={16}
+                  height={16}
+                  className="mr-2 w-[24px] h-[24px]"
+                />
+                <input
+                  type="text"
+                  placeholder="Search Programs/Courses, e.g Medicine..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="bg-transparent outline-none text-sm text-[#919BA5] w-full py-2"
+                />
+              </div>
+
+              {/* Filter button */}
+              <button
+                onClick={() => setShowMobileFilters(!showMobileFilters)}
+                className="bg-[#61213C] rounded-[4px] text-white px-4 flex items-center gap-2 text-sm hover:bg-[#4a1a2f] transition-colors"
+              >
+                <Image src="/filter.svg" alt="filter" width={16} height={16} className="w-[24px] h-[24px]" />
+              </button>
+            </div>
           </div>
 
-          {/* Sidebar Filters */}
-          <div className={`w-full lg:max-w-[350px] lg:w-[350px] lg:flex-shrink-0 border border-gray-200 rounded-lg p-4 space-y-4 bg-[#FBFCFC] h-fit ${
-            showMobileFilters ? 'block' : 'hidden lg:block'
-          }`}>
-            {/* Search */}
+          {/* Filter Panel for Mobile (same style as career page) */}
+          {showMobileFilters && (
+            <div className="lg:hidden bg-white border border-[#E5E7EB] rounded-[8px] p-6 mb-6 shadow-sm">
+              <div className="space-y-4">
+                <h3 className="text-lg font-semibold text-gray-900">Filters</h3>
+
+                {/* Academic Level */}
+                <div>
+                  <button 
+                    onClick={() => setShowAcademicLevel(!showAcademicLevel)}
+                    className="w-full flex items-center justify-between font-medium mb-2 text-[#61213C] hover:bg-gray-50 p-2 rounded transition-colors"
+                  >
+                    <div className="flex items-center">
+                      <span className={`w-4 h-4 rounded border-2 border-[#61213C] mr-2 flex items-center justify-center text-xs font-bold ${showAcademicLevel ? 'bg-[#61213C] text-white' : 'bg-white text-[#61213C]'}`}>
+                        {showAcademicLevel ? '−' : '+'}
+                      </span>
+                      Academic Level
+                    </div>
+                  </button>
+                  {showAcademicLevel && (
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      <button 
+                        onClick={() => setSelectedLevel(selectedLevel === "Graduate" ? "" : "Graduate")}
+                        className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                          selectedLevel === "Graduate" 
+                            ? "bg-[#61213C] text-white border-[#61213C]" 
+                            : "bg-white border-gray-300 text-gray-700 hover:border-[#61213C]"
+                        }`}
+                      >
+                        {selectedLevel === "Graduate" ? "− Graduate" : "+ Graduate"}
+                      </button>
+                      <button 
+                        onClick={() => setSelectedLevel(selectedLevel === "Undergraduate" ? "" : "Undergraduate")}
+                        className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                          selectedLevel === "Undergraduate" 
+                            ? "bg-[#61213C] text-white border-[#61213C]" 
+                            : "bg-white border-gray-300 text-gray-700 hover:border-[#61213C]"
+                        }`}
+                      >
+                        {selectedLevel === "Undergraduate" ? "− Undergraduate" : "+ Undergraduate"}
+                      </button>
+                    </div>
+                  )}
+                </div>
+
+                {/* Degree Type */}
+                <div>
+                  <button 
+                    onClick={() => setShowDegreeType(!showDegreeType)}
+                    className="w-full flex items-center justify-between font-medium mb-2 text-[#61213C] hover:bg-gray-50 p-2 rounded transition-colors"
+                  >
+                    <div className="flex items-center">
+                      <span className={`w-4 h-4 rounded border-2 border-[#61213C] mr-2 flex items-center justify-center text-xs font-bold ${showDegreeType ? 'bg-[#61213C] text-white' : 'bg-white text-[#61213C]'}`}>
+                        {showDegreeType ? '−' : '+'}
+                      </span>
+                      Degree Type
+                    </div>
+                  </button>
+                  {showDegreeType && (
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      {uniqueDegreeTypes.map((type) => (
+                        <button 
+                          key={type}
+                          onClick={() => setSelectedDegreeType(selectedDegreeType === type ? "" : type)}
+                          className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                            selectedDegreeType === type 
+                              ? "bg-[#61213C] text-white border-[#61213C]" 
+                              : "bg-white border-gray-300 text-gray-700 hover:border-[#61213C]"
+                          }`}
+                        >
+                          {selectedDegreeType === type ? `− ${type}` : `+ ${type}`}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+
+                {/* Areas of Interest */}
+                <div>
+                  <button 
+                    onClick={() => setShowAreasOfInterest(!showAreasOfInterest)}
+                    className="w-full flex items-center justify-between font-medium mb-2 text-[#61213C] hover:bg-gray-50 p-2 rounded transition-colors"
+                  >
+                    <div className="flex items-center">
+                      <span className={`w-4 h-4 rounded border-2 border-[#61213C] mr-2 flex items-center justify-center text-xs font-bold ${showAreasOfInterest ? 'bg-[#61213C] text-white' : 'bg-white text-[#61213C]'}`}>
+                        {showAreasOfInterest ? '−' : '+'}
+                      </span>
+                      Areas of Interest
+                    </div>
+                  </button>
+                  {showAreasOfInterest && (
+                    <div className="space-y-2 mb-2">
+                      <button 
+                        onClick={() => setSelectedArea(selectedArea === "Basic Medicine & Applied Sciences" ? "" : "Basic Medicine & Applied Sciences")}
+                        className={`block w-full text-left px-3 py-2 rounded-full text-sm border transition-colors ${
+                          selectedArea === "Basic Medicine & Applied Sciences" 
+                            ? "bg-[#61213C] text-white border-[#61213C]" 
+                            : "bg-white border-gray-300 text-gray-700 hover:border-[#61213C]"
+                        }`}
+                      >
+                        {selectedArea === "Basic Medicine & Applied Sciences" ? "− Basic Medicine & Applied Sciences" : "+ Basic Medicine & Applied Sciences"}
+                      </button>
+                      <div className="flex flex-wrap gap-2">
+                        <button 
+                          onClick={() => setSelectedArea(selectedArea === "Computing & Sciences" ? "" : "Computing & Sciences")}
+                          className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                            selectedArea === "Computing & Sciences" 
+                              ? "bg-[#61213C] text-white border-[#61213C]" 
+                              : "bg-white border-gray-300 text-gray-700 hover:border-[#61213C]"
+                          }`}
+                        >
+                          {selectedArea === "Computing & Sciences" ? "− Computing & Sciences" : "+ Computing & Sciences"}
+                        </button>
+                        <button 
+                          onClick={() => setSelectedArea(selectedArea === "Law" ? "" : "Law")}
+                          className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                            selectedArea === "Law" 
+                              ? "bg-[#61213C] text-white border-[#61213C]" 
+                              : "bg-white border-gray-300 text-gray-700 hover:border-[#61213C]"
+                          }`}
+                        >
+                          {selectedArea === "Law" ? "− Law" : "+ Law"}
+                        </button>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <button 
+                          onClick={() => setSelectedArea(selectedArea === "Social & Management" ? "" : "Social & Management")}
+                          className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                            selectedArea === "Social & Management" 
+                              ? "bg-[#61213C] text-white border-[#61213C]" 
+                              : "bg-white border-gray-300 text-gray-700 hover:border-[#61213C]"
+                          }`}
+                        >
+                          {selectedArea === "Social & Management" ? "− Social & Management" : "+ Social & Management"}
+                        </button>
+                      </div>
+                      <div className="flex flex-wrap gap-2">
+                        <button 
+                          onClick={() => setSelectedArea(selectedArea === "Communication & Media Sciences" ? "" : "Communication & Media Sciences")}
+                          className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                            selectedArea === "Communication & Media Sciences" 
+                              ? "bg-[#61213C] text-white border-[#61213C]" 
+                              : "bg-white border-gray-300 text-gray-700 hover:border-[#61213C]"
+                          }`}
+                        >
+                          {selectedArea === "Communication & Media Sciences" ? "− Communication & Media Sciences" : "+ Communication & Media Sciences"}
+                        </button>
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                {/* Lecture Delivery Mode */}
+                <div>
+                  <button 
+                    onClick={() => setShowLectureMode(!showLectureMode)}
+                    className="w-full flex items-center justify-between font-medium mb-2 text-[#61213C] hover:bg-gray-50 p-2 rounded transition-colors"
+                  >
+                    <div className="flex items-center">
+                      <span className={`w-4 h-4 rounded border-2 border-[#61213C] mr-2 flex items-center justify-center text-xs font-bold ${showLectureMode ? 'bg-[#61213C] text-white' : 'bg-white text-[#61213C]'}`}>
+                        {showLectureMode ? '−' : '+'}
+                      </span>
+                      Lecture Delivery Mode
+                    </div>
+                  </button>
+                  {showLectureMode && (
+                    <div className="flex flex-wrap gap-2 mb-2">
+                      {uniqueModes.slice(0, 6).map((mode) => (
+                        <button 
+                          key={mode}
+                          onClick={() => setSelectedMode(selectedMode === mode ? "" : mode)}
+                          className={`px-3 py-1 rounded-full text-sm border transition-colors ${
+                            selectedMode === mode 
+                              ? "bg-[#61213C] text-white border-[#61213C]" 
+                              : "bg-white border-gray-300 text-gray-700 hover:border-[#61213C]"
+                          }`}
+                        >
+                          {selectedMode === mode ? `− ${mode}` : `+ ${mode}`}
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              </div>
+              
+              <div className="flex gap-3 mt-6">
+                <button
+                  onClick={clearFilters}
+                  className="px-4 py-2 border border-[#919BA5] text-[#919BA5] rounded-[4px] text-sm hover:bg-gray-50 transition-colors"
+                >
+                  Clear Filters
+                </button>
+                <button
+                  onClick={() => setShowMobileFilters(false)}
+                  className="px-4 py-2 bg-[#61213C] text-white rounded-[4px] text-sm hover:bg-[#4a1a2f] transition-colors"
+                >
+                  Apply Filters
+                </button>
+              </div>
+            </div>
+          )}
+
+          {/* Desktop Sidebar Filters */}
+          <div className={`hidden lg:block w-full lg:max-w-[350px] lg:w-[350px] lg:flex-shrink-0 border border-gray-200 rounded-lg p-4 space-y-4 bg-[#FBFCFC] h-fit`}>
+            {/* Search - Desktop Only */}
             <div className="mb-4">
               <div className="relative">
                 <input
@@ -343,7 +560,7 @@ export default function Admissions() {
                         Apply
                       </button>
                       <Link 
-                        href={`/admissions/courses/${program.id}`}
+                        href={`/admissions/courses/${program.slug}`}
                         className="flex-1 border border-gray-300 py-2 px-4 rounded hover:bg-gray-50 transition-colors text-xs sm:text-sm text-gray-700 text-center"
                       >
                         View Details

@@ -3,6 +3,7 @@ export const programs = [
   // Faculty of Basic Medical and Allied Sciences
   {
     id: 1,
+    slug: "bachelor-of-nursing-science",
     title: "Bachelor of Nursing Science (B.NSc)",
     faculty: "Faculty of Basic Medical and Allied Sciences",
     department: "Department of Nursing Science",
@@ -48,6 +49,7 @@ export const programs = [
   },
   {
     id: 2,
+    slug: "bachelor-of-medical-laboratory-science",
     title: "Bachelor of Medical Laboratory Science (BMLS)",
     faculty: "Faculty of Basic Medical and Allied Sciences", 
     department: "Department of Medical Laboratory Science",
@@ -93,6 +95,7 @@ export const programs = [
   },
   {
     id: 3,
+    slug: "doctor-of-physiotherapy",
     title: "Doctor of Physiotherapy (DPT)",
     faculty: "Faculty of Basic Medical and Allied Sciences",
     department: "Department of Physiotherapy", 
@@ -138,6 +141,7 @@ export const programs = [
   },
   {
     id: 4,
+    slug: "bachelor-of-science-in-public-health",
     title: "Bachelor of Science in Public Health (BSc PH)",
     faculty: "Faculty of Basic Medical and Allied Sciences",
     department: "Department of Public Health",
@@ -185,6 +189,7 @@ export const programs = [
   // Faculty of Social and Management Sciences
   {
     id: 5,
+    slug: "bachelor-of-science-in-accounting-bsc-accounting",
     title: "Bachelor of Science in Accounting (B.Sc. Accounting)",
     faculty: "Faculty of Social and Management Sciences",
     department: "Department of Accounting",
@@ -230,6 +235,7 @@ export const programs = [
   },
   {
     id: 6,
+    slug: "bachelor-of-science-in-economics-bsc-economics",
     title: "Bachelor of Science in Economics (B.Sc. Economics)",
     faculty: "Faculty of Social and Management Sciences",
     department: "Department of Economics",
@@ -275,6 +281,7 @@ export const programs = [
   },
   {
     id: 7,
+    slug: "bachelor-of-science-in-business-administration",
     title: "Bachelor of Science in Business Administration",
     faculty: "Faculty of Social and Management Sciences",
     department: "Department of Business Administration",
@@ -322,6 +329,7 @@ export const programs = [
   // Faculty of Computing and Sciences
   {
     id: 8,
+    slug: "bachelor-of-science-in-computer-science",
     title: "Bachelor of Science in Computer Science",
     faculty: "Faculty of Computing and Sciences",
     department: "Department of Computer Science",
@@ -367,6 +375,7 @@ export const programs = [
   },
   {
     id: 9,
+    slug: "bachelor-of-science-in-information-technology",
     title: "Bachelor of Science in Information Technology",
     faculty: "Faculty of Computing and Sciences",
     department: "Department of Information Technology",
@@ -412,6 +421,7 @@ export const programs = [
   },
   {
     id: 10,
+    slug: "bachelor-of-science-in-cyber-security",
     title: "Bachelor of Science in Cyber Security",
     faculty: "Faculty of Computing and Sciences",
     department: "Department of Cyber Security",
@@ -457,6 +467,7 @@ export const programs = [
   },
   {
     id: 11,
+    slug: "bachelor-of-science-in-microbiology",
     title: "Bachelor of Science in Microbiology",
     faculty: "Faculty of Computing and Sciences", 
     department: "Department of Microbiology",
@@ -502,6 +513,7 @@ export const programs = [
   },
   {
     id: 12,
+    slug: "bachelor-of-science-in-biochemistry",
     title: "Bachelor of Science in Biochemistry",
     faculty: "Faculty of Computing and Sciences",
     department: "Department of Biochemistry", 
@@ -549,6 +561,7 @@ export const programs = [
   // Faculty of Communication and Media Studies  
   {
     id: 13,
+    slug: "bachelor-of-science-in-journalism",
     title: "Bachelor of Science in Journalism",
     faculty: "Faculty of Communication and Media Studies",
     department: "Department of Journalism",
@@ -594,6 +607,7 @@ export const programs = [
   },
   {
     id: 14,
+    slug: "bachelor-of-science-in-advertising",
     title: "Bachelor of Science in Advertising",
     faculty: "Faculty of Communication and Media Studies",
     department: "Department of Advertising",
@@ -639,6 +653,7 @@ export const programs = [
   },
   {
     id: 15,
+    slug: "bachelor-of-science-in-broadcasting",
     title: "Bachelor of Science in Broadcasting",
     faculty: "Faculty of Communication and Media Studies",
     department: "Department of Broadcasting",
@@ -684,6 +699,7 @@ export const programs = [
   },
   {
     id: 16,
+    slug: "bachelor-of-science-in-public-relations",
     title: "Bachelor of Science in Public Relations",
     faculty: "Faculty of Communication and Media Studies",
     department: "Department of Public Relations",
