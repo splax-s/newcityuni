@@ -214,7 +214,7 @@ const contentMap = {
         <br /> <br /> We look forward to seeing your smiling faces during your
         daily campus life activities on our beautiful campus! <br /> <br />{" "}
         Sincerely yours, <br /> <br />
-        <strong>Mr. Akin M. Akingbesote</strong>
+        <strong>Mr. Akin Akingbesote</strong>
         <br />
         Chancellor
       </p>
