@@ -5,7 +5,7 @@ import { usePathname, useRouter } from "next/navigation";
 const tabs = [
   { title: "Full Time Undergraduate Programmes", slug: "FTundergraduate" },
   // { title: "Part-Time Undergraduate Progeammes", slug: "PTundergraduate" },
-  { title: "Post-Graduate Programmes", slug: "PostGrad" },
+  // { title: "Post-Graduate Programmes", slug: "PostGrad" },
   { title: "Foundation/JUPEB", slug: "Foundation" },
 ];
 

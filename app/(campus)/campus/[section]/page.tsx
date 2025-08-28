@@ -12,64 +12,96 @@ import CampusTabs from "@/reuseComponents/CampusTabs";
 import Apply from "@/reuseComponents/ApplyNow";
 
 const contentMap = {
+  "campus-life": (
+    <>
+      <h2 className="text-2xl font-bold text-black mb-4">Campus Life at New City University</h2>
+      <p className="text-black mb-4">
+        At New City University, campus life isn&apos;t just an add-on — it&apos;s the heartbeat of our vibrant community, designed to enrich every facet of your student journey. We are committed to creating an environment where your well-being, social connections, and personal growth are paramount.
+      </p>
+      <br />
+      
+      <h3 className="text-lg font-bold text-black mb-2">Accommodation</h3>
+      <p className="text-black mb-2">
+        Imagine stepping into a living space that feels like home yet opens up a world of possibilities. Our modern and secure student hostel is fully equipped with essential amenities for your comfort and convenience.
+      </p>
+      <p className="text-black mb-4">
+        But it&apos;s more than just a room — our dedicated Residence Life team fosters a thriving community through engaging events and constant support. With housing located just steps from classes and campus activities, you gain more time to learn, explore, and connect.
+      </p>
+      
+      <h3 className="text-lg font-bold text-black mb-2">Campus Cafeteria</h3>
+      <p className="text-black mb-2">
+        The campus cafeteria is more than a dining space — it&apos;s a social hub where healthy, delicious, and affordable meals meet warm conversation. Our diverse menu caters to every taste, providing nourishment for both your body and your relationships.
+      </p>
+      <p className="text-black mb-4">
+        It&apos;s the perfect spot to relax, chat with friends, and feel part of the NCU family.
+      </p>
+      
+      <h3 className="text-lg font-bold text-black mb-2">Sports and Recreation</h3>
+      <p className="text-black mb-2">
+        We believe that a healthy body fuels a healthy mind. Our state-of-the-art facilities cater to both competitive and recreational sports.
+      </p>
+      <ul className="list-disc space-y-1 pl-6 text-black mb-2">
+        <li>Competitive sports programs</li>
+        <li>Fitness classes for all levels</li>
+        <li>Recreational activities and student clubs</li>
+      </ul>
+      <p className="text-black mb-4">
+        At NCU, sports are not just about fitness — they&apos;re about teamwork, camaraderie, and balance.
+      </p>
+      
+      <h3 className="text-lg font-bold text-black mb-2">Health Services</h3>
+      <p className="text-black mb-2">
+        Your well-being is our priority. The Health and Wellness Centre offers:
+      </p>
+      <ul className="list-disc space-y-1 pl-6 text-black mb-2">
+        <li>Confidential primary care</li>
+        <li>Expert consultations</li>
+        <li>Preventative health education</li>
+      </ul>
+      <p className="text-black mb-4">
+        For specialized needs, we provide seamless referrals to trusted off-campus specialists, so you can focus on your studies knowing your health is in good hands.
+      </p>
+      
+      <h3 className="text-lg font-bold text-black mb-2">Campus Safety</h3>
+      <p className="text-black mb-2">
+        Safety is the foundation of a thriving campus. Our 24/7 Campus Safety Department ensures a secure environment through:
+      </p>
+      <ul className="list-disc space-y-1 pl-6 text-black mb-2">
+        <li>Round-the-clock patrols by trained personnel</li>
+        <li>Extensive CCTV surveillance</li>
+        <li>Crime prevention education</li>
+      </ul>
+      <p className="text-black mb-6">
+        We nurture a culture of collective responsibility so New City University remains a safe and welcoming sanctuary for everyone.
+      </p>
+      
+      <div className="relative w-full h-[300px]">
+        <Image
+          src="/campus.png"
+          alt="Campus Life"
+          fill
+          style={{ objectFit: "cover" }}
+        />
+      </div>
+      <br />
+      <Apply />
+    </>
+  ),
   accomodation: (
     <>
-      <p>
-        NUC accommodations offer some of the finest on-campus accommodations
-        among private universities in Nigeria, designed to provide a comfortable
-        and secure living experience for all students. Each room is thoughtfully
-        designed to house three students, featuring ensuite facilities for
-        privacy and convenience.
+      <h1 className="text-2xl font-bold mb-4">Student Housing</h1>
+      <p className="text-black mb-4">
+        Imagine stepping into a living space that feels like home yet opens up a world of possibilities. Our modern and secure student housing is fully equipped with essential amenities for your comfort and convenience.
       </p>
-      <br />
-      <p>
-        Our halls are supported by dedicated porters and 24/7 security officers
-        to ensure the safety of students’ lives and property, creating a
-        nurturing environment where you can focus on your studies and personal
-        growth. With Nigeria hosting over 100,000 international students
-        annually due to affordable education, New City’s accommodations are
-        designed to cater to a global student body while maintaining a strong
-        sense of community
+      <p className="text-black mb-6">
+        But it&apos;s more than just a room — our dedicated Residence Life team fosters a thriving community through engaging events and constant support. With housing located just steps from classes and campus activities, you gain more time to learn, explore, and connect.
       </p>
-      <br />
-      <h1>
-        <strong>Our Halls of Residence</strong>
-      </h1>
-      <p>
-        Inspired by global and African icons of knowledge, leadership, and
-        innovation, our halls reflect New City University’s commitment to
-        fostering a culturally rich and aspirational environment. We offer eight
-        halls, split evenly between female and male students:
-      </p>
-      <br />
-      <h1>
-        <strong>Female Halls</strong>
-      </h1>
-      <br />
-      <ol className="list-disc space-y-1 pl-12 text-justify">
-        <li>Aminatu Laila Hall</li>
-        <li>Chimamanda Adichie Hal</li>
-        <li>Fatima Al-Fihri Hall</li>
-        <li>Wangari Maathai Hall</li>
-      </ol>
-      <br />
-      <h1>
-        <strong>Male Halls</strong>
-      </h1>
-      <br />
-      <ol className="list-disc space-y-1 pl-12 text-justify">
-        <li>Aminatu Laila Hall</li>
-        <li>Chimamanda Adichie Hal</li>
-        <li>Fatima Al-Fihri Hall</li>
-        <li>Wangari Maathai Hall</li>
-      </ol>
-      <br />
       <div className="relative w-full h-[300px]">
         <Image
           src="/hostel.png"
-          alt="history"
+          alt="Student Housing"
           fill
-          style={{ objectFit: "cover" }} // or 'contain' depending on your needs
+          style={{ objectFit: "cover" }}
         />
       </div>
       <br />

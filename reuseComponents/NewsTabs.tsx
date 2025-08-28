@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 
 const tabs = [
+  { title: "News & Events", slug: "news-events" },
   { title: "News", slug: "news" },
   { title: "Events", slug: "events" },
 ];
@@ -10,7 +11,7 @@ const tabs = [
 export default function NewsTabs() {
   const pathname = usePathname();
   const router = useRouter();
-  const currentSlug = pathname.split("/").pop() || "history";
+  const currentSlug = pathname.split("/").pop() || "news-events";
 
   return (
     <div>

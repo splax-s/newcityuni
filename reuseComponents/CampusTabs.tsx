@@ -3,6 +3,7 @@
 import { usePathname, useRouter } from "next/navigation";
 
 const tabs = [
+  { title: "Campus Life", slug: "campus-life" },
   { title: "Accomodation", slug: "accomodation" },
   { title: "Athletics", slug: "athletics" },
   { title: "Dining", slug: "dining" },
@@ -15,7 +16,7 @@ const tabs = [
 export default function CampusTabs() {
   const pathname = usePathname();
   const router = useRouter();
-  const currentSlug = pathname.split("/").pop() || "accomodation";
+  const currentSlug = pathname.split("/").pop() || "campus-life";
 
   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     router.push(`/campus/${e.target.value}`);

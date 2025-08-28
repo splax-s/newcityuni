@@ -11,6 +11,44 @@ import NewsListings from "@/reuseComponents/NewsListings";
 import EventsListings from "@/reuseComponents/EventsListings";
 
 const contentMap = {
+  "news-events": (
+    <>
+      <div className="max-w-4xl mx-auto px-4">
+        <h2 className="text-2xl font-bold text-black mb-6 text-center">News & Events</h2>
+        <p className="text-lg text-black mb-4">
+          Welcome to the official News and Events page of New City University (NCU) — the pulse of our campus community.
+        </p>
+        <p className="text-black mb-4">
+          This is where ideas spark, milestones are celebrated, and stories come to life. Whether you&apos;re a student charting your path, a faculty member driving innovation, an alumnus staying connected, or a guest curious about New City University, you&apos;re in the right place.
+        </p>
+        <p className="text-black mb-4">
+          From groundbreaking research shaping industries and student achievements making headlines to major campus events, strategic collaborations, and new opportunities — everything that defines the New City University experience is right here.
+        </p>
+        <p className="text-black mb-4">
+          Use the navigation tabs above to explore updates. Each section is designed to keep you informed, inspired, and connected to our journey.
+        </p>
+        <p className="text-black mb-6">
+          Take a moment to browse, engage, and discover what&apos;s next. At New City University, there&apos;s always something remarkable unfolding — and every story is a step toward the future we are building together.
+        </p>
+        <div className="text-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8">
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-xl font-semibold text-[#61213C] mb-3">Latest News</h3>
+              <p className="text-black">
+                Stay updated with the latest developments, achievements, and announcements from across our university community.
+              </p>
+            </div>
+            <div className="bg-gray-50 p-6 rounded-lg">
+              <h3 className="text-xl font-semibold text-[#61213C] mb-3">Upcoming Events</h3>
+              <p className="text-black">
+                Discover exciting events, workshops, seminars, and activities happening on campus and in our community.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  ),
   news: (
     <>
       <NewsListings />

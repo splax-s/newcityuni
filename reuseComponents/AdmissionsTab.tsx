@@ -4,7 +4,7 @@ import { usePathname, useRouter } from "next/navigation";
 
 const tabs = [
   { title: "Undergraduate", slug: "undergraduate" },
-  { title: "Post-Graduate", slug: "PostGrad" },
+  // { title: "Post-Graduate", slug: "PostGrad" },
 ];
 
 export default function AdmissionsTab() {

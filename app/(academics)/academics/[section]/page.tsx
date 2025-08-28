@@ -120,132 +120,132 @@ const contentMap = {
   //     <Apply />
   //   </>
   // ),
-  PostGrad: (
-    <>
-      <p>
-        As a dynamic new institution in Nigeria, New City University offers
-        postgraduate programs across our five innovative faculties, allowing you
-        to explore diverse disciplines and create a path tailored to your
-        professional and academic aspirations. With 10 postgraduate programs,
-        including Postgraduate Diploma (PGD), Master’s, M.Phil, and PhD, our
-        flexible curriculum empowers you to combine courses that align with your
-        goals, preparing you for global career success.
-      </p>
-      <br />
-      {/* <br /> */}
-      <CategoryCard
-        icon=""
-        title="Accounting"
-        items={["PGD, MSc (Accounting)", "PhD (Accounting)"]}
-      />
-      <br />
-      <CategoryCard
-        icon=""
-        title="Behavioural Studies"
-        items={[
-          "PGD, M.Sc, M.Phil/PhD Psychology",
-          "MSc Sociology",
-          "PGD Social Work",
-          "MMP Masters in Managerial Psychology",
-        ]}
-      />
-      <br />
-      <CategoryCard
-        icon=""
-        title="Biological Sciences"
-        items={["Msc, PhD (Microbiology)"]}
-      />
-      <br />
-      <CategoryCard
-        icon=""
-        title="Biochemistry"
-        items={[
-          "MSc in Biochemistry",
-          "M.Phil in Biochemistry",
-          "Ph.D in Biochemistry",
-        ]}
-      />
-      <br />
-      <CategoryCard
-        icon=""
-        title="Business Administration & Marketing"
-        items={[
-          "PGD, MSc Administration",
-          "PGD, MSc Marketing Business",
-          "PGD, MSc Human Resource Management",
-        ]}
-      />
-      <br />
-      <CategoryCard
-        icon=""
-        title="Chemical Sciences"
-        items={[
-          "MSc Materials Chemistry",
-          "PhD Industrial Chemistry",
-          "MSc Environmental & Analytical Chemistry",
-        ]}
-      />
-      <br />
-      <CategoryCard
-        icon=""
-        title="Computer Science"
-        items={["MSc/MPhil/PhD Computer Sciences", "PGD in Computer Science"]}
-      />
-      <br />
-      <CategoryCard
-        icon=""
-        title="Economics"
-        items={["PGD, MSc, Mphil, PhD Economics"]}
-      />
-      <br />
-      <CategoryCard
-        icon=""
-        title="History & International Studies"
-        items={[
-          "MA, PhD History & Int'l Studies",
-          "PGD, Security and Strategic Studies",
-        ]}
-      />
-      <br />
-      <CategoryCard
-        icon=""
-        title="Multidisciplinary MBAs"
-        items={[
-          "Accounting",
-          "Business Administration",
-          "Human Resource Management",
-        ]}
-      />
-      <br />
-      <CategoryCard
-        icon=""
-        title="Mass Communication"
-        items={["PGD, MSc, PhD: Communication and Media Studies"]}
-      />
-      <br />
-      <CategoryCard
-        icon=""
-        title="Political Science"
-        items={["M.Sc and PhD in Political Science"]}
-      />
-      <br />
-      <CategoryCard
-        icon=""
-        title="Physical Sciences"
-        items={[
-          "MSc, PhD Communication Physics",
-          "MSc, PhD Lower Atmospheric Physics",
-          "MSc, PhD Theoretical and Computational Physics",
-          "MSc, PhD Instrumentation",
-        ]}
-      />
-      <br />
-      <br />
-      <AppBanner />
-      <br />
-      <Apply />
-    </>
-  ),
+  // PostGrad: (
+  //   <>
+  //     <p>
+  //       As a dynamic new institution in Nigeria, New City University offers
+  //       postgraduate programs across our five innovative faculties, allowing you
+  //       to explore diverse disciplines and create a path tailored to your
+  //       professional and academic aspirations. With 10 postgraduate programs,
+  //       including Postgraduate Diploma (PGD), Master’s, M.Phil, and PhD, our
+  //       flexible curriculum empowers you to combine courses that align with your
+  //       goals, preparing you for global career success.
+  //     </p>
+  //     <br />
+  //     {/* <br /> */}
+  //     <CategoryCard
+  //       icon=""
+  //       title="Accounting"
+  //       items={["PGD, MSc (Accounting)", "PhD (Accounting)"]}
+  //     />
+  //     <br />
+  //     <CategoryCard
+  //       icon=""
+  //       title="Behavioural Studies"
+  //       items={[
+  //         "PGD, M.Sc, M.Phil/PhD Psychology",
+  //         "MSc Sociology",
+  //         "PGD Social Work",
+  //         "MMP Masters in Managerial Psychology",
+  //       ]}
+  //     />
+  //     <br />
+  //     <CategoryCard
+  //       icon=""
+  //       title="Biological Sciences"
+  //       items={["Msc, PhD (Microbiology)"]}
+  //     />
+  //     <br />
+  //     <CategoryCard
+  //       icon=""
+  //       title="Biochemistry"
+  //       items={[
+  //         "MSc in Biochemistry",
+  //         "M.Phil in Biochemistry",
+  //         "Ph.D in Biochemistry",
+  //       ]}
+  //     />
+  //     <br />
+  //     <CategoryCard
+  //       icon=""
+  //       title="Business Administration & Marketing"
+  //       items={[
+  //         "PGD, MSc Administration",
+  //         "PGD, MSc Marketing Business",
+  //         "PGD, MSc Human Resource Management",
+  //       ]}
+  //     />
+  //     <br />
+  //     <CategoryCard
+  //       icon=""
+  //       title="Chemical Sciences"
+  //       items={[
+  //         "MSc Materials Chemistry",
+  //         "PhD Industrial Chemistry",
+  //         "MSc Environmental & Analytical Chemistry",
+  //       ]}
+  //     />
+  //     <br />
+  //     <CategoryCard
+  //       icon=""
+  //       title="Computer Science"
+  //       items={["MSc/MPhil/PhD Computer Sciences", "PGD in Computer Science"]}
+  //     />
+  //     <br />
+  //     <CategoryCard
+  //       icon=""
+  //       title="Economics"
+  //       items={["PGD, MSc, Mphil, PhD Economics"]}
+  //     />
+  //     <br />
+  //     <CategoryCard
+  //       icon=""
+  //       title="History & International Studies"
+  //       items={[
+  //         "MA, PhD History & Int'l Studies",
+  //         "PGD, Security and Strategic Studies",
+  //       ]}
+  //     />
+  //     <br />
+  //     <CategoryCard
+  //       icon=""
+  //       title="Multidisciplinary MBAs"
+  //       items={[
+  //         "Accounting",
+  //         "Business Administration",
+  //         "Human Resource Management",
+  //       ]}
+  //     />
+  //     <br />
+  //     <CategoryCard
+  //       icon=""
+  //       title="Mass Communication"
+  //       items={["PGD, MSc, PhD: Communication and Media Studies"]}
+  //     />
+  //     <br />
+  //     <CategoryCard
+  //       icon=""
+  //       title="Political Science"
+  //       items={["M.Sc and PhD in Political Science"]}
+  //     />
+  //     <br />
+  //     <CategoryCard
+  //       icon=""
+  //       title="Physical Sciences"
+  //       items={[
+  //         "MSc, PhD Communication Physics",
+  //         "MSc, PhD Lower Atmospheric Physics",
+  //         "MSc, PhD Theoretical and Computational Physics",
+  //         "MSc, PhD Instrumentation",
+  //       ]}
+  //     />
+  //     <br />
+  //     <br />
+  //     <AppBanner />
+  //     <br />
+  //     <Apply />
+  //   </>
+  // ),
   Foundation: (
     <>
       <p className="text-[24px] font-[500] leading-[32px]">

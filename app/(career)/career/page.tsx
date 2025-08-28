@@ -413,8 +413,6 @@ export default function Career() {
     setCurrentPage(1);
   };
 
-  // Example parent component or page
-
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [currentPage]);
@@ -431,10 +429,7 @@ export default function Career() {
             <div className="lg:mb-[36px] mb-[24px]">
               <h1 className="text-black text-[24px] leading-[32px] mb-[24px]">
                 <strong>
-                  New City University is a leading Nigerian provider of
-                  innovative education, offering programs to thousands of
-                  students across Africa and beyond. While proudly rooted in
-                  Nigeria, our community and impact are global.
+                  As a newly established Nigerian university, New City University (NCU) champions the humanities while demonstrating their value to society and the economy through innovative knowledge creation and exchange.
                 </strong>
               </h1>
               <button
@@ -459,17 +454,10 @@ export default function Career() {
               </button>
             </div>
             <p className="text-black lg:mb-[36px] mb-[24px] transition-all duration-300">
-              As a newly established Nigerian university, New City University
-              champions the humanities, promoting their value to society and the
-              economy through innovative knowledge creation and exchange. <br />
-              <br /> We are a collaborative hub of academic excellence, uniting
-              diverse institutions to foster a vibrant community of learners and
-              educators. New City University’s growing network of over 10,000
-              students and 1,000 staff drives cutting-edge research across
-              disciplines. <br />
-              <br /> Our commitment to expanding access to education and
-              leveraging collective expertise empowers us to transform lives
-              globally and tackle future challenges with a global impact.
+              We serve as a collaborative hub of academic excellence, bringing together diverse institutions and professionals to build a vibrant community of educators and researchers. Although NCU has not yet admitted its first cohort of students, our human resources are fully in place to drive academic and administrative excellence. With a strong and growing network of qualified staff and institutional partners, NCU is poised to deliver cutting-edge research and transformative education across disciplines.
+              <br />
+              <br />
+              Our commitment to expanding access to education and leveraging collective expertise empowers us to transform lives, address pressing challenges, and make an enduring global impact.
             </p>
             <div className=" text-black lg:mb-[36px]">
               <h1>
@@ -477,55 +465,86 @@ export default function Career() {
               </h1>
               <br />
               <p>
-                At New City University, you can explore and apply for job
-                vacancies through our website. We do not accept unsolicited CVs.{" "}
+                At New City University, job vacancies are posted on our website to ensure transparency and equal opportunity. We do not accept unsolicited CVs.
                 <br />
                 <br />
-                To apply for a vacancy, click the “Apply” button to begin.
-                Create an account or log in if you have one. Our portal allows
-                you to save and revisit your application, editing sections
-                before submission. Once submitted, no further changes can be
-                made <strong>:</strong>
+                To apply for a vacancy:
               </p>
               <br />
-              <ol className="list-disc space-y-4 pl-6 ">
+              <ol className="list-decimal space-y-4 pl-6 ">
                 <li>
-                  <strong>Application Tips: </strong>
-                  Carefully review the Job Description and Person Specification
-                  to tailor your application, providing specific examples to
-                  demonstrate how your skills and experience align with the
-                  role’s requirements.
+                  Click the &quot;Apply&quot; button on the relevant job listing.
                 </li>
                 <li>
-                  <strong>Closing Dates: </strong>
-                  Vacancies close at midnight on the advertised date, and late
-                  applications are not accepted.
+                  Create an account or log in if you already have one.
                 </li>
                 <li>
-                  <strong>Reasonable Adjustment: </strong>
-                  If you need assistance during the application or interview
-                  process, contact recruitment@newcity.edu.ng.
+                  Complete your application online — you may save progress and edit before submission.
                 </li>
                 <li>
-                  <strong>Technical Support: </strong>
-                  For issues with the application portal, email our support team
-                  or call +234 708 5530 656, selecting option 2.
-                </li>
-                <li>
-                  <strong>Next Steps: </strong>
-                  Upon submitting your application, you’ll receive a
-                  confirmation email. If shortlisted, you’ll get an email to
-                  book an interview slot—check your spam/junk folder. If not
-                  shortlisted, you’ll be notified by email. Due to high
-                  application volumes, feedback is not provided at the
-                  application stage.
-                </li>
-                <li>
-                  <strong>Interview Adjustments: </strong>
-                  If invited to an interview and requiring adjustments, contact
-                  the Recruitment Team promptly to arrange accommodations.
+                  Once submitted, applications cannot be modified.
                 </li>
               </ol>
+              <br />
+              <h2>
+                <strong>Application Tips</strong>
+              </h2>
+              <ul className="list-disc space-y-2 pl-6 mt-4">
+                <li>
+                  Carefully review the Job Description and Person Specification.
+                </li>
+                <li>
+                  Tailor your application by providing specific examples of how your skills and experience meet the stated requirements.
+                </li>
+              </ul>
+              <br />
+              <h2>
+                <strong>Closing Dates</strong>
+              </h2>
+              <ul className="list-disc space-y-2 pl-6 mt-4">
+                <li>
+                  Vacancies close at midnight on the advertised date.
+                </li>
+                <li>
+                  Late applications will not be accepted.
+                </li>
+              </ul>
+              <br />
+              <h2>
+                <strong>Reasonable Adjustments</strong>
+              </h2>
+              <ul className="list-disc space-y-2 pl-6 mt-4">
+                <li>
+                  If you require assistance during the application or interview process, email recruitment@newcity.edu.ng to request accommodations.
+                </li>
+              </ul>
+              <br />
+              <h2>
+                <strong>Technical Support</strong>
+              </h2>
+              <ul className="list-disc space-y-2 pl-6 mt-4">
+                <li>
+                  For issues with the application portal, email our support team or call +234 708 5530 656.
+                </li>
+              </ul>
+              <br />
+              <h2>
+                <strong>Next Steps After Applying</strong>
+              </h2>
+              <ul className="list-disc space-y-2 pl-6 mt-4">
+                <li>
+                  You will receive an email confirmation once your application is submitted.
+                </li>
+                <li>
+                  If shortlisted, you will receive an email invitation to schedule an interview — please check your spam or junk folder to avoid missing updates.
+                </li>
+                <li>
+                  If you are not shortlisted, you will also be notified by email.
+                </li>
+                <li>
+                  Due to the high volume of applications, feedback is not provided at the initial application stage.
+                </li>
+              </ul>
             </div>
           </div>
         ) : (
