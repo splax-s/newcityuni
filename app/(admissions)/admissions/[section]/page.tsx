@@ -101,7 +101,6 @@ const contentMap = {
           shape your future together!
         </p>
         <p>For inquiries, contact us at</p>
-        <p>Olugbenga Abayomi PhD, FCIA, FNIM, FCPA</p>
         <p className="flex  items-center gap-[16px]">
           <Image
             src="/letter.svg"
@@ -235,7 +234,6 @@ const contentMap = {
           shape your future together!
         </p>
         <p>For inquiries, contact us at</p>
-        <p>Olugbenga Abayomi PhD, FCIA, FNIM, FCPA</p>
         <p className="flex  items-center gap-[16px]">
           <Image
             src="/letter.svg"

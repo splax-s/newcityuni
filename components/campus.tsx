@@ -19,6 +19,13 @@ export default function Showcase() {
           { src: "/camp2.png", alt: "Campus event 2" },
           { src: "/camp3.png", alt: "Campus event 3" },
           { src: "/camp4.png", alt: "Campus event 4" },
+          { src: "/camp5.jpg", alt: "Campus event 5" },
+          { src: "/camp6.jpg", alt: "Campus event 6" },
+          { src: "/camp7.jpg", alt: "Campus event 7" },
+          { src: "/camp8.jpg", alt: "Campus event 8" },
+          { src: "/camp9.jpg", alt: "Campus event 9" },
+          { src: "/camp10.jpg", alt: "Campus event 10" },
+          { src: "/camp11.jpg", alt: "Campus event 11" },
         ].map((img, index) => (
           <div
             key={index}

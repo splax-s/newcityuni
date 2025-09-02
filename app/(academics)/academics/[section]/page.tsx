@@ -30,6 +30,7 @@ const contentMap = {
           "Nursing",
           "Physiotherapy",
           "Public Health",
+          "Radiography"
         ]}
       />
       <br />

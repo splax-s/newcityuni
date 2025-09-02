@@ -52,7 +52,7 @@ export default function Feature() {
             },
             {
               mediaSrc: '/feature3.png',
-              title: 'Micro Biology',
+              title: 'Microbiology',
               description: 'Exploring the world of microorganisms and their effects on health, agriculture, and the environment. The program trains students in both industrial and medical microbiology through rigorous lab-based education.'
             },
           ].map((course, index) => (

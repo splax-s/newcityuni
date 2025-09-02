@@ -185,10 +185,56 @@ export const programs = [
       "Policy influence potential"
     ]
   },
+  {
+    id: 5,
+    slug: "bachelor-of-science-in-radiography",
+    title: "Bachelor of Science in Radiography (B.Sc. Radiography)",
+    faculty: "Faculty of Basic Medical and Allied Sciences",
+    department: "Department of Radiography",
+    level: "Undergraduate",
+    degreeType: "Bachelor",
+    areaOfInterest: "Basic Medicine & Applied Sciences",
+    lectureMode: "Clinical imaging",
+    duration: "48 months",
+    deadline: "15 Feb 2025",
+    image: "/medlab.svg",
+    description: "Comprehensive training in medical imaging techniques including X-ray, CT, MRI, and ultrasound with emphasis on patient care and radiation safety.",
+    keyFeatures: [
+      "Medical imaging technology and techniques",
+      "Radiation safety and protection protocols",
+      "Patient positioning and care",
+      "Advanced imaging modalities training"
+    ],
+    careerOpportunities: "Radiographers, Medical Imaging Technologists, CT Technicians, MRI Technologists, Ultrasound Technicians",
+    tags: ["Medical Imaging", "15 Feb 2025"],
+    requirements: {
+      subjects: ["English Language", "Mathematics", "Physics", "Chemistry", "Biology"],
+      utmeSubjects: ["Use of English", "Mathematics", "Physics", "Chemistry"],
+      cutOff: "190+",
+      ourCutoff: "210+"
+    },
+    curriculumHighlights: [
+      "Medical Imaging Physics",
+      "Radiographic Anatomy and Pathology",
+      "Radiation Protection and Safety",
+      "Digital Imaging Technology",
+      "Cross-sectional Anatomy",
+      "Patient Care and Communication"
+    ],
+    handsOnExperience: "Extensive clinical placements in radiology departments, hands-on training with imaging equipment, patient positioning practice, and internships in hospitals and imaging centers.",
+    industryPartnerships: "Clinical partnerships with major hospitals, diagnostic imaging centers, and medical facilities providing comprehensive practical training in modern imaging technologies.",
+    whyChoose: [
+      "State-of-the-art imaging equipment",
+      "Comprehensive clinical training",
+      "High employment demand",
+      "Modern healthcare technology",
+      "Patient care focus"
+    ]
+  },
 
   // Faculty of Social and Management Sciences
   {
-    id: 5,
+    id: 6,
     slug: "bachelor-of-science-in-accounting-bsc-accounting",
     title: "Bachelor of Science in Accounting (B.Sc. Accounting)",
     faculty: "Faculty of Social and Management Sciences",
@@ -234,7 +280,7 @@ export const programs = [
     ]
   },
   {
-    id: 6,
+    id: 7,
     slug: "bachelor-of-science-in-economics-bsc-economics",
     title: "Bachelor of Science in Economics (B.Sc. Economics)",
     faculty: "Faculty of Social and Management Sciences",
@@ -280,7 +326,7 @@ export const programs = [
     ]
   },
   {
-    id: 7,
+    id: 8,
     slug: "bachelor-of-science-in-business-administration",
     title: "Bachelor of Science in Business Administration",
     faculty: "Faculty of Social and Management Sciences",
@@ -328,7 +374,7 @@ export const programs = [
 
   // Faculty of Computing and Sciences
   {
-    id: 8,
+    id: 9,
     slug: "bachelor-of-science-in-computer-science",
     title: "Bachelor of Science in Computer Science",
     faculty: "Faculty of Computing and Sciences",
@@ -374,7 +420,7 @@ export const programs = [
     ]
   },
   {
-    id: 9,
+    id: 10,
     slug: "bachelor-of-science-in-information-technology",
     title: "Bachelor of Science in Information Technology",
     faculty: "Faculty of Computing and Sciences",
@@ -420,7 +466,7 @@ export const programs = [
     ]
   },
   {
-    id: 10,
+    id: 11,
     slug: "bachelor-of-science-in-cyber-security",
     title: "Bachelor of Science in Cyber Security",
     faculty: "Faculty of Computing and Sciences",
@@ -466,7 +512,7 @@ export const programs = [
     ]
   },
   {
-    id: 11,
+    id: 12,
     slug: "bachelor-of-science-in-microbiology",
     title: "Bachelor of Science in Microbiology",
     faculty: "Faculty of Computing and Sciences", 
@@ -512,7 +558,7 @@ export const programs = [
     ]
   },
   {
-    id: 12,
+    id: 13,
     slug: "bachelor-of-science-in-biochemistry",
     title: "Bachelor of Science in Biochemistry",
     faculty: "Faculty of Computing and Sciences",
@@ -560,7 +606,7 @@ export const programs = [
 
   // Faculty of Communication and Media Studies  
   {
-    id: 13,
+    id: 14,
     slug: "bachelor-of-science-in-journalism",
     title: "Bachelor of Science in Journalism",
     faculty: "Faculty of Communication and Media Studies",
@@ -606,7 +652,7 @@ export const programs = [
     ]
   },
   {
-    id: 14,
+    id: 15,
     slug: "bachelor-of-science-in-advertising",
     title: "Bachelor of Science in Advertising",
     faculty: "Faculty of Communication and Media Studies",
@@ -652,7 +698,7 @@ export const programs = [
     ]
   },
   {
-    id: 15,
+    id: 16,
     slug: "bachelor-of-science-in-broadcasting",
     title: "Bachelor of Science in Broadcasting",
     faculty: "Faculty of Communication and Media Studies",
@@ -698,7 +744,7 @@ export const programs = [
     ]
   },
   {
-    id: 16,
+    id: 17,
     slug: "bachelor-of-science-in-public-relations",
     title: "Bachelor of Science in Public Relations",
     faculty: "Faculty of Communication and Media Studies",

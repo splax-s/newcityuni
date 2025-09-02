@@ -18,12 +18,12 @@ export default function Discover() {
       <div className="w-full overflow-x-auto md:overflow-visible">
         <div className="flex md:grid md:grid-cols-3 gap-6 min-w-max md:min-w-0">
           <DiscoverMedia
-            mediaSrc="/discover1.png"
+            mediaSrc="/camp9.jpg"
             title="Quality Education Tailored for Your Success"
             description="We offer a diverse range of programmes designed to equip you with the skills needed for today's competitive job market."
           />
           <DiscoverMedia
-            mediaSrc="/discover2.png"
+            mediaSrc="/camp10.jpg"
             title="Learn from Our Experienced Faculty Members"
             description="Our faculty comprises industry experts dedicated to your academic growth."
           />

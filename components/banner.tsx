@@ -126,6 +126,16 @@ const courseData = [
     path: "/academics/FTundergraduate",
     keywords: ["law", "legal", "property", "private law", "jurisprudence"]
   },
+  { 
+    id: 27,
+    title: "Radiography", 
+    level: "Undergraduate", 
+    faculty: "Faculty of Basic Medical and Allied health Sciences",
+    mode: "Full-Time",
+    duration: "4 years",
+    path: "/academics/FTundergraduate",
+    keywords: ["radiography", "medical imaging", "x-ray", "CT", "MRI", "ultrasound", "radiology"]
+  },
   
   // Part-Time Undergraduate
   // { 
