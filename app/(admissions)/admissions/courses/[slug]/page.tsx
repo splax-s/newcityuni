@@ -111,9 +111,13 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
           <div className="space-y-6 sm:space-y-8">
             {/* Action Buttons Above Table */}
             <div className="flex flex-col sm:flex-row gap-2 sm:gap-2 w-full">
-              <button className="bg-[#61213C] text-white h-[44px] px-6 py-3 rounded-[4px] hover:bg-[#724456] transition-colors font-medium text-sm sm:text-base flex-1" style={{paddingTop: '12px', paddingBottom: '12px', paddingLeft: '24px', paddingRight: '24px'}}>
+              <Link
+                href={`/admissions/signup?program=${program.slug}`}
+                className="bg-[#61213C] text-white h-[44px] px-6 py-3 rounded-[4px] hover:bg-[#724456] transition-colors font-medium text-sm sm:text-base flex-1 flex items-center justify-center"
+                style={{paddingTop: '12px', paddingBottom: '12px', paddingLeft: '24px', paddingRight: '24px'}}
+              >
                 Apply
-              </button>
+              </Link>
               <button className="border border-[#61213C] text-[#61213C] h-[44px] px-6 py-3 rounded-[4px] hover:bg-[#61213C] hover:text-white transition-colors font-medium flex items-center justify-center gap-2 text-sm sm:text-base flex-1" style={{paddingTop: '12px', paddingBottom: '12px', paddingLeft: '24px', paddingRight: '24px'}}>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -300,7 +304,7 @@ export default function CourseDetailPage({ params }: CourseDetailPageProps) {
                   
                   <div className="flex flex-col sm:flex-row gap-2">
                     <Link 
-                      href={`/admissions/courses/${relatedProgram.slug}`}
+                      href={`/admissions/signup?program=${relatedProgram.slug}`}
                       className="w-full bg-[#61213C] text-white h-[44px] px-6 py-3 rounded-[4px] text-center flex items-center justify-center text-xs sm:text-sm hover:bg-[#724456] transition-colors"
                     >
                       Apply
