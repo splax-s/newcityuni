@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
@@ -19,6 +20,7 @@ export default function AdmissionsFormStep5() {
   const [paystackError, setPaystackError] = useState(false);
   const [flutterError, setFlutterError] = useState(false);
   const [remitaError, setRemitaError] = useState(false);
+  const router = useRouter();
 
   return (
     <>
@@ -177,7 +179,10 @@ export default function AdmissionsFormStep5() {
                   Your payment is secure and encrypted. We do not store your
                   card details.
                 </p>
-                <button className="w-full bg-[#61213C] text-white font-semibold py-3 rounded-md mt-4">
+                <button
+                  onClick={() => router.push("/admissions/form/step-6")}
+                  className="w-full bg-[#61213C] text-white font-semibold py-3 rounded-md mt-4"
+                >
                   Pay Now (₦15,000)
                 </button>
               </div>
@@ -212,7 +217,10 @@ export default function AdmissionsFormStep5() {
                     <p className="text-gray-800">SJDxEn120</p>
                   </div>
                 </div>
-                <button className="w-full bg-[#61213C] text-white font-semibold py-3 rounded-md mt-4">
+                <button
+                  onClick={() => router.push("/admissions/form/step-6")}
+                  className="w-full bg-[#61213C] text-white font-semibold py-3 rounded-md mt-4"
+                >
                   I have paid
                 </button>
               </div>
@@ -269,7 +277,10 @@ export default function AdmissionsFormStep5() {
                   </div>
                 </div>
 
-                <button className="w-full bg-[#61213C] text-white font-semibold py-3 rounded-md">
+                <button
+                  onClick={() => router.push("/admissions/form/step-6")}
+                  className="w-full bg-[#61213C] text-white font-semibold py-3 rounded-md"
+                >
                   Proceed to pay
                 </button>
               </div>
