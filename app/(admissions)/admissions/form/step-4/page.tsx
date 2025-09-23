@@ -3,17 +3,10 @@
 import Link from "next/link";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import Image from "next/image";
+import Stepper from "@/reuseComponents/Stepper";
 
 export default function AdmissionsFormStep4() {
-  const steps = [
-    "Program Choice",
-    "Personal Info",
-    "Academic Info",
-    "Uploads",
-    "Payment",
-    "Review & Submit",
-  ];
-
   return (
     <>
       <Navbar />
@@ -33,41 +26,7 @@ export default function AdmissionsFormStep4() {
 
       {/* Form Section */}
       <div className="max-w-5xl mx-auto py-12 px-4">
-        {/* Stepper */}
-        <div className="flex justify-between items-center mb-12 relative">
-          {steps.map((step, idx) => (
-            <div key={idx} className="flex-1 text-center">
-              <div
-                className={`w-10 h-10 mx-auto rounded-full flex items-center justify-center border-2 ${
-                  idx <= 3
-                    ? "border-[#8B1C3D] text-[#8B1C3D]"
-                    : "border-gray-300 text-gray-400"
-                } bg-white`}
-              >
-                {idx <= 3 ? "✓" : idx + 1}
-              </div>
-              <p
-                className={`mt-2 text-sm ${
-                  idx === 3 ? "text-[#8B1C3D] font-medium" : "text-gray-400"
-                }`}
-              >
-                {step}
-              </p>
-              {idx < steps.length - 1 && (
-                <div className="absolute top-5 left-0 right-0 flex justify-between -z-10">
-                  {steps.slice(0, -1).map((_, lineIdx) => (
-                    <span
-                      key={lineIdx}
-                      className={`flex-1 h-0.5 ${
-                        lineIdx < 3 ? "bg-[#8B1C3D]" : "bg-gray-300"
-                      } mx-2`}
-                    ></span>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+        <Stepper current={3} />
 
         {/* Step Title */}
         <h2 className="text-3xl text-black font-bold mb-2">
@@ -78,54 +37,82 @@ export default function AdmissionsFormStep4() {
         </p>
 
         {/* Upload Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-[208px_1fr_1fr] gap-6 ">
           {/* Upload Box */}
-          <div className="bg-white border border-dashed border-[#8B1C3D] rounded-lg p-6 flex flex-col items-center justify-center">
-            <div className="w-14 h-14 flex items-center justify-center mb-3">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-10 h-10 text-gray-400"
-                fill="none"
-                viewBox="0 0 24 24"
-                stroke="currentColor"
-                strokeWidth={2}
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  d="M12 16V4m0 0L8 8m4-4 4 4M4 16h16"
+          <div className="bg-white border rounded-lg p-6 md:w-[208px]">
+            <h3 className="text-gray-800 font-medium mb-4">
+              Upload required documents
+            </h3>
+            <div className="bg-white border border-dashed border-[#8B1C3D] rounded-lg p-6 flex flex-col items-center justify-center">
+              <div className="w-14 h-14 flex items-center justify-center mb-3">
+                <Image
+                  src="/icons/cloud-plus.svg"
+                  alt="Upload Icon"
+                  width={56}
+                  height={56}
                 />
-              </svg>
+              </div>
+              <p className="text-[#1C1F22] text-center">
+                Drag & drop to upload
+              </p>
+              <p className="text-[#A73966]">or browse</p>
             </div>
-            <p className="text-gray-600">Drag & drop to upload</p>
-            <p className="text-gray-600">or browse</p>
           </div>
 
           {/* Upload Record */}
           <div className="bg-white border rounded-lg p-6">
             <h3 className="text-gray-800 font-medium mb-4">Upload record</h3>
+            <hr className="my-4" />
             <div className="space-y-3">
               <div className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-1 bg-red-100 text-red-600 text-xs rounded">
-                    PDF
-                  </span>
-                  <span className="text-gray-700">WAEC.pdf</span>
+                  <Image
+                    src="/icons/pdf1.svg"
+                    alt="Uploaded File"
+                    width={35}
+                    height={35}
+                  />
+                  <div>
+                    <p className="text-gray-700">WAEC</p>
+                    <p className="text-gray-600 text-xs">900kb</p>
+                  </div>
                 </div>
-                <span className="text-gray-500">900kb</span>
-                <button className="text-[#8B1C3D] text-sm">Preview</button>
-                <button className="text-red-500">🗑</button>
+                <div className="flex items-center gap-2">
+                  <button className="flex items-center gap-2 border border-gray-300 rounded-md px-4 py-1 text-sm text-gray-700 hover:bg-gray-50">
+                    Preview
+                  </button>
+                  <Image
+                    src="/icons/trash.svg"
+                    alt="Uploaded File"
+                    width={25}
+                    height={25}
+                  />
+                </div>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-2">
-                  <span className="px-2 py-1 bg-blue-100 text-blue-600 text-xs rounded">
-                    JPG
-                  </span>
-                  <span className="text-gray-700">High_School_Certific...</span>
+                  <Image
+                    src="/icons/jpeg.svg"
+                    alt="Uploaded File"
+                    width={35}
+                    height={35}
+                  />
+                  <div>
+                    <p className="text-gray-700">High_School</p>
+                    <p className="text-gray-600 text-xs">500kb</p>
+                  </div>
                 </div>
-                <span className="text-gray-500">500kb</span>
-                <button className="text-[#8B1C3D] text-sm">Preview</button>
-                <button className="text-red-500">🗑</button>
+                <div className="flex items-center gap-2">
+                  <button className="flex items-center gap-2 border border-gray-300 rounded-md px-4 py-1  text-sm text-gray-700 hover:bg-gray-50">
+                    Preview
+                  </button>
+                  <Image
+                    src="/icons/trash.svg"
+                    alt="Uploaded File"
+                    width={25}
+                    height={25}
+                  />
+                </div>
               </div>
             </div>
           </div>
@@ -138,44 +125,99 @@ export default function AdmissionsFormStep4() {
               </h3>
               <p className="text-gray-600">2/4</p>
             </div>
+            <hr className="my-4" />
             <div className="space-y-4">
               {/* Uploaded */}
               <div className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-                    ✓
-                  </span>
-                  <span className="text-gray-700">WAEC Result</span>
+                  <Image
+                    src="/icons/checkcircle.svg"
+                    alt="checkcircle"
+                    width={25}
+                    height={25}
+                  />
+                  <div>
+                    <p className="text-[#1C1F22]">WAEC Result</p>
+                    <div className="flex items-center gap-2">
+                      <Image
+                        src="/icons/pdf.svg"
+                        alt="pdf"
+                        width={16}
+                        height={16}
+                      />
+                      <p className="text-[#6F7C89]">Joshua-WAEC.pdf</p>
+                    </div>
+                  </div>
                 </div>
-                <span className="text-gray-600">Joshua Sam-Alade WAEC.pdf</span>
-                <button className="text-[#8B1C3D] text-sm">Edit</button>
+                <button className="flex items-center gap-2 border border-gray-300 rounded-md px-4 py-1 text-sm text-gray-700 hover:bg-gray-50">
+                  <svg
+                    className="w-4 h-4 mr-1"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                  </svg>
+                  Edit
+                </button>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-green-100 flex items-center justify-center text-green-600">
-                    ✓
-                  </span>
-                  <span className="text-gray-700">NIN</span>
+                  <Image
+                    src="/icons/checkcircle.svg"
+                    alt="checkcircle"
+                    width={25}
+                    height={25}
+                  />
+                  <div>
+                    <p className="text-[#1C1F22]">NIN Result</p>
+                    <div className="flex items-center gap-2">
+                      <Image
+                        src="/icons/pdf.svg"
+                        alt="pdf"
+                        width={16}
+                        height={16}
+                      />
+                      <p className="text-[#6F7C89]">Joshua-WAEC.pdf</p>
+                    </div>
+                  </div>
                 </div>
-                <span className="text-gray-600">Joshua Sam-Alade WAEC.pdf</span>
-                <button className="text-[#8B1C3D] text-sm">Edit</button>
+                <button className="flex items-center gap-2 border border-gray-300 rounded-md px-4 py-1 text-sm text-gray-700 hover:bg-gray-50">
+                  <svg
+                    className="w-4 h-4 mr-1"
+                    fill="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path d="M3 17.25V21h3.75L17.81 9.94l-3.75-3.75L3 17.25zM20.71 7.04c.39-.39.39-1.02 0-1.41l-2.34-2.34c-.39-.39-1.02-.39-1.41 0l-1.83 1.83 3.75 3.75 1.83-1.83z" />
+                  </svg>
+                  Edit
+                </button>
               </div>
               {/* Pending */}
               <div className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-gray-200"></span>
+                  <Image
+                    src="/icons/checkcircle2.svg"
+                    alt="checkcircle"
+                    width={25}
+                    height={25}
+                  />
                   <span className="text-gray-700">Jamb Result</span>
                 </div>
-                <button className="bg-[#F4C2C2] text-white px-4 py-1 rounded-md text-sm">
+                <button className="bg-[#F4C2C2] text-white px-5 py-1 rounded-md text-sm">
                   Upload
                 </button>
               </div>
               <div className="flex items-center justify-between text-sm">
                 <div className="flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-gray-200"></span>
+                  <Image
+                    src="/icons/checkcircle2.svg"
+                    alt="checkcircle"
+                    width={25}
+                    height={25}
+                  />
                   <span className="text-gray-700">Just a filler</span>
                 </div>
-                <button className="bg-[#F4C2C2] text-white px-4 py-1 rounded-md text-sm">
+                <button className="bg-[#F4C2C2] text-white px-5 py-1 rounded-md text-sm">
                   Upload
                 </button>
               </div>

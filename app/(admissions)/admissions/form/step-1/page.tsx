@@ -3,16 +3,9 @@
 import Link from "next/link";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import Stepper from "@/reuseComponents/Stepper";
 
 export default function AdmissionsFormStep1() {
-  const steps = [
-    "Program Choice",
-    "Personal Info",
-    "Academic Info",
-    "Uploads",
-    "Payment",
-    "Review & Submit",
-  ];
   return (
     <>
       <Navbar />
@@ -32,40 +25,7 @@ export default function AdmissionsFormStep1() {
 
       {/* Form Section */}
       <div className="max-w-5xl mx-auto py-12 px-4">
-        {/* Stepper */}
-        <div className="flex justify-between items-center mb-12 relative">
-          {steps.map((step, idx) => (
-            <div key={idx} className="flex-1 text-center">
-              <div
-                className={`w-10 h-10 mx-auto rounded-full flex items-center justify-center border-2 ${
-                  idx === 0
-                    ? "border-[#8B1C3D] bg-white text-[#8B1C3D]"
-                    : "border-gray-300 bg-white text-gray-400"
-                }`}
-              >
-                ✓
-              </div>
-              <p
-                className={`mt-2 text-sm ${
-                  idx === 0 ? "text-[#8B1C3D] font-medium" : "text-gray-400"
-                }`}
-              >
-                {step}
-              </p>
-              {/* Line Connector */}
-              {idx < steps.length - 1 && (
-                <div className="absolute top-5 left-0 right-0 flex justify-between -z-10">
-                  {steps.slice(0, -1).map((_, lineIdx) => (
-                    <span
-                      key={lineIdx}
-                      className="flex-1 h-0.5 bg-gray-300 mx-2"
-                    ></span>
-                  ))}
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+        <Stepper current={0} />
 
         {/* Step Title */}
         <h2 className="text-3xl text-black font-bold mb-2">Step 1: Program Choice</h2>
@@ -108,22 +68,42 @@ export default function AdmissionsFormStep1() {
 
           {/* Dropdowns */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <select className="border rounded-md p-3 text-gray-700 w-full">
-              <option>Academic Level</option>
-            </select>
-            <select className="border rounded-md p-3 text-gray-700 w-full">
-              <option>Faculty</option>
-            </select>
-            <select className="border rounded-md p-3 text-gray-700 w-full">
-              <option>Department</option>
-            </select>
+            <div>
+              <label htmlFor="academicLevel" className="block text-sm font-medium text-gray-700 mb-1">
+                Academic Level
+              </label>
+              <select id="academicLevel" className="border rounded-md p-3 text-gray-700 w-full">
+                <option>Academic Level</option>
+              </select>
+            </div>
+            <div>
+              <label htmlFor="faculty" className="block text-sm font-medium text-gray-700 mb-1">
+                Faculty
+              </label>
+              <select id="faculty" className="border rounded-md p-3 text-gray-700 w-full">
+                <option>Faculty</option>
+              </select>
+            </div>
+            <div>
+              <label htmlFor="department" className="block text-sm font-medium text-gray-700 mb-1">
+                Department
+              </label>
+              <select id="department" className="border rounded-md p-3 text-gray-700 w-full">
+                <option>Department</option>
+              </select>
+            </div>
           </div>
 
           {/* Program Name & Search */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
-            <select className="border rounded-md p-3 text-gray-700 w-full">
-              <option>Program Name</option>
-            </select>
+            <div>
+              <label htmlFor="programName" className="block text-sm font-medium text-gray-700 mb-1">
+                Program Name
+              </label>
+              <select id="programName" className="border rounded-md p-3 text-gray-700 w-full">
+                <option>Program Name</option>
+              </select>
+            </div>
           </div>
 
           {/* Mode of Study */}

@@ -5,16 +5,9 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import Stepper from "@/reuseComponents/Stepper";
 
 export default function AdmissionsFormStep5() {
-  const steps = [
-    "Program Choice",
-    "Personal Info",
-    "Academic Info",
-    "Uploads",
-    "Payment",
-    "Review & Submit",
-  ];
 
   const [method, setMethod] = useState("card");
   const [paystackError, setPaystackError] = useState(false);
@@ -41,32 +34,7 @@ export default function AdmissionsFormStep5() {
 
       {/* Form Section */}
       <div className="max-w-5xl mx-auto py-12 px-4">
-        {/* Stepper */}
-        <div className="relative flex justify-between items-center mb-12">
-          <div className="absolute top-5 left-0 right-0 h-0.5 bg-gray-300 -z-10"></div>
-          <div className="absolute top-5 left-0 w-[70%] h-0.5 bg-[#8B1C3D] -z-10"></div>
-
-          {steps.map((step, idx) => (
-            <div key={idx} className="flex-1 text-center">
-              <div
-                className={`w-10 h-10 mx-auto rounded-full flex items-center justify-center border-2 font-medium text-sm ${
-                  idx <= 4
-                    ? "border-[#8B1C3D] text-[#8B1C3D] bg-white"
-                    : "border-gray-300 text-gray-400 bg-white"
-                }`}
-              >
-                {idx <= 4 ? "✓" : idx + 1}
-              </div>
-              <p
-                className={`mt-2 text-sm ${
-                  idx === 4 ? "text-[#8B1C3D] font-medium" : "text-gray-400"
-                }`}
-              >
-                {step}
-              </p>
-            </div>
-          ))}
-        </div>
+        <Stepper current={4} />
 
         {/* Step Title */}
         <h2 className="text-3xl text-black font-bold mb-2">
@@ -78,10 +46,12 @@ export default function AdmissionsFormStep5() {
         </p>
 
         {/* Payment Section */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="flex flex-col items-start md:flex-row gap-6">
           {/* Payment Methods */}
-          <div className="bg-white border rounded-lg p-6">
+          <div className="bg-white border w-[744px] rounded-lg p-6">
             <h3 className="text-gray-800 font-medium mb-4">Payment Methods</h3>
+
+            <hr className="my-4" />
 
             {/* Payment Method Buttons */}
             <div className="flex gap-4 border-b pb-6">
@@ -93,7 +63,12 @@ export default function AdmissionsFormStep5() {
                     : "border-gray-300 bg-white text-gray-700"
                 }`}
               >
-                <span>💳</span>
+                <Image
+                  src="/icons/wallet.svg"
+                  alt="wallet Icon"
+                  width={24}
+                  height={24}
+                />
                 <span className="text-sm font-medium">Debit/Credit Card</span>
               </button>
 
@@ -105,7 +80,12 @@ export default function AdmissionsFormStep5() {
                     : "border-gray-300 bg-white text-gray-700"
                 }`}
               >
-                <span>🏦</span>
+                <Image
+                  src="/icons/bank.svg"
+                  alt="bank Icon"
+                  width={24}
+                  height={24}
+                />
                 <span className="text-sm font-medium">
                   Bank Transfer / USSD
                 </span>
@@ -119,7 +99,12 @@ export default function AdmissionsFormStep5() {
                     : "border-gray-300 bg-white text-gray-700"
                 }`}
               >
-                <span>🔗</span>
+                <Image
+                  src="/icons/link.svg"
+                  alt="gateway Icon"
+                  width={24}
+                  height={24}
+                />
                 <span className="text-sm font-medium">Payment Gateway</span>
               </button>
             </div>
@@ -127,25 +112,27 @@ export default function AdmissionsFormStep5() {
             {/* Conditional Rendering */}
             {method === "card" && (
               <div className="mt-6 space-y-4">
-                <div>
-                  <label className="block text-sm text-gray-700">
+                <div className="flex gap-4">
+                  <div className="w-1/2">
+                    <label className="block text-sm text-gray-700">
                       Card Holder&apos;s Name
                     </label>
-                  <input
-                    type="text"
-                    defaultValue="Joshua Sam-Alade"
-                    className="w-full border border-gray-300 rounded-md py-2 px-3 mt-1"
-                  />
-                </div>
-                <div>
-                  <label className="block text-sm text-gray-700">
-                    Card Number
-                  </label>
-                  <input
-                    type="text"
-                    defaultValue="2134 2324 6797 2478"
-                    className="w-full border border-gray-300 rounded-md py-2 px-3 mt-1"
-                  />
+                    <input
+                      type="text"
+                      defaultValue="Joshua Sam-Alade"
+                      className="w-full border border-gray-300 rounded-md py-2 px-3 mt-1"
+                    />
+                  </div>
+                  <div className="w-1/2">
+                    <label className="block text-sm text-gray-700">
+                      Card Number
+                    </label>
+                    <input
+                      type="text"
+                      defaultValue="2134 2324 6797 2478"
+                      className="w-full border border-gray-300 rounded-md py-2 px-3 mt-1"
+                    />
+                  </div>
                 </div>
                 <div className="flex gap-4">
                   <div className="w-1/2">
@@ -165,7 +152,7 @@ export default function AdmissionsFormStep5() {
                     </select>
                   </div>
                 </div>
-                <div>
+                <div className="w-1/2">
                   <label className="block text-sm text-gray-700">
                     CVV Number
                   </label>
@@ -292,6 +279,7 @@ export default function AdmissionsFormStep5() {
             <h3 className="text-gray-800 font-medium mb-4">
               Application Summary
             </h3>
+            <hr className="my-4" />
             <div className="space-y-4">
               <div>
                 <span className="text-gray-600 text-sm">Program</span>

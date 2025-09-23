@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import Stepper from "@/reuseComponents/Stepper";
 import Image from "next/image";
 
 type AdmissionsData = {
@@ -54,6 +55,7 @@ export default function AdmissionsFormStep6() {
       </div>
 
       <div className="max-w-4xl mx-auto py-12 px-4">
+        <Stepper current={5} />
         <h1 className="text-2xl font-bold text-black mb-4">
           Step 6: Review & Submit
         </h1>

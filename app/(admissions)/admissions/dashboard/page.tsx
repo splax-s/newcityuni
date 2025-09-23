@@ -75,7 +75,7 @@ export default function AdmissionsDashboardPage() {
       </div>
       <div className="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-12 gap-6">
         {/* Sidebar */}
-        <aside className="md:col-span-2 bg-white border shadow-sm border-[rgba(232, 234, 236, 1))] rounded p-4">
+        <aside className="md:col-span-2 bg-white border shadow-sm border-[rgba(232, 234, 236, 1))] rounded p-2">
           <nav className="space-y-2">
             {sidebarItems.map((item) => (
               <Link
@@ -89,7 +89,7 @@ export default function AdmissionsDashboardPage() {
                   alt={item.label + " icon"}
                   className="w-5 h-5"
                 />
-                <span className="text-sm">{item.label}</span>
+                <span className="text-sm text-[#545D66]">{item.label}</span>
               </Link>
             ))}
           </nav>
@@ -129,7 +129,7 @@ export default function AdmissionsDashboardPage() {
 
                   <div className="flex-1">
                     <div className="flex justify-between items-center">
-                      <h4 className="font-semibold text-gray-900 flex items-center gap-2">
+                      <h4 className="font-semibold text-[#1C1F22] flex items-center gap-2">
                         <span>{card.title}</span>
                         <span className="w-5 h-5 inline-flex items-center justify-center">
                           {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -149,7 +149,7 @@ export default function AdmissionsDashboardPage() {
                         </span>
                       )}
                     </div>
-                    <p className="text-sm text-gray-600">{card.desc}</p>
+                    <p className="text-sm text-[#6F7C89]">{card.desc}</p>
                   </div>
                 </div>
               );
@@ -184,6 +184,7 @@ export default function AdmissionsDashboardPage() {
               </li>
               <li>2025/26 First semester Exam timetable now available...</li>
               <li>Course registration deadline updated...</li>
+              
             </ul>
           </div>
 
