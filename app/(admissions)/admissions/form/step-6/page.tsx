@@ -59,7 +59,7 @@ export default function AdmissionsFormStep6() {
         </h1>
 
         <p className="text-gray-600 mb-6">
-          Please review your application before submitting. You won't be able to
+          Please review your application before submitting. You won&apos;t be able to
           make changes after this step.
         </p>
 
