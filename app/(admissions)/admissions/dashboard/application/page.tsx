@@ -1,39 +1,20 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
+
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Link from "next/link";
 import AdmissionsSidebar from "@/components/AdmissionsSidebar";
 import Image from "next/image";
 
-type AdmissionsData = {
-  program?: string;
-  fullname?: string;
-  email?: string;
-};
 
 export default function AdmissionsDashboardApplicationPage() {
   const [selected, setSelected] = useState<
     "status" | "program" | "personal" | "academic"
   >("status");
-
-  const [data, setData] = useState<AdmissionsData | null>(null);
-
-  useEffect(() => {
-    try {
-      const raw = localStorage.getItem("admissions_form");
-      if (raw) setData(JSON.parse(raw));
-      else
-        setData({
-          program: "MSc in Technology",
-          fullname: "Joshua Sam-Alade",
-          email: "joshua@example.com",
-        });
-    } catch {
-      setData(null);
-    }
-  }, []);
+ 
+  
 
   return (
     <>
@@ -362,15 +343,15 @@ export default function AdmissionsDashboardApplicationPage() {
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
                     <div>
                       <p className="text-gray-500">Full Name</p>
-                      <p className="text-gray-900">{data.fullname}</p>
+                      <p className="text-gray-900">Joshua Sam-Alade</p>
                     </div>
                     <div>
                       <p className="text-gray-500">Middle Name</p>
-                      <p className="text-gray-900">{data.email}</p>
+                      <p className="text-gray-900">Joshua</p>
                     </div>
                     <div>
                       <p className="text-gray-500">Last Name</p>
-                      <p className="text-gray-900">{data.program}</p>
+                      <p className="text-gray-900">Sam-Alade</p>
                     </div>
                     <div>
                       <p className="text-gray-500">Phone Number</p>
@@ -378,7 +359,7 @@ export default function AdmissionsDashboardApplicationPage() {
                     </div>
                     <div>
                       <p className="text-gray-500">Email</p>
-                      <p className="text-gray-900">{data.email}</p>
+                      <p className="text-gray-900">joshua@example.com</p>
                     </div>
                     <div>
                       <p className="text-gray-500">Date of Birth</p>
