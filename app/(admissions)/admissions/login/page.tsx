@@ -49,7 +49,7 @@ export default function AdmissionsLoginPage() {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
-              <input name="password" type="password" value={form.password} onChange={handleChange} required className="w-full border px-3 py-2 rounded" />
+              <input name="password" type="password" value={form.password} onChange={handleChange} required className="w-full text-black border px-3 py-2 rounded" />
             </div>
 
             <div className="flex items-center justify-between text-sm">

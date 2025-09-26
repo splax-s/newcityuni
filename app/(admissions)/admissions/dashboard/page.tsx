@@ -2,24 +2,10 @@
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Link from "next/link";
+import AdmissionsSidebar from "@/components/AdmissionsSidebar";
 
 export default function AdmissionsDashboardPage() {
-  const sidebarItems = [
-    { label: "Dashboard", href: "/admissions/dashboard", icon: "SquaresFour.svg" },
-    {
-      label: "My Application",
-      href: "/admissions/dashboard/application",
-      icon: "Files.svg",
-    },
-    { label: "Uploads", href: "/admissions/dashboard/uploads", icon: "document-upload.svg" },
-    { label: "Payment", href: "/admissions/dashboard/payment", icon: "receipt-item.svg" },
-    {
-      label: "Notifications",
-      href: "/admissions/dashboard/notifications",
-      icon: "notification-bing2.svg",
-    },
-    { label: "Logout", href: "/admissions/logout", icon: "notification-bing.svg" },
-  ];
+  
 
   const progressCards = [
     {
@@ -74,26 +60,7 @@ export default function AdmissionsDashboardPage() {
         </div>
       </div>
       <div className="max-w-6xl mx-auto px-4 py-8 grid grid-cols-1 md:grid-cols-12 gap-6">
-        {/* Sidebar */}
-        <aside className="md:col-span-2 bg-white border shadow-sm border-[rgba(232, 234, 236, 1))] rounded p-2">
-          <nav className="space-y-2">
-            {sidebarItems.map((item) => (
-              <Link
-                key={item.href}
-                href={item.href}
-                className="flex items-center gap-2 p-2 rounded hover:bg-gray-50 text-gray-700"
-              >
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={`/icons/${item.icon}`}
-                  alt={item.label + " icon"}
-                  className="w-5 h-5"
-                />
-                <span className="text-sm text-[#545D66]">{item.label}</span>
-              </Link>
-            ))}
-          </nav>
-        </aside>
+        <AdmissionsSidebar />
 
         {/* Main Content */}
         <main className="md:col-span-7">
