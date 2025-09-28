@@ -424,6 +424,7 @@ export default function AdmissionsUploadsPage() {
       </div>
 
       <Footer />
+      
     </>
   );
 }
