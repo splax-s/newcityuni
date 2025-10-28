@@ -1,11 +1,52 @@
 "use client";
+import { useEffect, useState } from "react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Link from "next/link";
 import AdmissionsSidebar from "@/components/AdmissionsSidebar";
+import { getUserName } from "@/services/api/admissionsService";
 
 export default function AdmissionsDashboardPage() {
-  
+  const [userName, setUserName] = useState<string | null>(null);
+
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const res = await getUserName();
+        if (!mounted) return;
+        const obj = res as Record<string, unknown> | null;
+
+        // Prefer full_name, then first_name+last_name, then fallback keys
+        let name: string | null = null;
+        if (obj) {
+          const o = obj as Record<string, unknown>;
+          const first = o['first_name'] as string | undefined;
+          const full = o['full_name'] as string | undefined;
+          const last = o['last_name'] as string | undefined;
+          const uname = (o['user_name'] ?? o['display_name'] ?? o['name']) as string | undefined;
+
+          // Prefer first_name (e.g. "Bidi"), then full_name, then first+last, then username/display_name/name
+          if (first) {
+            name = first;
+          } else if (full) {
+            name = full;
+          } else if (first || last) {
+            name = `${first ?? ''}${first && last ? ' ' : ''}${last ?? ''}`.trim() || null;
+          } else if (uname) {
+            name = uname;
+          }
+        }
+
+        setUserName(name);
+      } catch {
+        // If the API fails, keep the fallback label
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   const progressCards = [
     {
@@ -67,7 +108,7 @@ export default function AdmissionsDashboardPage() {
           <div className=" mb-10 p-4 border rounded bg-white shadow-sm border-[rgba(232, 234, 236, 1))]">
             {" "}
             <h2 className="text-2xl text-black font-bold mb-2">
-              Welcome, Joshua! 👋
+              Welcome, {userName ?? "Applicant"}! 👋
             </h2>
             <p className="text-gray-600 mb-6">
               Track your progress and manage your application from here.
