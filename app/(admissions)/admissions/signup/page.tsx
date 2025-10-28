@@ -3,12 +3,14 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Image from "next/image";
 import Link from 'next/link'
+import { register } from '@/services/api';
 
 export default function AdmissionsSignupPage() {
   const router = useRouter();
 
   const [form, setForm] = useState({ fullname: "", email: "", phone: "", password: "", confirmPassword: "" });
   const [submitting, setSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -16,12 +18,32 @@ export default function AdmissionsSignupPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    // client-side confirm password validation
+    if (form.password !== form.confirmPassword) {
+      setFormError('Passwords do not match');
+      return;
+    }
+
+    setFormError(null);
     setSubmitting(true);
-    // Simulate submission (replace with real API call later)
-    await new Promise((res) => setTimeout(res, 800));
-    setSubmitting(false);
-    // After creating account, go to admissions dashboard
-    router.push('/admissions/dashboard');
+    try {
+      // Map UI fields to API payload. API requires `confirm_password`.
+      await register({
+        full_name: form.fullname,
+        email: form.email,
+        phone: form.phone,
+        password: form.password,
+        confirm_password: form.confirmPassword,
+      });
+      // On success navigate to dashboard
+      router.push('/admissions/dashboard');
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error('Register error:', msg);
+      setFormError(msg || 'Registration failed');
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   // Image for the signup page
@@ -116,6 +138,8 @@ export default function AdmissionsSignupPage() {
               {submitting ? "Creating Account…" : "Create Account"}
             </button>
           </form>
+
+            {formError && <div className="text-red-600 mt-3">{formError}</div>}
 
           {/* Terms and Policy */}
           <p className="text-xs text-gray-600 mt-4">

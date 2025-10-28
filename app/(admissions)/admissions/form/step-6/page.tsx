@@ -6,31 +6,48 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Stepper from "@/reuseComponents/Stepper";
 import Image from "next/image";
+import { getReviewSubmit } from "@/services/api/admissionsService";
 
-type AdmissionsData = {
-  program?: string;
-  fullname?: string;
-  email?: string;
-};
+type AdmissionsData = Record<string, unknown> | null;
 
 export default function AdmissionsFormStep6() {
   const router = useRouter();
   const [data, setData] = useState<AdmissionsData | null>(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    try {
-      const raw = localStorage.getItem("admissions_form");
-      if (raw) setData(JSON.parse(raw));
-      else
+    let mounted = true;
+    setLoading(true);
+    getReviewSubmit()
+      .then((res) => {
+        if (!mounted) return;
+        // API returns { application_data, step, progress }
+        setData(res?.application_data ?? null);
+      })
+      .catch((err: unknown) => {
+        console.error(err);
+        setError(err instanceof Error ? err.message : String(err));
+        // fallback: keep minimal mock so UI still works
         setData({
           program: "MSc in Technology",
           fullname: "Joshua Sam-Alade",
           email: "joshua@example.com",
         });
-    } catch {
-      setData(null);
-    }
+      })
+      .finally(() => {
+        if (mounted) setLoading(false);
+      });
+    return () => {
+      mounted = false;
+    };
   }, []);
+
+  const get = (key: string) => {
+    if (!data) return '-';
+    const v = (data as Record<string, unknown>)[key];
+    return v === null || v === undefined || v === '' ? '-' : String(v);
+  };
 
   function handleSubmit() {
     // simulated submit: clear local mock form state and redirect to dashboard
@@ -66,7 +83,11 @@ export default function AdmissionsFormStep6() {
         </p>
 
         <div className="bg-white border rounded-lg p-6 mb-6">
-          {!data ? (
+          {loading ? (
+            <p className="text-gray-600">Loading application...</p>
+          ) : error ? (
+            <p className="text-red-600">{error}</p>
+          ) : !data ? (
             <p className="text-gray-600">No saved application data found.</p>
           ) : (
             <div className="space-y-8">
@@ -95,27 +116,27 @@ export default function AdmissionsFormStep6() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
                   <div>
                     <p className="text-gray-500">Full Name</p>
-                    <p className="text-gray-900">{data.fullname}</p>
+                    <p className="text-gray-900">{get('user_name') !== '-' ? get('user_name') : `${get('first_name')} ${get('last_name')}`}</p>
                   </div>
                   <div>
                     <p className="text-gray-500">Middle Name</p>
-                    <p className="text-gray-900">{data.email}</p>
+                    <p className="text-gray-900">{get('middle_name')}</p>
                   </div>
                   <div>
-                    <p className="text-gray-500">Last Name</p>
-                    <p className="text-gray-900">{data.program}</p>
+                    <p className="text-gray-500">First Course Choice</p>
+                    <p className="text-gray-900">{get('first_course_choice')}</p>
                   </div>
                   <div>
                     <p className="text-gray-500">Phone Number</p>
-                    <p className="text-gray-900">+234 701 234 5678</p>
+                    <p className="text-gray-900">{get('phone_number')}</p>
                   </div>
                   <div>
                     <p className="text-gray-500">Email</p>
-                    <p className="text-gray-900">{data.email}</p>
+                    <p className="text-gray-900">{get('email') !== '-' ? get('email') : get('user_email')}</p>
                   </div>
                   <div>
                     <p className="text-gray-500">Date of Birth</p>
-                    <p className="text-gray-900">03/28/2025</p>
+                    <p className="text-gray-900">{get('date_of_birth')}</p>
                   </div>
                 </div>
               </div>
@@ -129,19 +150,19 @@ export default function AdmissionsFormStep6() {
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
                   <div>
                     <p className="text-gray-500">Address</p>
-                    <p className="text-gray-900">123 Banana Street, Lagos</p>
+                    <p className="text-gray-900">{get('address')}</p>
                   </div>
                   <div>
                     <p className="text-gray-500">Country</p>
-                    <p className="text-gray-900">Nigeria</p>
+                    <p className="text-gray-900">{get('country')}</p>
                   </div>
                   <div>
                     <p className="text-gray-500">State</p>
-                    <p className="text-gray-900">Lagos</p>
+                    <p className="text-gray-900">{get('state')}</p>
                   </div>
                   <div>
                     <p className="text-gray-500">Local Government Area</p>
-                    <p className="text-gray-900">Ikeja</p>
+                    <p className="text-gray-900">{get('city')}</p>
                   </div>
                 </div>
               </div>
@@ -174,28 +195,24 @@ export default function AdmissionsFormStep6() {
                   Health Information
                 </h2>
                 <hr className="mb-4" />
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-                  <div>
-                    <p className="text-gray-500">Blood Group</p>
-                    <p className="text-gray-900">O-</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+                    <div>
+                      <p className="text-gray-500">Gender</p>
+                      <p className="text-gray-900">{get('gender_display') !== '-' ? get('gender_display') : get('gender')}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">Documents Verified</p>
+                      <p className="text-gray-900">{get('documents_verified') === 'true' || get('documents_verified') === '1' ? 'Yes' : get('documents_verified') === '-' ? 'No' : get('documents_verified')}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">Status</p>
+                      <p className="text-gray-900">{get('status_display') !== '-' ? get('status_display') : get('status')}</p>
+                    </div>
+                    <div className="sm:col-span-2">
+                      <p className="text-gray-500">Awards Won</p>
+                      <p className="text-gray-900">{get('awards_won')}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-gray-500">Genotype</p>
-                    <p className="text-gray-900">AA</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500">Gender</p>
-                    <p className="text-gray-900">Male</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500">Disability</p>
-                    <p className="text-gray-900">None</p>
-                  </div>
-                  <div className="sm:col-span-2">
-                    <p className="text-gray-500">Health Issues</p>
-                    <p className="text-gray-900">None</p>
-                  </div>
-                </div>
               </div>
 
               {/* Next of Kin Information */}
@@ -204,20 +221,20 @@ export default function AdmissionsFormStep6() {
                   Next of Kin Information
                 </h2>
                 <hr className="mb-4" />
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-                  <div>
-                    <p className="text-gray-500">Full name</p>
-                    <p className="text-gray-900">John Doe</p>
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+                    <div>
+                      <p className="text-gray-500">Full name</p>
+                      <p className="text-gray-900">{get('user_name')}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">Address</p>
+                      <p className="text-gray-900">{get('address')}</p>
+                    </div>
+                    <div>
+                      <p className="text-gray-500">Phone</p>
+                      <p className="text-gray-900">{get('phone_number')}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-gray-500">Address</p>
-                    <p className="text-gray-900">456 Mango Avenue, Lagos</p>
-                  </div>
-                  <div>
-                    <p className="text-gray-500">Phone</p>
-                    <p className="text-gray-900">+234 701 234 5678</p>
-                  </div>
-                </div>
               </div>
             </div>
           )}

@@ -1,19 +1,47 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Stepper from "@/reuseComponents/Stepper";
+import { getPaymentGateways, initializePayment } from "@/services/api/admissionsService";
 
 export default function AdmissionsFormStep5() {
 
   const [method, setMethod] = useState("card");
-  const [paystackError, setPaystackError] = useState(false);
-  const [flutterError, setFlutterError] = useState(false);
-  const [remitaError, setRemitaError] = useState(false);
+  
   const router = useRouter();
+  const [gateways, setGateways] = useState<Record<string, string> | null>(null);
+  const [loadingGateways, setLoadingGateways] = useState(false);
+  const [initializing, setInitializing] = useState<string | null>(null);
+  const applicationId = "SJDxEn120"; // TODO: replace with real application id from state
+
+  useEffect(() => {
+    if (method !== "gateway") return;
+    let mounted = true;
+    setLoadingGateways(true);
+    getPaymentGateways()
+      .then((res) => {
+        if (!mounted) return;
+        // Expecting { payment_gateways: { paystack: url, flutterwave: url, ... } }
+        if (res && res.payment_gateways) {
+          setGateways(res.payment_gateways as Record<string, string>);
+        } else {
+          console.warn("Unexpected payment gateways response", res);
+          setGateways(null);
+        }
+      })
+      .catch((err) => {
+        console.error("Failed to load payment gateways", err);
+        setGateways(null);
+      })
+      .finally(() => setLoadingGateways(false));
+    return () => {
+      mounted = false;
+    };
+  }, [method]);
 
   return (
     <>
@@ -185,7 +213,7 @@ export default function AdmissionsFormStep5() {
                 <div className="grid grid-cols-2 gap-4 text-sm text-gray-700">
                   <div>
                     <p className="font-medium">Bank Name</p>
-                    <p className="text-gray-800">Zenith Bank</p>
+                    <p className="text-gray-800">Keystone</p>
                   </div>
                   <div>
                     <p className="font-medium">Account Name</p>
@@ -193,7 +221,7 @@ export default function AdmissionsFormStep5() {
                   </div>
                   <div>
                     <p className="font-medium">Account Number</p>
-                    <p className="text-gray-800">1234567890</p>
+                    <p className="text-gray-800">1013859043</p>
                   </div>
                   <div>
                     <p className="font-medium">Amount</p>
@@ -220,56 +248,63 @@ export default function AdmissionsFormStep5() {
                 </div>
 
                 <div className="flex gap-4 mb-6">
-                  <div className="flex-1 border rounded-md flex items-center justify-center p-4 cursor-pointer hover:border-[#8B1C3D]">
-                    {!paystackError ? (
-                      <Image
-                        src="/paystack.svg"
-                        alt="Paystack"
-                        height={24}
-                        width={96}
-                        className="h-6"
-                        onError={() => setPaystackError(true)}
-                      />
-                    ) : (
-                      <span className="text-xl">💳</span>
-                    )}
-                  </div>
-                  <div className="flex-1 border rounded-md flex items-center justify-center p-4 cursor-pointer hover:border-[#8B1C3D]">
-                    {!flutterError ? (
-                      <Image
-                        src="/flutterwave.svg"
-                        alt="Flutterwave"
-                        height={24}
-                        width={96}
-                        className="h-6"
-                        onError={() => setFlutterError(true)}
-                      />
-                    ) : (
-                      <span className="text-xl">⚡</span>
-                    )}
-                  </div>
-                  <div className="flex-1 border rounded-md flex items-center justify-center p-4 cursor-pointer hover:border-[#8B1C3D]">
-                    {!remitaError ? (
-                      <Image
-                        src="/remita.svg"
-                        alt="Remita"
-                        height={24}
-                        width={96}
-                        className="h-6"
-                        onError={() => setRemitaError(true)}
-                      />
-                    ) : (
-                      <span className="text-xl">💠</span>
-                    )}
-                  </div>
+                  {loadingGateways ? (
+                    <p className="text-sm text-gray-600">Loading payment gateways...</p>
+                  ) : gateways ? (
+                    Object.keys(gateways).map((key) => {
+                      const url = gateways[key];
+                      const logoMap: Record<string, string> = {
+                        paystack: "/paystack.svg",
+                        flutterwave: "/flutterwave.svg",
+                        etranzact: "/etranzact.png",
+                      };
+                      const logo = logoMap[key] || "/paystack.svg";
+                      return (
+                        <div key={key} className="flex-1">
+                          <button
+                            disabled={!!initializing}
+                            onClick={async () => {
+                              try {
+                                setInitializing(key);
+                                // payload depends on backend; include amount and application id
+                                const payload = { amount: 15000, application_id: applicationId };
+                                const resp = await initializePayment(url, payload);
+                                // try common fields for redirect URL
+                                const redirectUrl = resp?.authorization_url || resp?.data?.authorization_url || resp?.url || resp?.redirect_url || resp?.payment_url || resp?.data?.link;
+                                if (redirectUrl) {
+                                  window.location.href = redirectUrl;
+                                  return;
+                                }
+                                // fallback: open response in new tab for debugging
+                                const w = window.open();
+                                w?.document.write(`<pre>${JSON.stringify(resp, null, 2)}</pre>`);
+                              } catch (err: unknown) {
+                                console.error("Payment init failed", err);
+                                alert(err instanceof Error ? err.message : String(err));
+                              } finally {
+                                setInitializing(null);
+                              }
+                            }}
+                            className="w-full border rounded-md flex items-center justify-center p-4 hover:border-[#8B1C3D] bg-white"
+                          >
+                            <Image src={logo} alt={key} height={40} width={120} className="h-6" />
+                          </button>
+                        </div>
+                      );
+                    })
+                  ) : (
+                    <p className="text-sm text-red-500">No payment gateways configured.</p>
+                  )}
                 </div>
 
-                <button
-                  onClick={() => router.push("/admissions/form/step-6")}
-                  className="w-full bg-[#61213C] text-white font-semibold py-3 rounded-md"
-                >
-                  Proceed to pay
-                </button>
+                <div>
+                  <button
+                    onClick={() => router.push("/admissions/form/step-6")}
+                    className="w-full bg-[#61213C] text-white font-semibold py-3 rounded-md"
+                  >
+                    Proceed to pay
+                  </button>
+                </div>
               </div>
             )}
           </div>
