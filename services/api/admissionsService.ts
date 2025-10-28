@@ -101,3 +101,12 @@ const STEP_REVIEW_PATH = '/api/v1/admission/application/steps/review-submit/';
 export async function getReviewSubmit() {
   return apiFetch(STEP_REVIEW_PATH, { method: 'GET' });
 }
+
+const USER_NAME_PATH = '/api/v1/admission/user-name/';
+
+/**
+ * Get the current user's display name for admissions pages
+ */
+export async function getUserName() {
+  return apiFetch(USER_NAME_PATH, { method: 'GET' });
+}
