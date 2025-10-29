@@ -110,3 +110,13 @@ const USER_NAME_PATH = '/api/v1/admission/user-name/';
 export async function getUserName() {
   return apiFetch(USER_NAME_PATH, { method: 'GET' });
 }
+
+const SUBMIT_PATH = '/api/v1/admission/application/submit/';
+
+/**
+ * Submit the current application. Returns the server response which is
+ * expected to include an application id (e.g., { application_id: '...' }).
+ */
+export async function submitApplication() {
+  return apiFetch(SUBMIT_PATH, { method: 'POST' });
+}

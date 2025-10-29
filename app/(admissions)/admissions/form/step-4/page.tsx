@@ -292,13 +292,13 @@ export default function AdmissionsFormStep4() {
                           <p className="text-gray-600 text-xs">{f.size ? `${Math.round(f.size / 1024)}kb` : "-"}</p>
                           {f.status === 'local' && (
                             <div className="mt-2">
-                              <label className="text-xs text-gray-600 mr-2">Document type</label>
+                              <label className="text-xs text-black mr-2">Document type</label>
                               <select
                                 value={f.documentType || ""}
                                 onChange={(e) =>
                                   setUploadedFiles((prev) => prev.map((p) => (p.id === f.id ? { ...p, documentType: e.target.value } : p)))
                                 }
-                                className="border rounded-md text-sm p-1"
+                                className="border rounded-md text-sm p-1 text-black"
                               >
                                 <option value="">Select type</option>
                                 <option value="waec_certificate">WAEC Certificate</option>

@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import Image from "next/image";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
@@ -232,12 +233,17 @@ export default function AdmissionsFormStep5() {
                     <p className="text-gray-800">SJDxEn120</p>
                   </div>
                 </div>
-                <button
-                  onClick={() => router.push("/admissions/form/step-6")}
-                  className="w-full bg-[#61213C] text-white font-semibold py-3 rounded-md mt-4"
+                <a
+                  href={`mailto:Info@newcity.edu.ng?subject=${encodeURIComponent(
+                    `Application Fee Receipt - ${applicationId}`
+                  )}&body=${encodeURIComponent(
+                    `Hello,\n\nI have attached my application fee receipt for application ID: ${applicationId}.\n\nPlease confirm receipt.\n\nThanks.`
+                  )}`}
+                  className="w-full inline-block bg-[#61213C] text-white font-semibold py-3 rounded-md mt-4 text-center"
                 >
-                  I have paid
-                </button>
+                  Submit Receipt
+                </a>
+                <p className="text-sm text-gray-600"> After paying and sending your receipt, Please <Link className="text-[#61213C] cursor-pointer" href="/admissions/form/step-6">click here</Link> to proceed.</p>
               </div>
             )}
             {method === "gateway" && (
