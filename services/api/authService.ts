@@ -81,3 +81,30 @@ export async function login(payload: LoginPayload) {
 
   return res;
 }
+
+const LOGOUT_PATH = '/api/v1/auth/logout/';
+
+/**
+ * Logout the current user. Calls the logout endpoint and clears stored tokens/user.
+ */
+export async function logout() {
+  // Attempt server logout first
+  try {
+    await apiFetch(LOGOUT_PATH, { method: 'POST' });
+  } catch (err) {
+    // ignore errors from server logout but proceed to clear local state
+    console.warn('Server logout failed', err);
+  }
+
+  if (typeof window !== 'undefined') {
+    try {
+      localStorage.removeItem('access');
+      localStorage.removeItem('refresh');
+      localStorage.removeItem('user');
+    } catch (e) {
+      console.warn('Failed to clear localStorage during logout', e);
+    }
+  }
+
+  return true;
+}

@@ -6,7 +6,7 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Stepper from "@/reuseComponents/Stepper";
 import Image from "next/image";
-import { getReviewSubmit } from "@/services/api/admissionsService";
+import { getReviewSubmit, submitApplication } from "@/services/api/admissionsService";
 
 type AdmissionsData = Record<string, unknown> | null;
 
@@ -15,6 +15,7 @@ export default function AdmissionsFormStep6() {
   const [data, setData] = useState<AdmissionsData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
 
   useEffect(() => {
     let mounted = true;
@@ -49,10 +50,34 @@ export default function AdmissionsFormStep6() {
     return v === null || v === undefined || v === '' ? '-' : String(v);
   };
 
-  function handleSubmit() {
-    // simulated submit: clear local mock form state and redirect to dashboard
-    localStorage.removeItem("admissions_form");
-    router.push("/admissions/dashboard");
+  const formatDocType = (t: unknown) => {
+    if (!t) return '-';
+    try {
+      const s = String(t);
+      return s.replace(/_/g, ' ').replace(/\b\w/g, (c) => c.toUpperCase());
+    } catch {
+      return String(t);
+    }
+  };
+
+  async function handleSubmit() {
+    if (submitting) return;
+    setSubmitting(true);
+    setError(null);
+    try {
+      const res = await submitApplication();
+      // try common keys for application id
+      const appId = (res && (res.application_id ?? res.application?.id ?? res.id)) ?? null;
+      const appIdStr = appId ? String(appId) : null;
+      // clear local state and navigate to success page
+      try { localStorage.removeItem("admissions_form"); } catch {}
+      router.push(`/admissions/submitted${appIdStr ? `?application_id=${encodeURIComponent(appIdStr)}` : ''}`);
+    } catch (err: unknown) {
+      console.error(err);
+      setError(err instanceof Error ? err.message : String(err));
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -320,57 +345,50 @@ export default function AdmissionsFormStep6() {
                 </h3>
                 <hr className="mb-4" />
 
-                {/* JAMB */}
-                <div className="grid grid-cols-3 gap-4 text-sm mb-8">
-                  {/* Exam name */}
-                  <div className="font-bold text-gray-700">JAMB</div>
+                {/* Dynamic exam results grouped by exam_type */}
+                {(() => {
+                  const examResultsRaw = data && Array.isArray((data as Record<string, unknown>)['exam_results'])
+                    ? ((data as Record<string, unknown>)['exam_results'] as Array<Record<string, unknown>>)
+                    : [];
 
-                  {/* Header + subjects */}
-                  <div className="col-span-2">
-                    <div className="grid grid-cols-2 font-medium text-gray-500 mb-2">
-                      <p>Subject</p>
-                      <p>Grade</p>
-                    </div>
-                    <div className="grid grid-cols-2 gap-y-2">
-                      <p className="text-gray-900">Mathematics</p>
-                      <p className="text-gray-900">A+</p>
-                      <p className="text-gray-900">Physics</p>
-                      <p className="text-gray-900">B</p>
-                      <p className="text-gray-900">Chemistry</p>
-                      <p className="text-gray-900">A</p>
-                      <p className="text-gray-900">History</p>
-                      <p className="text-gray-900">A</p>
-                    </div>
-                  </div>
-                </div>
+                  if (examResultsRaw.length === 0) {
+                    return <p className="text-gray-600">No exam results provided.</p>;
+                  }
 
-                {/* WAEC */}
-                <div className="grid grid-cols-3 gap-4 text-sm border-t border-gray-200 pt-6">
-                  {/* Exam name */}
-                  <div className="font-bold text-gray-700">WAEC</div>
+                  const grouped = examResultsRaw.reduce((acc: Record<string, Array<Record<string, unknown>>>, item) => {
+                    const t = String(item['exam_type'] ?? 'other').toUpperCase();
+                    if (!acc[t]) acc[t] = [];
+                    acc[t].push(item);
+                    return acc;
+                  }, {} as Record<string, Array<Record<string, unknown>>>);
 
-                  {/* Header + subjects */}
-                  <div className="col-span-2">
-                    <div className="grid grid-cols-2 font-medium text-gray-500 mb-2">
-                      <p>Subject</p>
-                      <p>Grade</p>
+                  return Object.entries(grouped).map(([examType, items]) => (
+                    <div key={examType} className="grid grid-cols-3 gap-4 text-sm mb-8">
+                      <div className="font-bold text-gray-700">{examType}</div>
+
+                      <div className="col-span-2">
+                        <div className="grid grid-cols-2 font-medium text-gray-500 mb-2">
+                          <p>Subject</p>
+                          <p>Grade</p>
+                        </div>
+                        <div className="space-y-2">
+                          {items.map((it, idx) => {
+                            const rec = it as Record<string, unknown>;
+                            const subject = rec['subject'] ?? '-';
+                            const grade = rec['grade'] ?? '-';
+                            const key = String(rec['id'] ?? `${examType}-${idx}`);
+                            return (
+                              <div key={key} className="grid grid-cols-2 gap-y-2">
+                                <p className="text-gray-900">{String(subject)}</p>
+                                <p className="text-gray-900">{String(grade)}</p>
+                              </div>
+                            );
+                          })}
+                        </div>
+                      </div>
                     </div>
-                    <div className="grid grid-cols-2 gap-y-2">
-                      <p className="text-gray-900">Further Mathematics</p>
-                      <p className="text-gray-900">A</p>
-                      <p className="text-gray-900">Biology</p>
-                      <p className="text-gray-900">A</p>
-                      <p className="text-gray-900">English Literature</p>
-                      <p className="text-gray-900">B+</p>
-                      <p className="text-gray-900">Geography</p>
-                      <p className="text-gray-900">B</p>
-                      <p className="text-gray-900">Mathematics</p>
-                      <p className="text-gray-900">A+</p>
-                      <p className="text-gray-900">Computer Science</p>
-                      <p className="text-gray-900">A</p>
-                    </div>
-                  </div>
-                </div>
+                  ));
+                })()}
               </div>
             </div>
           )}
@@ -448,70 +466,46 @@ export default function AdmissionsFormStep6() {
               </div>
               <hr className="my-4" />
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-                <div className="flex items-center gap-2">
-                  <Image
-                    src="/icons/checkcircle.svg"
-                    alt="checkcircle"
-                    width={25}
-                    height={25}
-                  />
-                  <div>
-                    <p className="text-[#1C1F22]">WAEC Result</p>
-                    <div className="flex items-center gap-2">
-                      <Image
-                        src="/icons/pdf.svg"
-                        alt="pdf"
-                        width={16}
-                        height={16}
-                      />
-                      <p className="text-[#6F7C89]">
-                        Joshua Sam-Alade WAEC.pdf
-                      </p>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Image
-                    src="/icons/checkcircle.svg"
-                    alt="checkcircle"
-                    width={25}
-                    height={25}
-                  />
-                  <div>
-                    <p className="text-[#1C1F22]">NIN</p>
-                    <div className="flex items-center gap-2">
-                      <Image
-                        src="/icons/pdf.svg"
-                        alt="pdf"
-                        width={16}
-                        height={16}
-                      />
-                      <p className="text-[#6F7C89]">Joshua Sam-Alade NIN.pdf</p>
-                    </div>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <Image
-                    src="/icons/checkcircle.svg"
-                    alt="checkcircle"
-                    width={25}
-                    height={25}
-                  />
-                  <div>
-                    <p className="text-[#1C1F22]">JAMB Result</p>
-                    <div className="flex items-center gap-2">
-                      <Image
-                        src="/icons/pdf.svg"
-                        alt="pdf"
-                        width={16}
-                        height={16}
-                      />
-                      <p className="text-[#6F7C89]">
-                        Joshua Sam-Alade JAMB.pdf
-                      </p>
-                    </div>
-                  </div>
-                </div>
+                {(() => {
+                  const uploaded = data && Array.isArray((data as Record<string, unknown>)['uploaded_documents'])
+                    ? ((data as Record<string, unknown>)['uploaded_documents'] as Array<Record<string, unknown>>)
+                    : [];
+
+                  if (uploaded.length === 0) {
+                    return (
+                      <div className="col-span-1 sm:col-span-2 text-gray-600">No uploaded documents.</div>
+                    );
+                  }
+
+                  return uploaded.map((doc) => {
+                    const d = doc as Record<string, unknown>;
+                    const id = String(d['id'] ?? Math.random());
+                    const typeLabel = formatDocType(d['document_type']);
+                    const name = d['document_name'] ?? '-';
+                    return (
+                      <div key={id} className="flex items-center gap-2">
+                        <Image
+                          src="/icons/checkcircle.svg"
+                          alt="checkcircle"
+                          width={25}
+                          height={25}
+                        />
+                        <div>
+                          <p className="text-[#1C1F22]">{typeLabel}</p>
+                          <div className="flex items-center gap-2">
+                            <Image
+                              src="/icons/pdf.svg"
+                              alt="pdf"
+                              width={16}
+                              height={16}
+                            />
+                            <p className="text-[#6F7C89]">{String(name)}</p>
+                          </div>
+                        </div>
+                      </div>
+                    );
+                  });
+                })()}
               </div>
             </div>
           )}
@@ -527,13 +521,16 @@ export default function AdmissionsFormStep6() {
             </button>
 
             <button
-              onClick={handleSubmit}
-              className="ml-auto bg-[#61213C] text-white px-4 py-2 rounded-sm font-semibold"
+                  onClick={handleSubmit}
+                  disabled={submitting}
+                  className={`ml-auto px-4 py-2 rounded-sm font-semibold ${submitting ? 'bg-gray-400 text-white cursor-not-allowed' : 'bg-[#61213C] text-white'}`}
             >
-              Submit
+                  {submitting ? 'Submitting...' : 'Submit'}
             </button>
           </div>
         </div>
+
+            {/* After submit we now navigate to the success page; no modal rendered here */}
       </div>
 
       <Footer />

@@ -5,6 +5,7 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Stepper from "@/reuseComponents/Stepper";
 import React, { useEffect, useState } from "react";
+import nigeriaLgas from "@/data/nigeriaLgas";
 import { useRouter } from "next/navigation";
 import { submitPersonalInfo } from "@/services/api";
 
@@ -16,6 +17,15 @@ export default function AdmissionsFormStep2() {
   const [stateValue, setStateValue] = useState<string>("");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  // State of Origin (Nigeria-only)
+  const [originStates, setOriginStates] = useState<{ isoCode?: string; name: string }[]>([]);
+  const [originStateValue, setOriginStateValue] = useState<string>("Lagos");
+  const [originLgas, setOriginLgas] = useState<string[]>([]);
+  const [originLgaValue, setOriginLgaValue] = useState<string>("");
+  const [originLgaManual, setOriginLgaManual] = useState<string>("");
+  // Residency LGA (for Residency Information section)
+  const [residencyLgas, setResidencyLgas] = useState<string[]>([]);
+  const [residencyLgaManual, setResidencyLgaManual] = useState<string>("");
 
   useEffect(() => {
     // dynamic import so TypeScript doesn't require type declarations at build time
@@ -52,6 +62,53 @@ export default function AdmissionsFormStep2() {
     }
   }, [countryIso]);
 
+  // Update residency LGAs when residency state (stateValue) changes and country is Nigeria
+  useEffect(() => {
+    if (countryIso === "NG" && stateValue) {
+      const lg = nigeriaLgas[stateValue] || nigeriaLgas[stateValue.replace(" State", "")] || [];
+      setResidencyLgas(lg);
+      setResidencyLgaManual("");
+    } else {
+      setResidencyLgas([]);
+      setResidencyLgaManual("");
+    }
+  }, [countryIso, stateValue]);
+
+  // Load Nigeria-only origin states once
+  useEffect(() => {
+    let mounted = true;
+    import("country-state-city")
+      .then((mod) => {
+        const st = mod?.State?.getStatesOfCountry?.("NG") ?? [];
+        if (mounted) setOriginStates(st as { isoCode?: string; name: string }[]);
+      })
+      .catch(() => {
+        if (mounted) setOriginStates(Object.keys(nigeriaLgas).map((k) => ({ name: k })));
+      });
+
+    return () => {
+      mounted = false;
+    };
+  }, []);
+
+  // Update origin LGAs when origin state changes
+  useEffect(() => {
+    if (!originStateValue) {
+      setOriginLgas([]);
+      setOriginLgaValue("");
+      return;
+    }
+
+    const lg = nigeriaLgas[originStateValue] || nigeriaLgas[originStateValue.replace(" State", "")] || [];
+    setOriginLgas(lg);
+    setOriginLgaValue("");
+  }, [originStateValue]);
+
+  // Clear manual LGA input when selection changes away from Other
+  useEffect(() => {
+    if (originLgaValue !== "Other") setOriginLgaManual("");
+  }, [originLgaValue]);
+
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setError(null);
@@ -64,7 +121,12 @@ export default function AdmissionsFormStep2() {
       const countrySelectedIso = fd.get("country")?.toString() ?? "";
       const countryName = countries.find((c) => c.isoCode === countrySelectedIso)?.name ?? countrySelectedIso;
 
-      const payload = {
+  const originLgaManual = fd.get("originLgaManual")?.toString() ?? "";
+  const originLgaFormValue = originLgaManual || (fd.get("originLga")?.toString() ?? "");
+  const lgaManual = fd.get("lgaManual")?.toString() ?? "";
+  const lgaFormValue = lgaManual || (fd.get("lga")?.toString() ?? "");
+
+  const payload = {
         first_name: fd.get("firstName")?.toString() ?? "",
         middle_name: fd.get("middleName")?.toString() ?? "",
         last_name: fd.get("lastName")?.toString() ?? "",
@@ -74,9 +136,9 @@ export default function AdmissionsFormStep2() {
         address: fd.get("address")?.toString() ?? "",
         country: countryName,
         state: fd.get("state")?.toString() ?? "",
-        local_government_area: fd.get("lga")?.toString() ?? "",
+  local_government_area: lgaFormValue,
         state_of_origin: fd.get("originState")?.toString() ?? "",
-        state_of_origin_lga: fd.get("originLga")?.toString() ?? "",
+  state_of_origin_lga: originLgaFormValue,
         nationality: fd.get("nationality")?.toString() ?? "",
         blood_group: fd.get("bloodGroup")?.toString() ?? "",
         gender: fd.get("gender")?.toString() ?? "",
@@ -202,7 +264,27 @@ export default function AdmissionsFormStep2() {
 
                 <div>
                   <label htmlFor="lga" className="block text-sm font-medium text-black mb-1">Local Government Area</label>
-                  <input id="lga" name="lga" type="text" placeholder="Local Government Area" className="border rounded-md p-3 text-gray-700 w-full" />
+                  {residencyLgas.length ? (
+                    <>
+                      <select id="lga" name="lga" className="border rounded-md p-3 text-gray-700 w-full">
+                        <option value="">Select LGA</option>
+                        {residencyLgas.map((l) => (
+                          <option key={l} value={l}>{l}</option>
+                        ))}
+                        <option value="Other">Other (enter manually)</option>
+                      </select>
+                      <input
+                        type="text"
+                        name="lgaManual"
+                        placeholder="If Other, enter LGA here"
+                        value={residencyLgaManual}
+                        onChange={(e) => setResidencyLgaManual(e.target.value)}
+                        className="border rounded-md p-3 text-gray-700 w-full mt-2"
+                      />
+                    </>
+                  ) : (
+                    <input id="lga" name="lga" type="text" placeholder="Local Government Area" className="border rounded-md p-3 text-gray-700 w-full" />
+                  )}
                 </div>
               </div>
             </div>
@@ -215,16 +297,60 @@ export default function AdmissionsFormStep2() {
               <hr className="mb-4" />
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
-                  <label htmlFor="originState" className="block text-sm font-medium text-black mb-1">State</label>
-                  <select id="originState" name="originState" defaultValue="Lagos State" className="border rounded-md p-3 text-gray-700 w-full">
-                    <option>State</option>
-                    <option>Lagos State</option>
-                  </select>
+                    <label htmlFor="originState" className="block text-sm font-medium text-black mb-1">State</label>
+                    <select
+                      id="originState"
+                      name="originState"
+                      value={originStateValue}
+                      onChange={(e) => setOriginStateValue(e.target.value)}
+                      className="border rounded-md p-3 text-gray-700 w-full"
+                    >
+                      <option value="">Select state</option>
+                      {originStates.map((s) => (
+                        <option key={s.isoCode ?? s.name} value={s.name}>
+                          {s.name}
+                        </option>
+                      ))}
+                    </select>
                 </div>
 
                 <div>
                   <label htmlFor="originLga" className="block text-sm font-medium text-black mb-1">Local Government Area</label>
-                  <input id="originLga" name="originLga" type="text" placeholder="Local Government Area" className="border rounded-md p-3 text-gray-700 w-full" />
+                  {originLgas.length ? (
+                    <select
+                      id="originLga"
+                      name="originLga"
+                      value={originLgaValue}
+                      onChange={(e) => setOriginLgaValue(e.target.value)}
+                      className="border rounded-md p-3 text-gray-700 w-full"
+                    >
+                      <option value="">Select LGA</option>
+                      {originLgas.map((l) => (
+                        <option key={l} value={l}>{l}</option>
+                      ))}
+                      <option value="Other">Other (enter manually)</option>
+                    </select>
+                  ) : (
+                    <input
+                      id="originLga"
+                      name="originLga"
+                      type="text"
+                      placeholder="Enter Local Government Area"
+                      value={originLgaValue}
+                      onChange={(e) => setOriginLgaValue(e.target.value)}
+                      className="border rounded-md p-3 text-gray-700 w-full"
+                    />
+                  )}
+                  {originLgaValue === "Other" && (
+                    <input
+                      type="text"
+                      name="originLgaManual"
+                      placeholder="Specify LGA"
+                      value={originLgaManual}
+                      onChange={(e) => setOriginLgaManual(e.target.value)}
+                      className="border rounded-md p-3 text-gray-700 w-full mt-2"
+                    />
+                  )}
                 </div>
 
                 <div>
