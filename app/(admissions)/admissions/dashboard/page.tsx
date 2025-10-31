@@ -4,12 +4,79 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Link from "next/link";
 import AdmissionsSidebar from "@/components/AdmissionsSidebar";
-import { getUserName } from "@/services/api/admissionsService";
+import { getUserName, getApplicationSummary } from "@/services/api/admissionsService";
+import { useAppSelector } from '../../../../store/hooks';
+import { useSearchParams } from 'next/navigation';
+import { programs } from '@/data/programs';
 
 export default function AdmissionsDashboardPage() {
   const [userName, setUserName] = useState<string | null>(null);
 
+  const auth = useAppSelector((s) => s.auth);
+  const [applicationId, setApplicationId] = useState<string | null>(
+    auth?.user?.id != null ? String(auth?.user?.id) : null
+  );
+  const searchParams = useSearchParams();
+  const [relatedProgramTitle, setRelatedProgramTitle] = useState<string | null>(null);
+  const searchParamsString = searchParams ? searchParams.toString() : '';
+
+  // Initialize userName from Redux auth if available
   useEffect(() => {
+    if (auth?.user) {
+      const u = auth.user;
+      const first = u.first_name?.trim();
+      const last = u.last_name?.trim();
+      if (first && last) {
+        setUserName(`${first} ${last}`);
+        return;
+      }
+      if (first) {
+        setUserName(first);
+        return;
+      }
+      if (u.username) {
+        setUserName(u.username as string);
+        return;
+      }
+    }
+    // otherwise leave existing effect to call API below
+  }, [auth]);
+
+  // derive selected program from query param (e.g. ?program=program-slug)
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(searchParamsString || '');
+      const slug = params.get('program');
+      if (slug) {
+        const p = programs.find((pr) => pr.slug === slug);
+        setRelatedProgramTitle(p ? p.title : slug);
+      } else {
+        setRelatedProgramTitle(null);
+      }
+    } catch {
+      // ignore if searchParams not available for some reason
+    }
+  }, [searchParamsString]);
+
+  // If Redux doesn't have the selected program (e.g. after refresh), try localStorage
+  useEffect(() => {
+    try {
+      if (!auth?.selectedProgram && !relatedProgramTitle) {
+        const raw = typeof window !== 'undefined' ? localStorage.getItem('selectedProgram') : null;
+        if (raw) {
+          const parsed = JSON.parse(raw) as { slug: string; title: string } | null;
+          if (parsed?.title) setRelatedProgramTitle(parsed.title);
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }, [auth?.selectedProgram, relatedProgramTitle]);
+
+  useEffect(() => {
+    // If we already populated userName from Redux, skip the API call.
+    if (userName) return;
+
     let mounted = true;
     (async () => {
       try {
@@ -46,7 +113,26 @@ export default function AdmissionsDashboardPage() {
     return () => {
       mounted = false;
     };
-  }, []);
+  }, [userName]);
+
+  // Fetch application summary to get application_id and update applicationId
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const res = await getApplicationSummary();
+        if (!mounted) return;
+        const obj = res as Record<string, unknown> | null;
+        const appId = obj ? (obj['application_id'] as string | undefined) : undefined;
+        if (appId) setApplicationId(appId);
+      } catch {
+        // ignore errors and keep fallback
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, [auth?.user?.id]);
 
   const progressCards = [
     {
@@ -108,7 +194,7 @@ export default function AdmissionsDashboardPage() {
           <div className=" mb-10 p-4 border rounded bg-white shadow-sm border-[rgba(232, 234, 236, 1))]">
             {" "}
             <h2 className="text-2xl text-black font-bold mb-2">
-              Welcome, {userName ?? "Applicant"}! 👋
+              Welcome, {auth?.user?.first_name ?? (userName ? String(userName).split(' ')[0] : 'Applicant')}! 👋
             </h2>
             <p className="text-gray-600 mb-6">
               Track your progress and manage your application from here.
@@ -205,17 +291,17 @@ export default function AdmissionsDashboardPage() {
             <div className="flex flex-col gap-3">
               <div className="flex flex-col">
                 <p className="font-medium text-gray-500">Full Name:</p>
-                <p className="text-gray-800">Oluwademilade Joshua Sam-Alade</p>
+                <p className="text-gray-800">{userName ?? 'Applicant'}</p>
               </div>
               <div className="flex flex-col">
                 <p className="font-medium text-gray-500">Application ID:</p>
-                <p className="text-gray-800">SJdXen120</p>
+                <p className="text-gray-800">{applicationId ?? '—'}</p>
               </div>
               <div className="flex flex-col">
                 <p className="font-medium text-gray-500">
                   Program of Interest:
                 </p>
-                <p className="text-gray-800">Computer Engineering</p>
+                <p className="text-gray-800">{auth?.selectedProgram?.title ?? relatedProgramTitle ?? '—'}</p>
               </div>
               <div className="flex flex-col">
                 <p className="font-medium text-gray-500">Submission Date:</p>

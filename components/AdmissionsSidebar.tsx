@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import React, { useState } from "react";
 import { logout as apiLogout } from "@/services/api/authService";
 
 type Item = { label: string; href: string; icon: string };
@@ -52,7 +52,7 @@ export default function AdmissionsSidebar({ items }: { items?: Item[] }) {
           // Render Logout as a button that calls the API instead of a normal link
           if (item.label.toLowerCase() === 'logout') {
             return (
-              <>
+              <React.Fragment key={item.href}>
                 <button
                   key={item.href}
                   onClick={(e) => {
@@ -93,7 +93,7 @@ export default function AdmissionsSidebar({ items }: { items?: Item[] }) {
                     </div>
                   </div>
                 )}
-              </>
+              </React.Fragment>
             );
           }
 

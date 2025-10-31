@@ -120,3 +120,12 @@ const SUBMIT_PATH = '/api/v1/admission/application/submit/';
 export async function submitApplication() {
   return apiFetch(SUBMIT_PATH, { method: 'POST' });
 }
+
+const SUMMARY_PATH = '/api/v1/admission/summary/';
+
+/**
+ * Get application summary including application_id
+ */
+export async function getApplicationSummary() {
+  return apiFetch(SUMMARY_PATH, { method: 'GET' });
+}

@@ -133,9 +133,10 @@ export default function AdmissionsFormStep1() {
                   onChange={(e) => setFaculty(e.target.value)}
                   className="border rounded-md p-3 text-gray-700 w-full"
                 >
-                  <option>Faculty of Science</option>
-                  <option>Faculty of Arts</option>
-                  <option>Faculty of Engineering</option>
+                  <option>Faculty Of Basic Medical And Allied Health Sciences</option>
+                  <option>Faculty Of Science and Computing</option>
+                  <option>Faculty Of Communications And Media Studies</option>
+                  <option>Faculty Of Social And Management Sciences</option>
                 </select>
               </div>
               <div>
@@ -148,10 +149,23 @@ export default function AdmissionsFormStep1() {
                   onChange={(e) => setDepartment(e.target.value)}
                   className="border rounded-md p-3 text-gray-700 w-full"
                 >
+                  <option>Department Of Nursing Science</option>
+                  <option>Department Of Doctor of Physiotherapy(DPT)</option>
+                  <option>Department Of Medical Laboratory Science</option>
+                  <option>Department Of Radiography</option>
+                  <option>Department Of Public Health</option>
                   <option>Department of Computer Science</option>
-                  <option>Department of Mathematics</option>
-                  <option>Department of Physics</option>
-                  <option>Department of Chemistry</option>
+                  <option>Department of Cyber-Security</option>
+                  <option>Department of Information Technology</option>
+                  <option>Department of Biochemistry</option>
+                  <option>Department of Mass Communication</option>
+                  <option>Department of Accounting</option>
+                  <option>Department of Business Administration</option>
+                  <option>Department of Economics</option>
+                  <option>Department of Public Relations</option>
+                  <option>Department of Advertising</option>
+                  <option>Department of Broadcasting</option>
+                  <option>Department of Journalism and Media Studies</option>
                 </select>
               </div>
             </div>
@@ -168,10 +182,23 @@ export default function AdmissionsFormStep1() {
                   onChange={(e) => setProgramName(e.target.value)}
                   className="border rounded-md p-3 text-gray-700 w-full"
                 >
-                  <option>Software Engineering</option>
-                  <option>Computer Science</option>
-                  <option>Information Technology</option>
-                  <option>Cybersecurity</option>
+                  <option>B.sc Nursing Science</option>
+                  <option>PhD Doctor of Physiotherapy(DPT)</option>
+                  <option>B.sc Medical Laboratory Science</option>
+                  <option>B.sc Radiography</option>
+                  <option>B.sc Public Health</option>
+                  <option>B.sc Computer Science</option>
+                  <option>B.sc Cyber-Security</option>
+                  <option>B.sc Information Technology</option>
+                  <option>B.sc Biochemistry</option>
+                  <option>B.sc Mass Communication</option>
+                  <option>B.sc Accounting</option>
+                  <option>B.sc Business Administration</option>
+                  <option>B.sc Economics</option>
+                  <option>B.sc Public Relations</option>
+                  <option>B.sc Advertising</option>
+                  <option>B.sc Broadcasting</option>
+                  <option>B.sc Journalism and Media Studies</option>
                 </select>
               </div>
             </div>

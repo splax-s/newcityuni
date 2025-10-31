@@ -1,12 +1,18 @@
 "use client"
-import { useRouter } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Image from 'next/image'
 import { login } from '../../../../services/api/authService'
+import { useAppDispatch } from '../../../../store/hooks'
+import { setSelectedProgram } from '@/store/authSlice'
+import { programs } from '@/data/programs'
 
 export default function AdmissionsLoginPage() {
   const router = useRouter()
+  const dispatch = useAppDispatch()
+  const searchParams = useSearchParams()
+  const searchParamsString = searchParams ? searchParams.toString() : '';
 
   const [form, setForm] = useState({ email: '', password: '', remember: false })
   const [submitting, setSubmitting] = useState(false)
@@ -36,6 +42,18 @@ export default function AdmissionsLoginPage() {
       } catch {
         // ignore storage errors
       }
+      // If there's a persisted selectedProgram in localStorage already, ensure Redux has it
+      try {
+        const raw = localStorage.getItem('selectedProgram')
+        if (raw) {
+          const parsed = JSON.parse(raw) as { slug: string; title: string }
+          if (parsed?.slug) {
+            dispatch(setSelectedProgram(parsed))
+          }
+        }
+      } catch {
+        // ignore
+      }
       router.push('/admissions/dashboard')
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : String(err)
@@ -44,6 +62,32 @@ export default function AdmissionsLoginPage() {
       setSubmitting(false)
     }
   }
+
+  // On mount, capture `program` query param (or fallback to persisted selection) and store in Redux
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(searchParamsString || '')
+      const slug = params.get('program')
+      if (slug) {
+        const p = programs.find((pr) => pr.slug === slug)
+        const title = p ? p.title : slug
+        dispatch(setSelectedProgram({ slug, title }))
+        try {
+          localStorage.setItem('selectedProgram', JSON.stringify({ slug, title }))
+        } catch {}
+        return
+      }
+
+      // fallback: try to read previously stored selection
+      const raw = localStorage.getItem('selectedProgram')
+      if (raw) {
+        const parsed = JSON.parse(raw) as { slug: string; title: string }
+        if (parsed?.slug) dispatch(setSelectedProgram(parsed))
+      }
+    } catch {
+      // ignore
+    }
+  }, [searchParamsString, dispatch])
 
   return (
     <div className="min-h-screen flex flex-col md:flex-row">

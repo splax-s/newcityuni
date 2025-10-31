@@ -1,12 +1,17 @@
 "use client";
-import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
+import { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from 'next/link'
 import { register } from '@/services/api';
+import { useAppDispatch } from '../../../../store/hooks';
+import { setSelectedProgram } from '@/store/authSlice';
+import { programs } from '@/data/programs';
 
 export default function AdmissionsSignupPage() {
   const router = useRouter();
+  const dispatch = useAppDispatch();
+  const searchParams = useSearchParams();
 
   const [form, setForm] = useState({ fullname: "", email: "", phone: "", password: "", confirmPassword: "" });
   const [submitting, setSubmitting] = useState(false);
@@ -45,6 +50,28 @@ export default function AdmissionsSignupPage() {
       setSubmitting(false);
     }
   };
+
+  // On mount, capture `program` query param and store in Redux so dashboard can read it
+  const searchParamsString = searchParams ? searchParams.toString() : '';
+
+  useEffect(() => {
+    try {
+      const params = new URLSearchParams(searchParamsString || '');
+      const slug = params.get('program');
+      if (slug) {
+        const p = programs.find((pr) => pr.slug === slug);
+        const title = p ? p.title : slug;
+        dispatch(setSelectedProgram({ slug, title }));
+        try {
+          localStorage.setItem('selectedProgram', JSON.stringify({ slug, title }));
+        } catch {
+          // ignore storage failures
+        }
+      }
+    } catch {
+      // ignore
+    }
+  }, [searchParamsString, dispatch]);
 
   // Image for the signup page
   const imageSrc = "/signup.svg";

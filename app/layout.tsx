@@ -1,6 +1,7 @@
 
 import "./globals.css";
 import { Analytics } from "@vercel/analytics/next"
+import ReduxProvider from '../providers/ReduxProvider';
 
 export default function RootLayout({
     children,
@@ -19,7 +20,8 @@ export default function RootLayout({
                     rel="stylesheet"
                 />
             </head>
-            <body>{children}
+            <body>
+                <ReduxProvider>{children}</ReduxProvider>
                 <Analytics />
             </body>
         </html>
