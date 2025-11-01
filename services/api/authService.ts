@@ -1,5 +1,7 @@
 import { apiFetch } from './client';
 import type { RegisterPayload } from './types';
+import store from '../../store/store';
+import { setAuth as setAuthAction, clearAuth as clearAuthAction } from '../../store/authSlice';
 
 const REGISTER_PATH = '/api/v1/auth/register/';
 const LOGIN_PATH = '/api/v1/auth/login/';
@@ -29,6 +31,12 @@ export async function register(payload: RegisterPayload) {
       }
     } catch (e) {
       console.warn('Could not persist auth tokens to localStorage after register', e);
+    }
+    // Also update the in-memory/store representation so components can react immediately.
+    try {
+      store.dispatch(setAuthAction(res));
+    } catch (e) {
+      console.warn('Failed to dispatch auth set after register', e);
     }
   }
 
@@ -77,6 +85,11 @@ export async function login(payload: LoginPayload) {
       // and may handle persistence differently.
       console.warn('Could not persist auth tokens to localStorage', e);
     }
+    try {
+      store.dispatch(setAuthAction(res));
+    } catch (e) {
+      console.warn('Failed to dispatch auth set after login', e);
+    }
   }
 
   return res;
@@ -104,6 +117,12 @@ export async function logout() {
     } catch (e) {
       console.warn('Failed to clear localStorage during logout', e);
     }
+  }
+
+  try {
+    store.dispatch(clearAuthAction());
+  } catch (e) {
+    console.warn('Failed to dispatch auth clear during logout', e);
   }
 
   return true;

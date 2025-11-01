@@ -7,7 +7,7 @@ import Image from "next/image";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Stepper from "@/reuseComponents/Stepper";
-import { getPaymentGateways, initializePayment } from "@/services/api/admissionsService";
+import { getPaymentGateways, initializePayment, getApplicationSummary } from "@/services/api/admissionsService";
 
 export default function AdmissionsFormStep5() {
 
@@ -17,7 +17,41 @@ export default function AdmissionsFormStep5() {
   const [gateways, setGateways] = useState<Record<string, string> | null>(null);
   const [loadingGateways, setLoadingGateways] = useState(false);
   const [initializing, setInitializing] = useState<string | null>(null);
-  const applicationId = "SJDxEn120"; // TODO: replace with real application id from state
+  const [applicationId, setApplicationId] = useState<string | null>(null);
+  const [program, setProgram] = useState<string | null>(null);
+  const [feeDisplay, setFeeDisplay] = useState<string | null>(null);
+  const [feeAmount, setFeeAmount] = useState<number | null>(null);
+  const [deadlineDisplay, setDeadlineDisplay] = useState<string | null>(null);
+
+  // Fetch application summary (application_id, fee, deadline, program)
+  useEffect(() => {
+    let mounted = true;
+    (async () => {
+      try {
+        const res = await getApplicationSummary();
+        if (!mounted) return;
+        const obj = res as Record<string, unknown> | null;
+        if (!obj) return;
+        const appId = obj['application_id'] as string | undefined;
+        const prog = obj['program'] as string | undefined;
+        const fAmt = (obj['fee_amount'] as number) ?? (obj['fee'] as number) ?? null;
+        const fDisplay = obj['fee_display'] as string | undefined;
+        const dDisplay = obj['deadline_display'] as string | undefined;
+
+        if (appId) setApplicationId(appId);
+        if (prog) setProgram(prog.replace(/_/g, ' '));
+        if (typeof fAmt === 'number') setFeeAmount(fAmt);
+        if (fDisplay) setFeeDisplay(fDisplay);
+        if (dDisplay) setDeadlineDisplay(dDisplay);
+      } catch (err) {
+        // keep fallbacks if API fails
+        console.warn('Failed to load application summary', err);
+      }
+    })();
+    return () => {
+      mounted = false;
+    };
+  }, []);
 
   useEffect(() => {
     if (method !== "gateway") return;
@@ -199,7 +233,7 @@ export default function AdmissionsFormStep5() {
                   onClick={() => router.push("/admissions/form/step-6")}
                   className="w-full bg-[#61213C] text-white font-semibold py-3 rounded-md mt-4"
                 >
-                  Pay Now (₦15,000)
+                  Pay Now ({feeDisplay ?? '₦15,000'})
                 </button>
               </div>
             )}
@@ -207,8 +241,8 @@ export default function AdmissionsFormStep5() {
             {method === "bank" && (
               <div className="mt-6 space-y-4">
                 <div className="p-3 border border-blue-200 bg-blue-50 text-[#1E3356] text-sm rounded">
-                  Make transfer of{" "}
-                  <span className="font-semibold">₦15,000</span> to the account
+                  Make transfer of {" "}
+                  <span className="font-semibold">{feeDisplay ?? '₦15,000'}</span> to the account
                   below
                 </div>
                 <div className="grid grid-cols-2 gap-4 text-sm text-gray-700">
@@ -226,11 +260,11 @@ export default function AdmissionsFormStep5() {
                   </div>
                   <div>
                     <p className="font-medium">Amount</p>
-                    <p className="text-gray-800">₦15,000</p>
+                    <p className="text-gray-800">{feeDisplay ?? '₦15,000'}</p>
                   </div>
                   <div>
                     <p className="font-medium">Reference</p>
-                    <p className="text-gray-800">SJDxEn120</p>
+                    <p className="text-gray-800">{applicationId ?? '—'}</p>
                   </div>
                 </div>
                 <a
@@ -273,7 +307,7 @@ export default function AdmissionsFormStep5() {
                               try {
                                 setInitializing(key);
                                 // payload depends on backend; include amount and application id
-                                const payload = { amount: 15000, application_id: applicationId };
+                                const payload = { amount: feeAmount ?? 15000, application_id: applicationId };
                                 const resp = await initializePayment(url, payload);
                                 // try common fields for redirect URL
                                 const redirectUrl = resp?.authorization_url || resp?.data?.authorization_url || resp?.url || resp?.redirect_url || resp?.payment_url || resp?.data?.link;
@@ -324,19 +358,19 @@ export default function AdmissionsFormStep5() {
             <div className="space-y-4">
               <div>
                 <span className="text-gray-600 text-sm">Program</span>
-                <p className="text-gray-800 text-sm">MSc in Technology</p>
+                <p className="text-gray-800 text-sm">{program ?? '—'}</p>
               </div>
               <div>
                 <span className="text-gray-600 text-sm">Application ID</span>
-                <p className="text-gray-800 text-sm">SJDxEn120</p>
+                <p className="text-gray-800 text-sm">{applicationId ?? '—'}</p>
               </div>
               <div>
                 <span className="text-gray-600 text-sm">Fee Amount</span>
-                <p className="text-gray-800 text-sm">₦15,000</p>
+                <p className="text-gray-800 text-sm">{feeDisplay ?? '₦15,000'}</p>
               </div>
               <div>
                 <span className="text-gray-600 text-sm">Deadline</span>
-                <p className="text-[#D97706] text-sm">August 30, 2025</p>
+                <p className="text-[#D97706] text-sm">{deadlineDisplay ?? '—'}</p>
               </div>
             </div>
           </div>

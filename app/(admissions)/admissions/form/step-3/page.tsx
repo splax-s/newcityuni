@@ -200,7 +200,7 @@ export default function AdmissionsFormStep3() {
                 </label>
                 <label className="block text-sm font-medium text-gray-600">
                   Grade
-                  <input name="grade" type="text" placeholder="A+" className="border rounded-md p-3 text-gray-700 w-full mt-1" />
+                  <input name="grade" type="text" placeholder="90" className="border rounded-md p-3 text-gray-700 w-full mt-1" />
                 </label>
 
                 <input type="hidden" name="exam_type" value="JAMB" />
@@ -210,7 +210,7 @@ export default function AdmissionsFormStep3() {
                 </label>
                 <label className="block text-sm font-medium text-gray-600">
                   Grade
-                  <input name="grade" type="text" placeholder="B" className="border rounded-md p-3 text-gray-700 w-full mt-1" />
+                  <input name="grade" type="text" placeholder="98" className="border rounded-md p-3 text-gray-700 w-full mt-1" />
                 </label>
 
                 <input type="hidden" name="exam_type" value="JAMB" />
@@ -220,7 +220,7 @@ export default function AdmissionsFormStep3() {
                 </label>
                 <label className="block text-sm font-medium text-gray-600">
                   Grade
-                  <input name="grade" type="text" placeholder="A" className="border rounded-md p-3 text-gray-700 w-full mt-1" />
+                  <input name="grade" type="text" placeholder="89" className="border rounded-md p-3 text-gray-700 w-full mt-1" />
                 </label>
 
                 <input type="hidden" name="exam_type" value="JAMB" />
