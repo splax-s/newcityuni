@@ -182,6 +182,7 @@ export default function AdmissionsFormStep1() {
                   onChange={(e) => setProgramName(e.target.value)}
                   className="border rounded-md p-3 text-gray-700 w-full"
                 >
+                  
                   <option>B.sc Nursing Science</option>
                   <option>PhD Doctor of Physiotherapy(DPT)</option>
                   <option>B.sc Medical Laboratory Science</option>
