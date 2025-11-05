@@ -50,7 +50,9 @@ export default function AdmissionsLoginClient() {
     
     router.push('/admissions/dashboard')
     
-  } catch (error) {
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err)
+    console.log(msg)
     setError('Login failed. Please check your credentials.')
   } finally {
     setSubmitting(false)
