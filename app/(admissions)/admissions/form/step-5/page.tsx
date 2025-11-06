@@ -233,7 +233,7 @@ export default function AdmissionsFormStep5() {
                   onClick={() => router.push("/admissions/form/step-6")}
                   className="w-full bg-[#61213C] text-white font-semibold py-3 rounded-md mt-4"
                 >
-                  Pay Now ({feeDisplay ?? '₦15,000'})
+                  Pay Now ({feeDisplay ?? '₦10,000'})
                 </button>
               </div>
             )}
@@ -242,7 +242,7 @@ export default function AdmissionsFormStep5() {
               <div className="mt-6 space-y-4">
                 <div className="p-3 border border-blue-200 bg-blue-50 text-[#1E3356] text-sm rounded">
                   Make transfer of {" "}
-                  <span className="font-semibold">{feeDisplay ?? '₦15,000'}</span> to the account
+                  <span className="font-semibold">{feeDisplay ?? '₦10,000'}</span> to the account
                   below
                 </div>
                 <div className="grid grid-cols-2 gap-4 text-sm text-gray-700">
@@ -260,7 +260,7 @@ export default function AdmissionsFormStep5() {
                   </div>
                   <div>
                     <p className="font-medium">Amount</p>
-                    <p className="text-gray-800">{feeDisplay ?? '₦15,000'}</p>
+                    <p className="text-gray-800">{feeDisplay ?? '₦10,000'}</p>
                   </div>
                   <div>
                     <p className="font-medium">Reference</p>
@@ -297,6 +297,7 @@ export default function AdmissionsFormStep5() {
                         paystack: "/paystack.svg",
                         flutterwave: "/flutterwave.svg",
                         etranzact: "/etranzact.png",
+                        credo: "/credoBlack.svg",
                       };
                       const logo = logoMap[key] || "/paystack.svg";
                       return (
@@ -307,7 +308,7 @@ export default function AdmissionsFormStep5() {
                               try {
                                 setInitializing(key);
                                 // payload depends on backend; include amount and application id
-                                const payload = { amount: feeAmount ?? 15000, application_id: applicationId };
+                                const payload = { amount: feeAmount ?? 10000, application_id: applicationId };
                                 const resp = await initializePayment(url, payload);
                                 // try common fields for redirect URL
                                 const redirectUrl = resp?.authorization_url || resp?.data?.authorization_url || resp?.url || resp?.redirect_url || resp?.payment_url || resp?.data?.link;
@@ -325,9 +326,11 @@ export default function AdmissionsFormStep5() {
                                 setInitializing(null);
                               }
                             }}
-                            className="w-full border rounded-md flex items-center justify-center p-4 hover:border-[#8B1C3D] bg-white"
+                            className="w-full border cursor-pointer rounded-md flex items-center justify-center py-4 px-3 hover:border-[#8B1C3D] bg-white"
                           >
-                            <Image src={logo} alt={key} height={40} width={120} className="h-6" />
+                             <div className="relative flex items-center justify-center w-full h-6">
+                            <Image src={logo} alt={key} height={40} width={160} className="object-cover max-w-full max-h-full" priority />
+                            </div>
                           </button>
                         </div>
                       );
@@ -366,7 +369,7 @@ export default function AdmissionsFormStep5() {
               </div>
               <div>
                 <span className="text-gray-600 text-sm">Fee Amount</span>
-                <p className="text-gray-800 text-sm">{feeDisplay ?? '₦15,000'}</p>
+                <p className="text-gray-800 text-sm">{feeDisplay ?? '₦10,000'}</p>
               </div>
               <div>
                 <span className="text-gray-600 text-sm">Deadline</span>
