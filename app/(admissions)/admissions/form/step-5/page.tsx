@@ -20,7 +20,7 @@ export default function AdmissionsFormStep5() {
   const [applicationId, setApplicationId] = useState<string | null>(null);
   const [program, setProgram] = useState<string | null>(null);
   const [feeDisplay, setFeeDisplay] = useState<string | null>(null);
-  const [feeAmount, setFeeAmount] = useState<number | null>(null);
+  // const [feeAmount, setFeeAmount] = useState<number | null>(null);
   const [deadlineDisplay, setDeadlineDisplay] = useState<string | null>(null);
 
   // Fetch application summary (application_id, fee, deadline, program)
@@ -34,13 +34,13 @@ export default function AdmissionsFormStep5() {
         if (!obj) return;
         const appId = obj['application_id'] as string | undefined;
         const prog = obj['program'] as string | undefined;
-        const fAmt = (obj['fee_amount'] as number) ?? (obj['fee'] as number) ?? null;
+        // const fAmt = (obj['fee_amount'] as number) ?? (obj['fee'] as number) ?? null;
         const fDisplay = obj['fee_display'] as string | undefined;
         const dDisplay = obj['deadline_display'] as string | undefined;
 
         if (appId) setApplicationId(appId);
         if (prog) setProgram(prog.replace(/_/g, ' '));
-        if (typeof fAmt === 'number') setFeeAmount(fAmt);
+        // if (typeof fAmt === 'number') setFeeAmount(fAmt);
         if (fDisplay) setFeeDisplay(fDisplay);
         if (dDisplay) setDeadlineDisplay(dDisplay);
       } catch (err) {
