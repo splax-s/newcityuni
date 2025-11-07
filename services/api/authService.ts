@@ -14,6 +14,7 @@ export async function register(payload: RegisterPayload) {
   const res = await apiFetch(REGISTER_PATH, {
     method: 'POST',
     body: JSON.stringify(payload),
+    skipAuth: true,
   });
 
   // If the register response contains tokens, persist them. If not,
@@ -72,6 +73,7 @@ export async function login(payload: LoginPayload) {
   const res = await apiFetch(LOGIN_PATH, {
     method: 'POST',
     body: JSON.stringify(payload),
+    skipAuth: true,
   });
 
   // Persist tokens and user info to localStorage for subsequent requests.

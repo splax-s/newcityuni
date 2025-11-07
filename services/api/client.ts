@@ -1,7 +1,8 @@
 const BASE_URL = 'https://nacu-lms-ae2a4ae13fbe.herokuapp.com';
 
-async function apiFetch(path: string, options: RequestInit = {}) {
-  const url = `${BASE_URL}${path}`;
+async function apiFetch(path: string, options: RequestInit & { skipAuth?: boolean } = {}) {
+   const { skipAuth, ...fetchOptions } = options;
+   const url = `${BASE_URL}${path}`;
 
   // Prepare headers. If caller provided headers, respect them. Do not set
   // Content-Type when the body is FormData so the browser can set boundary.
@@ -13,9 +14,8 @@ async function apiFetch(path: string, options: RequestInit = {}) {
     headers['Content-Type'] = 'application/json';
   }
 
-  // Attach Authorization header when an access token exists in localStorage.
-  // We check typeof window to ensure this code only runs in the browser.
-  if (typeof window !== 'undefined') {
+    // Only attach Authorization header if not skipped and token exists
+  if (!skipAuth && typeof window !== 'undefined') {
     const token = localStorage.getItem('access');
     if (token) {
       headers['Authorization'] = `Bearer ${token}`;
