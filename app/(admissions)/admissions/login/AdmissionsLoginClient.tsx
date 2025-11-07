@@ -29,36 +29,36 @@ export default function AdmissionsLoginClient() {
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setSubmitting(true)
-    setError(null)
-    try {
-      const payload = { identifier: form.email, password: form.password }
-      const res = await login(payload)
-      try {
-        localStorage.setItem('auth', JSON.stringify(res))
-      } catch {
-        // ignore storage errors
-      }
-      try {
-        const raw = localStorage.getItem('selectedProgram')
-        if (raw) {
-          const parsed = JSON.parse(raw) as { slug: string; title: string }
-          if (parsed?.slug) {
-            dispatch(setSelectedProgram(parsed))
-          }
-        }
-      } catch {
-        // ignore
-      }
-      router.push('/admissions/dashboard')
-    } catch (err: unknown) {
-      const msg = err instanceof Error ? err.message : String(err)
-      setError(msg || 'Login failed')
-    } finally {
-      setSubmitting(false)
+  e.preventDefault()
+  setSubmitting(true)
+  setError(null)
+  
+  try {
+    const authResponse = await login({ 
+      identifier: form.email, 
+      password: form.password 
+    })
+    
+    localStorage.setItem('auth', JSON.stringify(authResponse))
+    
+    // Restore selected program if it exists
+    const storedProgram = localStorage.getItem('selectedProgram')
+    if (storedProgram) {
+      const program = JSON.parse(storedProgram)
+      dispatch(setSelectedProgram(program))
     }
+    
+    router.push('/admissions/dashboard')
+    
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err)
+    console.log(msg)
+    setError('Login failed. Please check your credentials.')
+  } finally {
+    setSubmitting(false)
   }
+  }
+
 
   useEffect(() => {
     try {
