@@ -300,15 +300,28 @@ export default function AdmissionsFormStep5() {
                         credo: "/credoBlack.svg",
                       };
                       const logo = logoMap[key] || "/paystack.svg";
+                      // Disable these gateways
+                      const disabledGateways = ["paystack", "flutterwave", "etranzact"];
+                      const isDisabled = disabledGateways.includes(key);
                       return (
                         <div key={key} className="flex-1">
                           <button
-                            disabled={!!initializing}
+                            disabled={!!initializing || isDisabled}
                             onClick={async () => {
+                              if (isDisabled) return;
                               try {
                                 setInitializing(key);
                                 // payload depends on backend; include amount and application id
-                                const payload = { amount: feeAmount ?? 10000, application_id: applicationId };
+                                const payload = {
+                                amount: 100,
+                                // amount: feeAmount ?? 10000,
+                                payment_type: "full",
+                                payment_method_id: 3, // Replace with actual method ID if dynamic
+                                purpose: "Admission Application Fee",
+                                provider: key, // Use the gateway key (e.g., "credo")
+                                callback_url: "https://nacu-lms-ae2a4ae13fbe.herokuapp.com/admissions/payment/callback",
+                                miscellaneous_fee_id: null,
+                              };
                                 const resp = await initializePayment(url, payload);
                                 // try common fields for redirect URL
                                 const redirectUrl = resp?.authorization_url || resp?.data?.authorization_url || resp?.url || resp?.redirect_url || resp?.payment_url || resp?.data?.link;
@@ -326,7 +339,9 @@ export default function AdmissionsFormStep5() {
                                 setInitializing(null);
                               }
                             }}
-                            className="w-full border cursor-pointer rounded-md flex items-center justify-center py-4 px-3 hover:border-[#8B1C3D] bg-white"
+                           className={`w-full border rounded-md flex items-center justify-center py-4 px-3 hover:border-[#8B1C3D] bg-white
+                            ${isDisabled ? "opacity-50 pointer-events-none" : "cursor-pointer"}
+                          `}
                           >
                              <div className="relative flex items-center justify-center w-full h-6">
                             <Image src={logo} alt={key} height={40} width={160} className="object-cover max-w-full max-h-full" priority />
