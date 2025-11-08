@@ -1,22 +1,45 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import AdmissionsSidebar from "@/components/AdmissionsSidebar";
+import { getAdmissionNotifications } from "@/services/api";
 
 type NotificationItem = {
-  id: string;
+  id: string | number;
   title: string;
   message: string;
-  date: string;
-  read: boolean;
+  notification_type: string;
+  type_display: string;
+  priority: string;
+  priority_display: string;
+  is_read: boolean;
+  created_at: string;
 };
 
 export default function NotificationsPage() {
-  const [items, setItems] = useState<NotificationItem[]>([]);
+   const [items, setItems] = useState<NotificationItem[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [tab, setTab] = useState<"All" | "Read" | "Unread">("All");
 
- 
+   useEffect(() => {
+    setLoading(true);
+    getAdmissionNotifications()
+      .then((res) => {
+        setItems(res?.notifications || []);
+      })
+      .catch(() => setItems([]))
+      .finally(() => setLoading(false));
+  }, []);
+
+  const filteredItems =
+    tab === "All"
+      ? items
+      : tab === "Read"
+      ? items.filter((n) => n.is_read)
+      : items.filter((n) => !n.is_read);
+
 
   return (
     <>
@@ -46,75 +69,66 @@ export default function NotificationsPage() {
               </h2>
             </div>
 
-            {/* Tabs */}
+           {/* Tabs */}
             <div className="flex items-center gap-3 mb-6 border-b pb-2 text-sm">
-              {["All", "Read", "Unread"].map((tab) => (
+              {["All", "Read", "Unread"].map((t) => (
                 <button
-                  key={tab}
-                  onClick={() => {
-                    if (tab === "All") setItems([...items]);
-                    else if (tab === "Read")
-                      setItems(
-                        [...items].sort(
-                          (a, b) => Number(!a.read) - Number(!b.read)
-                        )
-                      );
-                    else if (tab === "Unread")
-                      setItems(
-                        [...items].sort(
-                          (a, b) => Number(a.read) - Number(b.read)
-                        )
-                      );
-                  }}
-                  className={`px-3 py-1 rounded ${
-                    tab === "All"
+                  key={t}
+                  onClick={() => setTab(t as typeof tab)}
+                  className={`px-3 py-1 cursor-pointer rounded ${
+                    tab === t
                       ? "bg-[#F9F5F6] text-[#61213C] font-medium"
                       : "hover:bg-gray-50 text-gray-600"
                   }`}
                 >
-                  {tab}
+                  {t}
                 </button>
               ))}
             </div>
 
-            {/* Notifications List (static demo for now) */}
-            <ul className="space-y-6">
-              <li className="relative p-4 border rounded-lg bg-[#FFF8FA]">
-                <div className="flex items-start gap-3">
-                  <div className="w-8 h-8 rounded-full flex items-center justify-center text-lg bg-[#F9E9EF]">
-                    🎉
-                  </div>
+            {/* Loading State */}
+            {loading && (
+              <div className="py-12 text-center text-gray-500">Loading notifications...</div>
+            )}
 
-                  <div className="flex-1">
-                    <h3 className="font-medium text-gray-800 text-sm">Admission offer</h3>
+            {/* Empty State */}
+            {!loading && filteredItems.length === 0 && (
+              <div className="py-12 text-center text-gray-400">
+                No notifications found.
+              </div>
+            )}
 
-                    <div className="mt-3 bg-gray-50 rounded-md p-3 text-sm text-gray-700">
-                      <p className="font-semibold mb-1">🎉 Congratulations, Joshua!</p>
-                      <p>
-                        You have been offered provisional admission into the <strong>Master of Science (MSc) in Technology</strong> program.
-                      </p>
-
-                      <p className="mt-2 font-medium">Next Steps:</p>
-                      <ol className="list-decimal list-inside space-y-1 text-gray-600 text-sm mt-1">
-                        <li>Download your admission letter</li>
-                        <li>Pay your acceptance fee</li>
-                        <li>Complete your enrollment requirements</li>
-                      </ol>
-
-                      <div className="flex flex-wrap items-center gap-2 mt-4">
-                        <button className="px-4 py-2 bg-[#61213C] text-white rounded text-sm">Pay Acceptance Fee</button>
-                        <button className="px-4 py-2 border rounded text-sm">Download Admission Letter</button>
-                        <button className="px-4 py-2 text-sm text-gray-600 hover:underline">Decline Offer</button>
+            {/* Notifications List */}
+            {!loading && filteredItems.length > 0 && (
+              <ul className="space-y-6">
+                {filteredItems.map((n) => (
+                  <li
+                    key={n.id}
+                    className={`relative p-4 border rounded-lg ${
+                      n.is_read ? "bg-gray-50" : "bg-[#FFF8FA]"
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="w-8 h-8 rounded-full flex items-center justify-center text-lg bg-[#F9E9EF]">
+                        {n.notification_type === "application_update" ? "📄" : "🔔"}
                       </div>
+                      <div className="flex-1">
+                        <h3 className="font-medium text-gray-800 text-sm">{n.title}</h3>
+                        <div className="mt-3 bg-gray-50 rounded-md p-3 text-sm text-gray-700">
+                          <p>{n.message}</p>
+                        </div>
+                        <p className="text-xs text-gray-400 mt-2">
+                          {new Date(n.created_at).toLocaleString()}
+                        </p>
+                      </div>
+                      {!n.is_read && (
+                        <span className="absolute top-3 right-3 w-2 h-2 bg-[#91204D] rounded-full" />
+                      )}
                     </div>
-
-                    <p className="text-xs text-gray-400 mt-2">{new Date().toLocaleString()}</p>
-                  </div>
-
-                  <span className="absolute top-3 right-3 w-2 h-2 bg-[#91204D] rounded-full" />
-                </div>
-              </li>
-            </ul>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         </main>
       </div>

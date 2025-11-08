@@ -7,6 +7,7 @@ import Footer from "@/components/footer";
 import AdmissionsSidebar from "@/components/AdmissionsSidebar";
 import Image from "next/image";
 import { Send, ChevronRight } from "lucide-react";
+import { getAdmissionTransactions } from "@/services/api";
 
 type PaymentRecord = {
   id: string;
@@ -15,6 +16,26 @@ type PaymentRecord = {
   date: string;
   status: "success" | "pending" | "failed";
 };
+
+type Transaction = {
+  id: string | number;
+  transaction_type: string;
+  type_display: string;
+  amount: string;
+  amount_display: string;
+  description: string;
+  status: "success" | "pending" | "failed";
+  status_display: string;
+  reference: string;
+  created_at: string;
+};
+
+const TABS = [
+  { label: "All", value: "all" },
+  { label: "Deposits", value: "deposit" },
+  { label: "Withdrawals", value: "withdrawal" },
+  { label: "Payments", value: "payment" },
+];
 
 export default function AdmissionsPaymentPage() {
   const router = useRouter();
@@ -26,6 +47,9 @@ export default function AdmissionsPaymentPage() {
   const [selectedPaymentType, setSelectedPaymentType] = useState<
     "gateway" | "bank"
   >("bank");
+  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedTab, setSelectedTab] = useState<string>("all");
 
   useEffect(() => {
     try {
@@ -44,6 +68,16 @@ export default function AdmissionsPaymentPage() {
     }
   }, [records]);
 
+   useEffect(() => {
+    setLoading(true);
+    getAdmissionTransactions()
+      .then((res) => {
+        setTransactions(res?.transactions || []);
+      })
+      .catch(() => setTransactions([]))
+      .finally(() => setLoading(false));
+  }, []);
+
   function addDemoPayment() {
     const p: PaymentRecord = {
       id: `${Date.now()}`,
@@ -60,6 +94,11 @@ export default function AdmissionsPaymentPage() {
   function clearRecords() {
     setRecords([]);
   }
+
+  const filteredTransactions =
+    selectedTab === "all"
+      ? transactions
+      : transactions.filter((t) => t.transaction_type === selectedTab);
 
   return (
     <>
@@ -143,51 +182,79 @@ export default function AdmissionsPaymentPage() {
                 </button>
               </div>
 
-              {/* Tabs */}
+               {/* Tabs */}
               <div className="flex items-center gap-2 mb-4 text-sm">
-                <button className="px-3 py-1 rounded bg-gray-100 text-gray-800 font-medium">
-                  All
-                </button>
-                <button className="px-3 py-1 rounded text-gray-500 hover:text-gray-700">
-                  Deposits
-                </button>
-                <button className="px-3 py-1 rounded text-gray-500 hover:text-gray-700">
-                  Withdrawals
-                </button>
-                <button className="px-3 py-1 rounded text-gray-500 hover:text-gray-700">
-                  Payments
-                </button>
+                {TABS.map((tab) => (
+                  <button
+                    key={tab.value}
+                    onClick={() => setSelectedTab(tab.value)}
+                    className={`px-3 py-1 rounded cursor-pointer ${
+                      selectedTab === tab.value
+                        ? "bg-gray-100 text-gray-800 font-medium"
+                        : "text-gray-500 hover:text-gray-700"
+                    }`}
+                  >
+                    {tab.label}
+                  </button>
+                ))}
               </div>
 
-              {/* Transaction list (static demo) */}
-              <ul className="space-y-4">
-                {[1, 2, 3].map((i) => (
-                  <li
-                    key={i}
-                    className="flex items-center justify-between border-t pt-3 first:border-t-0 first:pt-0"
-                  >
-                    <div className="flex items-start gap-3">
-                      <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
-                        <Send className="w-4 h-4 text-gray-600" />
+                {/* Loading State */}
+              {loading && (
+                <div className="py-12 text-center text-gray-500">
+                  Loading transactions...
+                </div>
+              )}
+
+              {/* Empty State */}
+              {!loading && filteredTransactions.length === 0 && (
+                <div className="py-12 text-center text-gray-400">
+                  No transactions found.
+                </div>
+              )}
+
+              {/* Transaction list */}
+              {!loading && filteredTransactions.length > 0 && (
+                <ul className="space-y-4">
+                  {filteredTransactions.map((t) => (
+                    <li
+                      key={t.id}
+                      className="flex items-center justify-between border-t pt-3 first:border-t-0 first:pt-0"
+                    >
+                      <div className="flex items-start gap-3">
+                        <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center">
+                          <Send className="w-4 h-4 text-gray-600" />
+                        </div>
+                        <div>
+                          <p className="text-sm font-medium text-gray-800">
+                            {t.description || t.type_display}{" "}
+                            <span
+                              className={
+                                t.status === "success"
+                                  ? "text-green-600 font-semibold"
+                                  : t.status === "pending"
+                                  ? "text-yellow-600 font-semibold"
+                                  : "text-red-600 font-semibold"
+                              }
+                            >
+                              {t.amount_display || t.amount}
+                            </span>
+                          </p>
+                          <p className="text-xs text-gray-500">
+                            {new Date(t.created_at).toLocaleString()}
+                          </p>
+                          <p className="text-xs text-gray-400">
+                            Status: {t.status_display || t.status}
+                          </p>
+                        </div>
                       </div>
-                      <div>
-                        <p className="text-sm font-medium text-gray-800">
-                          Application fee{" "}
-                          <span className="text-green-600 font-semibold">
-                            ₦15,000.00
-                          </span>
-                        </p>
-                        <p className="text-xs text-gray-500">
-                          14/09/25 • 09:45am
-                        </p>
-                      </div>
-                    </div>
-                    <button className="px-3 py-1 border rounded text-sm text-gray-700 hover:bg-gray-50">
-                      Download receipt
-                    </button>
-                  </li>
-                ))}
-              </ul>
+                      <button className="px-3 py-1 border rounded text-sm text-gray-700 hover:bg-gray-50">
+                        Download receipt
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              )}
             </div>
           ) : (
             <div className="bg-white border rounded shadow-sm p-6">
