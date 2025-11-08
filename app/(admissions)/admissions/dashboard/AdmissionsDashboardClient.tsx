@@ -4,10 +4,23 @@ import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Link from "next/link";
 import AdmissionsSidebar from "@/components/AdmissionsSidebar";
-import { getUserName, getApplicationSummary } from "@/services/api/admissionsService";
+import { getUserName, getApplicationSummary, getAdmissionNotifications } from "@/services/api/admissionsService";
 import { useAppSelector } from '../../../../store/hooks';
 import { useSearchParams } from 'next/navigation';
 import { programs } from '@/data/programs';
+
+
+type NotificationItem = {
+  id: string | number;
+  title: string;
+  message: string;
+  notification_type: string;
+  type_display: string;
+  priority: string;
+  priority_display: string;
+  is_read: boolean;
+  created_at: string;
+};
 
 export default function AdmissionsDashboardClient() {
   const [userName, setUserName] = useState<string | null>(null);
@@ -20,6 +33,8 @@ export default function AdmissionsDashboardClient() {
   const searchParams = useSearchParams();
   const [relatedProgramTitle, setRelatedProgramTitle] = useState<string | null>(null);
   const searchParamsString = searchParams ? searchParams.toString() : '';
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [loadingNotifications, setLoadingNotifications] = useState<boolean>(true);
 
   // Initialize userName from Redux auth if available
   useEffect(() => {
@@ -73,6 +88,20 @@ export default function AdmissionsDashboardClient() {
       // ignore
     }
   }, [auth?.selectedProgram, relatedProgramTitle]);
+
+
+  // Fetch notifications for sidebar
+  useEffect(() => {
+    setLoadingNotifications(true);
+    getAdmissionNotifications()
+      .then((res) => {
+        setNotifications(res?.notifications?.slice(0, 3) || []);
+      })
+      .catch(() => {
+        setNotifications([]);
+      })
+      .finally(() => setLoadingNotifications(false));
+  }, []);
 
   useEffect(() => {
     // If we already populated userName from Redux, skip the API call.
@@ -280,21 +309,31 @@ export default function AdmissionsDashboardClient() {
         <aside className="md:col-span-3 space-y-6">
           {/* Notifications */}
           <div className="bg-white border shadow-sm border-[rgba(232, 234, 236, 1))] rounded p-4">
-            <div className="flex justify-between items-center mb-4">
+            <div className="flex justify-between items-center mb-3">
               <h3 className="font-semibold text-black">Notifications</h3>
-              <Link href="#" className="text-sm text-[#61213C]">
+              <Link href="/admissions/dashboard/notifications" className="text-sm text-[#61213C]">
                 See all
               </Link>
             </div>
+                {loadingNotifications ? (
+            <div className="text-gray-400 text-sm text-center py-4">Loading...</div>
+          ) : notifications.length === 0 ? (
+            <div className="text-gray-400 text-sm text-center py-4">No notifications yet.</div>
+          ) : (
             <ul className="space-y-3 text-sm text-gray-700">
-              <li className="flex justify-between">
-                <span>Dr Pelumi added a new online lecture...</span>
-                <span className="w-2 h-2 rounded-full bg-red-500 mt-2"></span>
-              </li>
-              <li>2025/26 First semester Exam timetable now available...</li>
-              <li>Course registration deadline updated...</li>
-              
+              {notifications.map((n) => (
+                <li key={n.id} className="flex justify-between items-start">
+                  <span>
+                    <span className="font-medium">{n.title}</span>
+                    <span className="block text-xs text-gray-500">{n.message}</span>
+                  </span>
+                  {!n.is_read && (
+                    <span className="w-2 h-2 rounded-full bg-red-500 mt-2 ml-2"></span>
+                  )}
+                </li>
+              ))}
             </ul>
+          )}
           </div>
 
           {/* Application Summary */}

@@ -129,3 +129,22 @@ const SUMMARY_PATH = '/api/v1/admission/summary/';
 export async function getApplicationSummary() {
   return apiFetch(SUMMARY_PATH, { method: 'GET' });
 }
+
+const NOTIFICATIONS_PATH = '/api/v1/admission/notifications/';
+
+/**
+ * Fetch all admissions notifications.
+ */
+export async function getAdmissionNotifications() {
+  return apiFetch(NOTIFICATIONS_PATH, { method: 'GET' });
+}
+
+
+
+const TRANSACTIONS_PATH = '/api/v1/admission/transactions/';
+/**
+ * Fetch all admission transactions.
+ */
+export async function getAdmissionTransactions() {
+  return apiFetch(TRANSACTIONS_PATH, { method: 'GET' });
+}
