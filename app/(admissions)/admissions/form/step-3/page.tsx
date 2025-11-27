@@ -70,9 +70,9 @@ export default function AdmissionsFormStep3() {
       <Navbar />
 
       {/* Top Breadcrumb */}
-      <div className="bg-[#61213C] text-white p-2">
+      <div className="bg-[#61213C] text-white p-4">
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center mb-4 text-xs sm:text-sm">
+          <div className="flex items-center text-xs sm:text-sm">
             <span>Home</span>
             <span className="mx-2">›</span>
             <span>Admissions</span>
