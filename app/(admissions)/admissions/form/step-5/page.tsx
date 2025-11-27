@@ -311,6 +311,9 @@ export default function AdmissionsFormStep5() {
                               if (isDisabled) return;
                               try {
                                 setInitializing(key);
+
+                                const secureUrl = url.startsWith('http://') ? url.replace('http://', 'https://') : url;
+
                                 // payload depends on backend; include amount and application id
                                 const payload = {
                                 amount: 100,
@@ -322,7 +325,7 @@ export default function AdmissionsFormStep5() {
                                 callback_url: "https://nacu-lms-ae2a4ae13fbe.herokuapp.com/admissions/payment/callback",
                                 miscellaneous_fee_id: null,
                               };
-                                const resp = await initializePayment(url, payload);
+                                const resp = await initializePayment(secureUrl, payload);
                                 // try common fields for redirect URL
                                 const redirectUrl = resp?.authorization_url || resp?.data?.authorization_url || resp?.url || resp?.redirect_url || resp?.payment_url || resp?.data?.link;
                                 if (redirectUrl) {
