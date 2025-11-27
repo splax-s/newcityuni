@@ -1,27 +1,164 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect} from "react";
 
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import Link from "next/link";
 import AdmissionsSidebar from "@/components/AdmissionsSidebar";
 import Image from "next/image";
+import { getReviewSubmit } from "@/services/api";
 
+
+type ApplicationStep = {
+  id: number;
+  step_name: string;
+  step_display: string;
+  status: string;
+  status_display: string;
+  completed_at?: string;
+  notes?: string;
+};
+
+type UploadedDocument = {
+  name?: string;
+  url?: string;
+  status?: string;
+};
+
+type ProgramDetails = {
+  academic_level: string;
+  faculty: string;
+  department: string;
+  program_name: string;
+  mode_of_study: string;
+};
+
+type PersonalInfo = {
+  basic_information: {
+    first_name: string;
+    middle_name: string;
+    last_name: string;
+    phone: string;
+    email: string;
+    date_of_birth: string;
+  };
+  residency_information: {
+    address: string;
+    country: string;
+    state: string;
+    local_government_area: string;
+  };
+  state_of_origin_information: {
+    state: string;
+    local_government_area: string;
+    nationality: string;
+  };
+  health_information: {
+    blood_group: string;
+    gender: string;
+    genotype: string;
+    disability: string;
+    health_issue: string;
+  };
+  next_of_kin_information: {
+    full_name: string;
+    address: string;
+    phone: string;
+  };
+};
+
+type AcademicInfo = {
+  senior_secondary_school: {
+    school_name: string;
+    year_enrolled?: string;
+    year_completed?: string;
+    certificate?: string;
+  };
+  junior_secondary_school: {
+    school_name: string;
+    year_enrolled?: string;
+    year_completed?: string;
+    certificate?: string;
+  };
+  results: {
+    jamb: { subject: string; grade: string }[];
+    waec: { subject: string; grade: string }[];
+  };
+};
+
+type Payment = {
+  id: number;
+  amount: number;
+  currency: string;
+  payment_method: string;
+  payment_method_display: string;
+  status: string;
+  status_display: string;
+  transaction_id: string;
+  payment_reference: string;
+  payment_gateway: string;
+  initiated_at: string;
+  completed_at?: string;
+  failed_at?: string;
+  failure_reason: string;
+  receipt_url: string;
+  notes: string;
+};
+
+type ApplicationData = {
+  status: string;
+  status_display: string;
+  rejection_reason?: string;
+  steps: ApplicationStep[];
+  program_details: ProgramDetails;
+  personal_info: PersonalInfo;
+  academic_info: AcademicInfo;
+  uploaded_documents: UploadedDocument[];
+};
+
+type ReviewSubmitResponse = {
+  application_data: ApplicationData;
+  progress: {
+    completed_steps: number;
+    total_steps: number;
+    progress_percentage: number;
+  };
+  payment?: Payment;
+  payment_completed?: boolean;
+};
 
 export default function AdmissionsDashboardApplicationPage() {
   const [selected, setSelected] = useState<
-    "status" | "program" | "personal" | "academic"
+    "status" | "program" | "personal" | "academic" | "uploads"
   >("status");
+
+  // Add these new state variables
+  const [reviewData, setReviewData] = useState<ReviewSubmitResponse | null>(null);
+  const [loading, setLoading] = useState(true);
+
+   // Fetch application data on mount
+  useEffect(() => {
+    setLoading(true);
+    getReviewSubmit()
+      .then((res) => {
+        setReviewData(res);
+      })
+      .catch((err) => {
+        console.error("Failed to fetch application data:", err);
+        setReviewData(null);
+      })
+      .finally(() => setLoading(false));
+  }, []);
  
   
 
   return (
     <>
       <Navbar />
-      <div className="bg-[#61213C] text-white p-2">
+      <div className="bg-[#61213C] text-white p-4">
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center mb-4 text-xs sm:text-sm">
+          <div className="flex items-center text-xs sm:text-sm">
             <span>Home</span>
             <span className="mx-2">›</span>
             <span>Admissions</span>
@@ -90,7 +227,7 @@ export default function AdmissionsDashboardApplicationPage() {
                       strokeLinejoin="round"
                     />
                   </svg>
-                  <p> Track Application Status</p>
+                  <p className="text-sm"> Track Application Status</p>
                 </div>
                 <Image
                   src="/icons/right-arrow.svg"
@@ -148,7 +285,7 @@ export default function AdmissionsDashboardApplicationPage() {
                       strokeWidth="1.5"
                     />
                   </svg>
-                  <p> Program</p>
+                  <p className="text-sm"> Program</p>
                 </div>
                 <Image
                   src="/icons/right-arrow.svg"
@@ -195,7 +332,7 @@ export default function AdmissionsDashboardApplicationPage() {
                       strokeWidth="1.5"
                     />
                   </svg>
-                  <p> Personal Information</p>
+                  <p className="text-sm"> Personal Information</p>
                 </div>
                 <Image
                   src="/icons/right-arrow.svg"
@@ -251,7 +388,7 @@ export default function AdmissionsDashboardApplicationPage() {
                       strokeLinecap="round"
                     />
                   </svg>
-                  <p> Academic History</p>
+                  <p className="text-sm"> Academic History</p>
                 </div>
                 <Image
                   src="/icons/right-arrow.svg"
@@ -260,6 +397,60 @@ export default function AdmissionsDashboardApplicationPage() {
                   alt="arrow"
                 />
               </li>
+
+                <li
+                  role="button"
+                  tabIndex={0}
+                  onClick={() => setSelected("uploads")}
+                  onKeyDown={(e) => e.key === "Enter" && setSelected("uploads")}
+                  className={`flex items-center justify-between px-3 py-2 rounded cursor-pointer ${
+                    selected === "uploads" ? "bg-gray-50" : "hover:bg-gray-50"
+                  }`}
+                >
+                  <div
+                    className={`flex items-center gap-2 ${
+                      selected === "uploads" ? "text-[#61213C]" : "text-gray-700"
+                    }`}
+                  >
+                    <svg
+                      className={
+                        selected === "uploads"
+                          ? "opacity-100 w-6 h-6"
+                          : "opacity-60 w-6 h-6"
+                      }
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                      fill="none"
+                      aria-hidden
+                    >
+                      <path
+                        d="M12 16V8M12 8L8 12M12 8L16 12"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <rect
+                        x="3"
+                        y="3"
+                        width="18"
+                        height="18"
+                        rx="4"
+                        stroke="currentColor"
+                        strokeWidth="1.5"
+                      />
+                    </svg>
+                    <p className="text-sm">Uploads</p>
+                  </div>
+                  <Image
+                    src="/icons/right-arrow.svg"
+                    width={8}
+                    height={8}
+                    alt="arrow"
+                  />
+                </li>
+
             </ul>
           </div>
         </main>
@@ -267,372 +458,495 @@ export default function AdmissionsDashboardApplicationPage() {
         <aside className="md:col-span-6">
           {selected === "program" ? (
             <div className="bg-white border rounded shadow-sm p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="font-semibold text-black">Program Details</h4>
-                <Link
-                  href="/admissions/form/step-2"
-                  className="text-sm text-[#61213C]"
-                >
-                  Edit
-                </Link>
-              </div>
-              <hr className="my-4" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-                <div>
-                  <p className="text-gray-500">Academic Level</p>
-                  <p className="text-gray-900">Undergraduate</p>
+            {loading ? (
+              <div className="py-12 text-center text-gray-500">Loading...</div>
+            ) : reviewData?.application_data?.program_details ? (
+              <>
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-semibold text-black">Program Details</h4>
+                  <Link
+                    href="/admissions/form/step-1"
+                    className="text-sm text-[#61213C]"
+                  >
+                    Edit
+                  </Link>
                 </div>
-                <div>
-                  <p className="text-gray-500">Faculty</p>
-                  <p className="text-gray-900">Science</p>
+                <hr className="my-4" />
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+                  <div>
+                    <p className="text-gray-500">Academic Level</p>
+                    <p className="text-gray-900">{reviewData.application_data.program_details.academic_level}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500">Faculty</p>
+                    <p className="text-gray-900">{reviewData.application_data.program_details.faculty}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500">Department</p>
+                    <p className="text-gray-900">{reviewData.application_data.program_details.department?.replace(/_/g, ' ')}</p>
+                  </div>
+                  <div>
+                    <p className="text-gray-500">Program Name</p>
+                    <p className="text-gray-900">{reviewData.application_data.program_details.program_name?.replace(/_/g, ' ')}</p>
+                  </div>
                 </div>
-                <div>
-                  <p className="text-gray-500">Department</p>
-                  <p className="text-gray-900">Mathematics</p>
-                </div>
-                <div>
-                  <p className="text-gray-500">Program Name</p>
-                  <p className="text-gray-900">BSc Computer Science</p>
-                </div>
-              </div>
 
-              <hr className="my-4" />
+                <hr className="my-4" />
 
-              <div className="mt-6 flex items-center gap-6">
-                <label className="flex items-center gap-2 text-gray-700">
-                  <input
-                    type="radio"
-                    name="mode"
-                    className="accent-[#8B1C3D]"
-                  />
-                  Part-Time
-                </label>
-                <label className="flex items-center gap-2 text-gray-700">
-                  <input
-                    type="radio"
-                    name="mode"
-                    defaultChecked
-                    className="accent-[#8B1C3D]"
-                  />
-                  Full-Time
-                </label>
-              </div>
-            </div>
+                <div className="mt-6 flex text-sm items-center gap-6">
+                  <label className="flex items-center gap-2 text-gray-700">
+                    <input
+                      type="radio"
+                      name="mode"
+                      checked={reviewData.application_data.program_details.mode_of_study === 'Part-Time'}
+                      readOnly
+                      className="accent-[#8B1C3D] text-sm"
+                    />
+                    Part-Time
+                  </label>
+                  <label className="flex items-center gap-2 text-gray-700">
+                    <input
+                      type="radio"
+                      name="mode"
+                      checked={reviewData.application_data.program_details.mode_of_study === 'Full-Time'}
+                      readOnly
+                      className="accent-[#8B1C3D] text-sm"
+                    />
+                    Full-Time
+                  </label>
+                </div>
+              </>
+            ) : (
+              <div className="py-12 text-center text-sm text-gray-500">No program details found.</div>
+            )}
+          </div>
           ) : selected === "personal" ? (
-            <div className="bg-white border rounded shadow-sm p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="font-semibold text-black">
-                  Personal Information
-                </h4>
-                <Link
-                  href="/admissions/form/step-2"
-                  className="text-sm text-[#61213C]"
-                >
-                  Edit
-                </Link>
-              </div>
+              <div className="bg-white border rounded shadow-sm p-6">
+            {loading ? (
+              <div className="py-12 text-center text-gray-500">Loading...</div>
+            ) : reviewData?.application_data?.personal_info ? (
+              <>
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-semibold text-black">Personal Information</h4>
+                  <Link href="/admissions/form/step-2" className="text-sm text-[#61213C]">
+                    Edit
+                  </Link>
+                </div>
+                <hr className="my-4" />
 
-              <hr className="my-4" />
+                <div className="space-y-12">
+                  {/* Basic Information */}
+                  <div>
+                    <h2 className="text-sm font-normal text-gray-900 mb-4">Basic Information</h2>
+                    <hr className="mb-4" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+                      <div>
+                        <p className="text-gray-500">First Name</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.basic_information.first_name || 'Not provided'}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Middle Name</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.basic_information.middle_name || 'Not provided'}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Last Name</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.basic_information.last_name || 'Not provided'}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Phone Number</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.basic_information.phone || 'Not provided'}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Email</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.basic_information.email}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Date of Birth</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.basic_information.date_of_birth}</p>
+                      </div>
+                    </div>
+                  </div>
 
-              <div className="space-y-12">
-                <div>
-                  <h2 className="text-sm font-normal text-gray-900 mb-4">
-                    Basic Information
-                  </h2>
-                  <hr className="mb-4" />
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-                    <div>
-                      <p className="text-gray-500">Full Name</p>
-                      <p className="text-gray-900">Joshua Sam-Alade</p>
+                  {/* Residency Information */}
+                  <div className="border-t border-gray-200 pt-6">
+                    <h2 className="text-sm font-normal text-gray-900 mb-4">Residency Information</h2>
+                    <hr className="mb-4" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+                      <div>
+                        <p className="text-gray-500">Address</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.residency_information.address || 'Not provided'}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Country</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.residency_information.country}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">State</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.residency_information.state || 'Not provided'}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Local Government Area</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.residency_information.local_government_area}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-gray-500">Middle Name</p>
-                      <p className="text-gray-900">Joshua</p>
+                  </div>
+
+                  {/* State of Origin */}
+                  <div className="border-t border-gray-200 pt-6">
+                    <h2 className="text-sm font-normal text-gray-900 mb-4">State of Origin Information</h2>
+                    <hr className="mb-4" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+                      <div>
+                        <p className="text-gray-500">State</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.state_of_origin_information.state}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Local Government Area</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.state_of_origin_information.local_government_area}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Nationality</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.state_of_origin_information.nationality}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-gray-500">Last Name</p>
-                      <p className="text-gray-900">Sam-Alade</p>
+                  </div>
+
+                  {/* Health Information */}
+                  <div className="border-t border-gray-200 pt-6">
+                    <h2 className="text-sm font-normal text-gray-900 mb-4">Health Information</h2>
+                    <hr className="mb-4" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+                      <div>
+                        <p className="text-gray-500">Blood Group</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.health_information.blood_group}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Genotype</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.health_information.genotype}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Gender</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.health_information.gender}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Disability</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.health_information.disability}</p>
+                      </div>
+                      <div className="sm:col-span-2">
+                        <p className="text-gray-500">Health Issues</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.health_information.health_issue}</p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="text-gray-500">Phone Number</p>
-                      <p className="text-gray-900">+234 701 234 5678</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Email</p>
-                      <p className="text-gray-900">joshua@example.com</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Date of Birth</p>
-                      <p className="text-gray-900">03/28/2025</p>
+                  </div>
+
+                  {/* Next of Kin */}
+                  <div className="border-t border-gray-200 pt-6">
+                    <h2 className="text-sm font-normal text-gray-900 mb-4">Next of Kin Information</h2>
+                    <hr className="mb-4" />
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+                      <div>
+                        <p className="text-gray-500">Full name</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.next_of_kin_information.full_name}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Address</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.next_of_kin_information.address}</p>
+                      </div>
+                      <div>
+                        <p className="text-gray-500">Phone</p>
+                        <p className="text-gray-900">{reviewData.application_data.personal_info.next_of_kin_information.phone}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
-
-                <div className="border-t border-gray-200 pt-6">
-                  <h2 className="text-sm font-normal text-gray-900 mb-4">
-                    Residency Information
-                  </h2>
-                  <hr className="mb-4" />
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-                    <div>
-                      <p className="text-gray-500">Address</p>
-                      <p className="text-gray-900">123 Banana Street, Lagos</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Country</p>
-                      <p className="text-gray-900">Nigeria</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">State</p>
-                      <p className="text-gray-900">Lagos</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Local Government Area</p>
-                      <p className="text-gray-900">Ikeja</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="border-t border-gray-200 pt-6">
-                  <h2 className="text-sm font-normal text-gray-900 mb-4">
-                    State of Origin Information
-                  </h2>
-                  <hr className="mb-4" />
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-                    <div>
-                      <p className="text-gray-500">State</p>
-                      <p className="text-gray-900">Lagos State</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Local Government Area</p>
-                      <p className="text-gray-900">Ikeja</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Nationality</p>
-                      <p className="text-gray-900">Nigerian</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="border-t border-gray-200 pt-6">
-                  <h2 className="text-sm font-normal text-gray-900 mb-4">
-                    Health Information
-                  </h2>
-                  <hr className="mb-4" />
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-                    <div>
-                      <p className="text-gray-500">Blood Group</p>
-                      <p className="text-gray-900">O-</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Genotype</p>
-                      <p className="text-gray-900">AA</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Gender</p>
-                      <p className="text-gray-900">Male</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Disability</p>
-                      <p className="text-gray-900">None</p>
-                    </div>
-                    <div className="sm:col-span-2">
-                      <p className="text-gray-500">Health Issues</p>
-                      <p className="text-gray-900">None</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="border-t border-gray-200 pt-6">
-                  <h2 className="text-sm font-normal text-gray-900 mb-4">
-                    Next of Kin Information
-                  </h2>
-                  <hr className="mb-4" />
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-                    <div>
-                      <p className="text-gray-500">Full name</p>
-                      <p className="text-gray-900">John Doe</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Address</p>
-                      <p className="text-gray-900">456 Mango Avenue, Lagos</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Phone</p>
-                      <p className="text-gray-900">+234 701 234 5678</p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
+              </>
+            ) : ( 
+              <div className="py-12 text-sm text-center text-gray-500">No personal information found.</div>
+            )}
+          </div>
           ) : selected === "academic" ? (
-            <div className="bg-white border rounded shadow-sm p-6">
+           <div className="bg-white border rounded shadow-sm p-6">
+              {loading ? (
+                <div className="py-12 text-center text-gray-500">Loading...</div>
+              ) : reviewData?.application_data.academic_info ? (
+                <>
+                  <div className="flex items-center justify-between mb-4">
+                    <h4 className="font-semibold text-black">Academic History</h4>
+                    <Link href="/admissions/form/step-3" className="text-sm text-[#61213C]">
+                      Edit
+                    </Link>
+                  </div>
+                  <hr className="my-4" />
+
+                  <div className="space-y-12">
+                    {/* Senior Secondary School */}
+                    <div>
+                      <h3 className="text-sm font-normal text-gray-900 mb-4">Senior Secondary School</h3>
+                      <hr className="mb-4" />
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+                        <div>
+                          <p className="text-gray-500">School Name</p>
+                          <p className="text-gray-900">{reviewData.application_data.academic_info.senior_secondary_school.school_name}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500">Year Enrolled</p>
+                          <p className="text-gray-900">{reviewData.application_data.academic_info.senior_secondary_school.year_enrolled || 'Not provided'}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500">Year Completed</p>
+                          <p className="text-gray-900">{reviewData.application_data.academic_info.senior_secondary_school.year_completed || 'Not provided'}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500">Certificate</p>
+                          <p className="text-gray-900">{reviewData.application_data.academic_info.senior_secondary_school.certificate || 'Not provided'}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Junior Secondary School */}
+                    <div className="border-t border-gray-200 pt-6">
+                      <h3 className="text-sm font-normal text-gray-900 mb-4">Junior Secondary School</h3>
+                      <hr className="mb-4" />
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
+                        <div>
+                          <p className="text-gray-500">School Name</p>
+                          <p className="text-gray-900">{reviewData.application_data.academic_info.junior_secondary_school.school_name}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500">Year Enrolled</p>
+                          <p className="text-gray-900">{reviewData.application_data.academic_info.junior_secondary_school.year_enrolled || 'Not provided'}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500">Year Completed</p>
+                          <p className="text-gray-900">{reviewData.application_data.academic_info.junior_secondary_school.year_completed || 'Not provided'}</p>
+                        </div>
+                        <div>
+                          <p className="text-gray-500">Certificate</p>
+                          <p className="text-gray-900">{reviewData.application_data.academic_info.junior_secondary_school.certificate}</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Results */}
+                    <div className="border-t border-gray-200 pt-6">
+                      <h3 className="text-sm font-normal text-gray-900 mb-4">Results</h3>
+                      <hr className="mb-4" />
+
+                      {/* JAMB Results */}
+                      {reviewData.application_data.academic_info.results.jamb && reviewData.application_data.academic_info.results.jamb.length > 0 && (
+                        <div className="grid grid-cols-3 gap-4 text-sm mb-8">
+                          <div className="font-normal text-gray-700">JAMB</div>
+                          <div className="col-span-2">
+                            <div className="grid grid-cols-2 font-medium text-gray-500 mb-2">
+                              <p>Subject</p>
+                              <p>Grade</p>
+                            </div>
+                            <div className="grid grid-cols-2 gap-y-2">
+                              {reviewData.application_data.academic_info.results.jamb.map((result, idx) => (
+                                <>
+                                  <p key={`subject-${idx}`} className="text-gray-900 capitalize">{result.subject}</p>
+                                  <p key={`grade-${idx}`} className="text-gray-900 uppercase">{result.grade}</p>
+                                </>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* WAEC Results */}
+                      {reviewData.application_data.academic_info.results.waec && reviewData.application_data.academic_info.results.waec.length > 0 && (
+                        <div className="grid grid-cols-3 gap-4 text-sm border-t border-gray-200 pt-6">
+                          <div className="font-normal text-gray-700">WAEC</div>
+                          <div className="col-span-2">
+                            <div className="grid grid-cols-2 font-medium text-gray-500 mb-2">
+                              <p>Subject</p>
+                              <p>Grade</p>
+                            </div>
+                            <div className="grid grid-cols-2 gap-y-2">
+                              {reviewData.application_data.academic_info.results.waec.map((result, idx) => (
+                                <>
+                                  <p key={`subject-${idx}`} className="text-gray-900 capitalize">{result.subject}</p>
+                                  <p key={`grade-${idx}`} className="text-gray-900 uppercase">{result.grade}</p>
+                                </>
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </>
+              ) : (
+                <div className="py-12 text-center text-sm text-gray-500">No academic information found.</div>
+              )}
+            </div>
+          ) :
+          selected === "uploads" ? (
+        <div className="bg-white border rounded shadow-sm p-6">
+          {loading ? (
+            <div className="py-12 text-center text-gray-500">Loading...</div>
+          ) : (reviewData?.application_data.uploaded_documents?.length ?? 0) > 0 ? (
+            <>
               <div className="flex items-center justify-between mb-4">
-                <h4 className="font-semibold text-black">Academic History</h4>
-                <Link
-                  href="/admissions/form/step-3"
-                  className="text-sm text-[#61213C]"
-                >
+                <h4 className="font-semibold text-black">Uploaded Documents</h4>
+                <Link href="/admissions/form/step-4" className="text-sm text-[#61213C]">
                   Edit
                 </Link>
               </div>
               <hr className="my-4" />
-
-              <div className="space-y-12">
-                <div>
-                  <h3 className="text-sm font-normal text-gray-900 mb-4">
-                    Senior Secondary School
-                  </h3>
-                  <hr className="mb-4" />
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-                    <div>
-                      <p className="text-gray-500">School Name</p>
-                      <p className="text-gray-900">Greenwood High School</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Year Completed</p>
-                      <p className="text-gray-900">03/28/2025</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Year Enrolled</p>
-                      <p className="text-gray-900">03/28/2025</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Certificate</p>
-                      <p className="text-gray-900">SSS Leaving Certificate</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="border-t border-gray-200 pt-6">
-                  <h3 className="text-sm font-normal text-gray-900 mb-4">
-                    Junior Secondary School
-                  </h3>
-                  <hr className="mb-4" />
-                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 text-sm">
-                    <div>
-                      <p className="text-gray-500">School Name</p>
-                      <p className="text-gray-900">Maple Leaf Academy</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Year Completed</p>
-                      <p className="text-gray-900">03/28/2025</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Year Enrolled</p>
-                      <p className="text-gray-900">03/28/2025</p>
-                    </div>
-                    <div>
-                      <p className="text-gray-500">Certificate</p>
-                      <p className="text-gray-900">JSS Leaving Certificate</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="border-t border-gray-200 pt-6">
-                  <h3 className="text-sm font-normal text-gray-900 mb-4">
-                    Results
-                  </h3>
-                  <hr className="mb-4" />
-
-                  {/* JAMB */}
-                  <div className="grid grid-cols-3 gap-4 text-sm mb-8">
-                    {/* Exam name */}
-                    <div className="font-normal text-gray-700">JAMB</div>
-
-                    {/* Header + subjects */}
-                    <div className="col-span-2">
-                      <div className="grid grid-cols-2 font-medium text-gray-500 mb-2">
-                        <p>Subject</p>
-                        <p>Grade</p>
-                      </div>
-                      <div className="grid grid-cols-2 gap-y-2">
-                        <p className="text-gray-900">Mathematics</p>
-                        <p className="text-gray-900">A+</p>
-                        <p className="text-gray-900">Physics</p>
-                        <p className="text-gray-900">B</p>
-                        <p className="text-gray-900">Chemistry</p>
-                        <p className="text-gray-900">A</p>
-                        <p className="text-gray-900">History</p>
-                        <p className="text-gray-900">A</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* WAEC */}
-                  <div className="grid grid-cols-3 gap-4 text-sm border-t border-gray-200 pt-6">
-                    {/* Exam name */}
-                    <div className="font-normal text-gray-700">WAEC</div>
-
-                    {/* Header + subjects */}
-                    <div className="col-span-2">
-                      <div className="grid grid-cols-2 font-medium text-gray-500 mb-2">
-                        <p>Subject</p>
-                        <p>Grade</p>
-                      </div>
-                      <div className="grid grid-cols-2 gap-y-2">
-                        <p className="text-gray-900">Further Mathematics</p>
-                        <p className="text-gray-900">A</p>
-                        <p className="text-gray-900">Biology</p>
-                        <p className="text-gray-900">A</p>
-                        <p className="text-gray-900">English Literature</p>
-                        <p className="text-gray-900">B+</p>
-                        <p className="text-gray-900">Geography</p>
-                        <p className="text-gray-900">B</p>
-                        <p className="text-gray-900">Mathematics</p>
-                        <p className="text-gray-900">A+</p>
-                        <p className="text-gray-900">Computer Science</p>
-                        <p className="text-gray-900">A</p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <div className="bg-white border rounded shadow-sm p-6">
-              <div className="flex items-center justify-between mb-4">
-                <h4 className="font-semibold text-black">Application Status</h4>
-                <span className="px-2 py-1 text-xs rounded bg-orange-100 text-orange-600">
-                  In Progress
-                </span>
-              </div>
-
-              <hr className="my-4" />
-
-              <ul className="space-y-4 flex flex-col gap-6 text-sm">
-                {[
-                  "Sign up",
-                  "Personal Information",
-                  "Academic History",
-                  "Document Upload",
-                  "Payment",
-                  "Application Submitted",
-                  "Review Pending",
-                  "Under Review",
-                  "Offer Made",
-                ].map((step, idx) => (
-                  <li key={idx} className="flex items-center gap-2">
-                    <span
-                      className={`w-5 h-5 flex items-center justify-center rounded-full text-xs font-semibold ${
-                        idx < 5
-                          ? "bg-[#91213C] text-white"
-                          : "bg-gray-200 text-gray-500 border"
-                      }`}
-                    >
-                      ✓
-                    </span>
-                    <span
-                      className={`${
-                        idx < 5 ? "text-gray-800" : "text-gray-500"
-                      }`}
-                    >
-                      {step}
-                    </span>
+              <ul className="space-y-4">
+                {(reviewData?.application_data.uploaded_documents ?? []).map((doc: UploadedDocument, idx: number) => (
+                  <li key={idx} className="flex items-center gap-3">
+                    <span className="text-gray-700">{doc.name || `Document ${idx + 1}`}</span>
+                    {doc.url && (
+                      <a
+                        href={doc.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-xs text-blue-600 underline"
+                      >
+                        View
+                      </a>
+                    )}
+                    {doc.status && (
+                      <span className={`ml-2 text-xs px-2 py-1 rounded ${
+                        doc.status === "verified"
+                          ? "bg-green-100 text-green-700"
+                          : doc.status === "pending"
+                          ? "bg-yellow-100 text-yellow-700"
+                          : "bg-gray-100 text-gray-700"
+                      }`}>
+                        {doc.status}
+                      </span>
+                    )}
                   </li>
                 ))}
               </ul>
+            </>
+          ) : (
+            <div className="py-12 text-center text-sm text-gray-500">
+              No documents uploaded yet.
             </div>
+          )}
+        </div>
+      ) : (
+        <div className="bg-white border rounded shadow-sm p-6">
+    {loading ? (
+      <div className="py-12 text-center text-gray-500">
+        Loading application status...
+              </div>
+            ) : reviewData ? (
+              <>
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="font-semibold text-black">Application Status</h4>
+                  <span className={`px-2 py-1 text-xs rounded ${
+                    reviewData.application_data.status === 'draft' 
+                      ? 'bg-orange-100 text-orange-600'
+                      : reviewData.application_data.status === 'submitted'
+                      ? 'bg-blue-100 text-blue-600'
+                      : reviewData.application_data.status === 'approved'
+                      ? 'bg-green-100 text-green-600'
+                      : 'bg-gray-100 text-gray-600'
+                  }`}>
+                    {reviewData.application_data.status_display}
+                  </span>
+                </div>
+
+                <hr className="my-4" />
+
+                {/* Progress Bar */}
+                <div className="mb-6">
+                  <div className="flex justify-between text-sm text-gray-600 mb-2">
+                    <span>Progress</span>
+                    <span>{Math.round(reviewData.progress.progress_percentage)}%</span>
+                  </div>
+                  <div className="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      className="bg-[#91213C] h-2 rounded-full transition-all duration-300"
+                      style={{ width: `${reviewData.progress.progress_percentage}%` }}
+                    />
+                  </div>
+                  <div className="text-xs text-gray-500 mt-1">
+                    {reviewData.progress.completed_steps} of {reviewData.progress.total_steps} steps completed
+                  </div>
+                </div>
+
+                {/* Dynamic Steps */}
+                <ul className="space-y-4 text-sm">
+                  {reviewData.application_data.steps.map((step: ApplicationStep) => (
+                    <li key={step.id} className="flex items-center gap-3">
+                      <span
+                        className={`w-5 h-5 flex items-center justify-center rounded-full text-xs font-semibold ${
+                          step.status === "completed"
+                            ? "bg-[#91213C] text-white"
+                            : step.status === "pending"
+                            ? "bg-yellow-100 text-yellow-600 border border-yellow-200"
+                            : "bg-gray-200 text-gray-500 border"
+                        }`}
+                      >
+                        {step.status === "completed" ? "✓" : step.status === "pending" ? "⏳" : "○"}
+                      </span>
+                      <div className="flex-1">
+                        <span
+                          className={`${
+                            step.status === "completed" ? "text-gray-800 font-medium" : "text-gray-500"
+                          }`}
+                        >
+                          {step.step_display}
+                        </span>
+                        {step.completed_at && (
+                          <div className="text-xs text-gray-400 mt-1">
+                            Completed: {new Date(step.completed_at).toLocaleDateString()}
+                          </div>
+                        )}
+                        {step.notes && (
+                          <div className="text-xs text-gray-600 mt-1">
+                            {step.notes}
+                          </div>
+                        )}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+
+                {/* Payment Status */}
+                {reviewData.payment && (
+                  <div className="mt-6 p-4 bg-gray-50 border rounded-lg">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm text-gray-600 font-medium">Payment Status</span>
+                      <span className={`text-xs px-2 py-1 rounded ${
+                        reviewData.payment.status === 'completed'
+                          ? 'bg-green-100 text-green-600'
+                          : reviewData.payment.status === 'pending'
+                          ? 'bg-yellow-100 text-yellow-600'
+                          : 'bg-red-100 text-red-600'
+                      }`}>
+                        {reviewData.payment.status_display}
+                      </span>
+                    </div>
+                    {reviewData.payment.status === 'completed' && (
+                      <div className="text-xs text-gray-600 mt-2">
+                        Amount: ₦{reviewData.payment.amount} • 
+                        Ref: {reviewData.payment.payment_reference}
+                      </div>
+                    )}
+                  </div>
+                )}
+
+                {/* Rejection Reason */}
+                {reviewData.application_data.rejection_reason && (
+                  <div className="mt-6 p-4 bg-red-50 border border-red-200 rounded-lg">
+                    <h5 className="text-sm font-medium text-red-800 mb-2">Rejection Reason</h5>
+                    <p className="text-sm text-red-700">{reviewData.application_data.rejection_reason}</p>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="py-12 text-center text-gray-500">
+                Failed to load application data.
+              </div>
+            )}
+          </div>
           )}
         </aside>
       </div>

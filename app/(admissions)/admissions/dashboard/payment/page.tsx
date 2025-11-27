@@ -54,7 +54,7 @@ export default function AdmissionsPaymentPage() {
   );
   const [selectedPaymentType, setSelectedPaymentType] = useState<
     "gateway" | "bank"
-  >("bank");
+  >("gateway");
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState<string>("all");
@@ -124,9 +124,9 @@ export default function AdmissionsPaymentPage() {
     <>
       <Navbar />
 
-      <div className="bg-[#61213C] text-white p-2">
+      <div className="bg-[#61213C] text-white p-4">
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center mb-4 text-xs sm:text-sm">
+          <div className="flex items-center text-xs sm:text-sm">
             <span>Home</span>
             <span className="mx-2">›</span>
             <span>Admissions</span>
@@ -288,171 +288,105 @@ export default function AdmissionsPaymentPage() {
               )}
             </div>
           ) : (
-            <div className="bg-white border rounded shadow-sm p-6">
-              <div className="mb-6">
-                <h4 className="font-semibold text-[#61213C] mb-2">Wallet</h4>
-                <div className="bg-[#61213C] text-white rounded-lg p-4 mb-4">
-                  <p className="text-sm opacity-80">Balance</p>
-                  <p className="text-2xl font-semibold mt-1">₦2,420,049.00</p>
-                </div>
-
-                <div className="flex gap-2 mb-4">
-                  <button
-                    onClick={() => setSelectedPaymentType("bank")}
-                    className={`flex-1 px-3 py-2 rounded ${
-                      selectedPaymentType === "bank"
-                        ? "border-[#8B1C3D] bg-[#F4E6EA] text-[#8B1C3D]"
-                        : "border-gray-300 bg-white text-gray-700"
-                    }`}
-                  >
-                    <div className="flex flex-col items-center justify-center gap-2">
-                      <Image
-                        src="/icons/bank.svg"
-                        width={24}
-                        height={24}
-                        alt="Bank icon"
-                      />
-                      <span className="text-sm font-medium">
-                        Bank Transfer / USSD
-                      </span>
-                    </div>
-                  </button>
-                  <button
-                    onClick={() => setSelectedPaymentType("gateway")}
-                    className={`flex-1 px-3 py-2 rounded ${
-                      selectedPaymentType === "gateway"
-                        ? "border-[#8B1C3D] bg-[#F4E6EA] text-[#8B1C3D]"
-                        : "border-gray-300 bg-white text-gray-700"
-                    }`}
-                  >
-                    <div className="flex flex-col items-center justify-center gap-2">
-                      <Image
-                        src="/icons/link.svg"
-                        width={24}
-                        height={24}
-                        alt="Gateway icon"
-                      />
-                      <span className="text-sm font-medium">
-                        Payment Gateway
-                      </span>
-                    </div>
-                  </button>
-                </div>
-
-                {selectedPaymentType === "bank" ? (
-                  <div className="space-y-2 text-sm">
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Account Number</span>
-                      <div className="flex gap-2 items-center">
-                        <span className="font-medium text-gray-800">
-                          2211777650
+           <div className="bg-white border rounded shadow-sm p-6">
+      <h4 className="font-semibold text-[#61213C] mb-3">Payment Status</h4>
+      {/* Check if user has a completed payment */}
+      {payments.some((p) => p.status === "completed") ? (
+        <div className="bg-green-50 border border-green-200 rounded p-4 mb-4">
+          <div className="flex items-center gap-3">
+            <span className="text-green-600 text-2xl">✔️</span>
+            <div>
+              <p className="font-semibold text-green-700 mb-1">Payment Completed</p>
+              <p className="text-sm text-green-800">
+                Thank you! Your payment has been received.
+              </p>
+              <div className="mt-2 text-xs text-gray-600">
+                {payments
+                  .filter((p) => p.status === "completed")
+                  .map((p) => (
+                    <div key={p.id} className="mb-2">
+                      <div>
+                        <span className="font-medium">{p.payment_method_display}</span>{" "}
+                        • {formatAmount(p.amount, p.currency)}
+                      </div>
+                      <div>
+                        Ref: <span className="text-gray-500">{p.payment_reference}</span>
+                      </div>
+                      <div>
+                        Date:{" "}
+                        <span className="text-gray-500">
+                          {new Date(p.completed_at || p.initiated_at).toLocaleString()}
                         </span>
-                        <button
-                          onClick={() => {
-                            try {
-                              navigator.clipboard.writeText("2211777650");
-                              alert("Account number copied");
-                            } catch {
-                              /* ignore */
-                            }
-                          }}
-                          className="text-sm text-[#61213C]"
-                        >
-                          Copy
-                        </button>
                       </div>
                     </div>
-
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Bank Name</span>
-                      <span className="font-medium text-gray-800">
-                        Zenith Bank
-                      </span>
-                    </div>
-
-                    <div className="flex justify-between">
-                      <span className="text-gray-500">Account Name</span>
-                      <span className="font-medium text-gray-800">
-                        Joshua Sam-Alade / New City
-                      </span>
-                    </div>
-
-                    <div className="pt-3">
-                      <p className="text-sm text-gray-500">
-                        After transfer, click{" "}
-                        <span className="font-medium">I&apos;ve paid</span> to
-                        mark the payment (demo).
-                      </p>
-                      <div className="mt-3">
-                        <button
-                          onClick={addDemoPayment}
-                          className="px-4 py-2 bg-[#61213C] text-white rounded"
-                        >
-                          I&apos;ve paid
-                        </button>
-                      </div>
-                    </div>
-                  </div>
-                ) : (
-                  <>
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
-                      <button
-                        onClick={() => setSelectedMethod("paystack")}
-                        className={`flex items-center gap-3 p-3 rounded border ${
-                          selectedMethod === "paystack"
-                            ? "border-[#61213C] bg-[#FFF7F7]"
-                            : "hover:bg-gray-50"
-                        }`}
-                      >
-                        <Image
-                          src="/paystack.svg"
-                          width={96}
-                          height={24}
-                          alt="Paystack"
-                        />
-                      </button>
-                      <button
-                        onClick={() => setSelectedMethod("flutterwave")}
-                        className={`flex items-center gap-3 p-3 rounded border ${
-                          selectedMethod === "flutterwave"
-                            ? "border-[#61213C] bg-[#FFF7F7]"
-                            : "hover:bg-gray-50"
-                        }`}
-                      >
-                        <Image
-                          src="/flutterwave.svg"
-                          width={96}
-                          height={24}
-                          alt="Flutterwave"
-                        />
-                      </button>
-                      <button
-                        onClick={() => setSelectedMethod("remita")}
-                        className={`flex items-center gap-3 p-3 rounded border ${
-                          selectedMethod === "remita"
-                            ? "border-[#61213C] bg-[#FFF7F7]"
-                            : "hover:bg-gray-50"
-                        }`}
-                      >
-                        <Image
-                          src="/remita.svg"
-                          width={96}
-                          height={24}
-                          alt="Remita"
-                        />
-                      </button>
-                    </div>
-
-                    <button
-                      onClick={addDemoPayment}
-                      className="w-full bg-[#61213C] text-white font-semibold py-3 rounded-md"
-                    >
-                      Proceed to pay
-                    </button>
-                  </>
-                )}
+                  ))}
               </div>
             </div>
+          </div>
+        </div>
+      ) : (
+        <>
+          <div className="mb-2">
+            <p className="text-gray-700 mb-3">Please select a payment method to complete your application fee:</p>
+            <div className="flex gap-2 mb-4">
+              <button
+                onClick={() => setSelectedPaymentType("gateway")}
+                className={`flex-1 px-3 py-2 rounded border ${
+                  selectedPaymentType === "gateway"
+                    ? "border-[#8B1C3D] bg-[#F4E6EA] text-[#8B1C3D]"
+                    : "border-gray-300 bg-white text-gray-700"
+                }`}
+              >
+                <div className="flex flex-col items-center justify-center gap-2">
+                  <Image src="/icons/link.svg" width={24} height={24} alt="Gateway icon" />
+                  <span className="text-sm font-medium">Payment Gateway</span>
+                </div>
+              </button>
+            </div>
+           
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+                <button
+                  onClick={() => setSelectedMethod("paystack")}
+                  className={`flex items-center gap-3 p-3 rounded border ${
+                    selectedMethod === "paystack"
+                      ? "border-[#61213C] bg-[#FFF7F7]"
+                      : "hover:bg-gray-50"
+                  }`}
+                >
+                  <Image src="/paystack.svg" width={96} height={24} alt="Paystack" />
+                </button>
+                <button
+                  onClick={() => setSelectedMethod("flutterwave")}
+                  className={`flex items-center gap-3 p-3 rounded border ${
+                    selectedMethod === "flutterwave"
+                      ? "border-[#61213C] bg-[#FFF7F7]"
+                      : "hover:bg-gray-50"
+                  }`}
+                >
+                  <Image src="/flutterwave.svg" width={96} height={24} alt="Flutterwave" />
+                </button>
+                <button
+                  onClick={() => setSelectedMethod("remita")}
+                  className={`flex items-center gap-3 p-3 rounded border ${
+                    selectedMethod === "remita"
+                      ? "border-[#61213C] bg-[#FFF7F7]"
+                      : "hover:bg-gray-50"
+                  }`}
+                >
+                  <Image src="/remita.svg" width={96} height={24} alt="Remita" />
+                </button>
+              </div>
+            
+            <button
+              onClick={addDemoPayment}
+              className="w-full bg-[#61213C] mt-5 text-white font-semibold py-3 rounded-md"
+            >
+              Proceed to pay
+            </button>
+          </div>
+        </>
+      )}
+    </div>
           )}
         </aside>
       </div>

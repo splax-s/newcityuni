@@ -66,9 +66,9 @@ export default function AdmissionsUploadsPage() {
     <>
       <Navbar />
 
-      <div className="bg-[#61213C] text-white p-2">
+      <div className="bg-[#61213C] text-white p-4">
         <div className="max-w-6xl mx-auto">
-          <div className="flex items-center mb-4 text-xs sm:text-sm">
+          <div className="flex items-center  text-xs sm:text-sm">
             <span>Home</span>
             <span className="mx-2">›</span>
             <span>Admissions</span>
@@ -129,7 +129,7 @@ export default function AdmissionsUploadsPage() {
                     height={24}
                     alt="file"
                   />
-                  <p>Upload record</p>
+                  <p className="text-sm">Upload record</p>
                 </div>
                 <Image
                   src="/icons/right-arrow.svg"
@@ -159,7 +159,7 @@ export default function AdmissionsUploadsPage() {
                     height={24}
                     alt="Verified"
                   />
-                  <p>Verified</p>
+                  <p className="text-sm">Verified</p>
                 </div>
                 <Image
                   src="/icons/right-arrow.svg"
@@ -187,7 +187,7 @@ export default function AdmissionsUploadsPage() {
                     height={24}
                     alt="Pending Verification"
                   />
-                  <p>Pending Verification</p>
+                  <p className="text-sm">Pending Verification</p>
                 </div>
                 <Image
                   src="/icons/right-arrow.svg"
@@ -215,7 +215,7 @@ export default function AdmissionsUploadsPage() {
                     height={24}
                     alt="Missing"
                   />
-                  <p>Missing Uploads</p>
+                  <p className="text-sm">Missing Uploads</p>
                 </div>
                 <Image
                   src="/icons/right-arrow.svg"
