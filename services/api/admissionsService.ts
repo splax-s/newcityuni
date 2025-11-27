@@ -148,3 +148,12 @@ const TRANSACTIONS_PATH = '/api/v1/admission/transactions/';
 export async function getAdmissionTransactions() {
   return apiFetch(TRANSACTIONS_PATH, { method: 'GET' });
 }
+
+
+const PAYMENTS_PATH = '/api/v1/admission/payment/';
+/**
+ * Fetch all admission payments.
+ */
+export async function getAdmissionPayments() {
+  return apiFetch(PAYMENTS_PATH, { method: 'GET' });
+}
