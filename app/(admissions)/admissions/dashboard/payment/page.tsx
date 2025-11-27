@@ -7,7 +7,7 @@ import Footer from "@/components/footer";
 import AdmissionsSidebar from "@/components/AdmissionsSidebar";
 import Image from "next/image";
 import { Send, ChevronRight } from "lucide-react";
-import { getAdmissionTransactions } from "@/services/api";
+import { getAdmissionPayments } from "@/services/api";
 
 type PaymentRecord = {
   id: string;
@@ -17,24 +17,32 @@ type PaymentRecord = {
   status: "success" | "pending" | "failed";
 };
 
-type Transaction = {
-  id: string | number;
-  transaction_type: string;
-  type_display: string;
-  amount: string;
-  amount_display: string;
-  description: string;
-  status: "success" | "pending" | "failed";
+type Payment = {
+  id: number;
+  amount: number;
+  currency: string;
+  payment_method: string;
+  payment_method_display: string;
+  status: "pending" | "completed" | "failed";
   status_display: string;
-  reference: string;
-  created_at: string;
+  transaction_id: string;
+  payment_reference: string;
+  payment_gateway: string;
+  initiated_at: string;
+  completed_at?: string;
+  failed_at?: string;
+  failure_reason: string;
+  receipt_url: string;
+  notes: string;
 };
+
+
 
 const TABS = [
   { label: "All", value: "all" },
-  { label: "Deposits", value: "deposit" },
-  { label: "Withdrawals", value: "withdrawal" },
-  { label: "Payments", value: "payment" },
+  { label: "Completed", value: "completed" },
+  { label: "Pending", value: "pending" },
+  { label: "Failed", value: "failed" },
 ];
 
 export default function AdmissionsPaymentPage() {
@@ -47,7 +55,7 @@ export default function AdmissionsPaymentPage() {
   const [selectedPaymentType, setSelectedPaymentType] = useState<
     "gateway" | "bank"
   >("bank");
-  const [transactions, setTransactions] = useState<Transaction[]>([]);
+  const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState<string>("all");
 
@@ -68,13 +76,21 @@ export default function AdmissionsPaymentPage() {
     }
   }, [records]);
 
-   useEffect(() => {
+  
+  useEffect(() => {
     setLoading(true);
-    getAdmissionTransactions()
+    getAdmissionPayments()
       .then((res) => {
-        setTransactions(res?.transactions || []);
+        // Handle single payment object or array
+        if (Array.isArray(res)) {
+          setPayments(res);
+        } else if (res) {
+          setPayments([res]);
+        }
       })
-      .catch(() => setTransactions([]))
+      .catch(() => {
+        setPayments([]);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -91,14 +107,18 @@ export default function AdmissionsPaymentPage() {
     router.push("/admissions/form/step-5");
   }
 
-  function clearRecords() {
-    setRecords([]);
-  }
 
-  const filteredTransactions =
+  const filteredPayments =
     selectedTab === "all"
-      ? transactions
-      : transactions.filter((t) => t.transaction_type === selectedTab);
+      ? payments
+      : payments.filter((p) => p.status === selectedTab);
+
+  const formatAmount = (amount: number, currency: string) => {
+    return new Intl.NumberFormat('en-NG', {
+      style: 'currency',
+      currency: currency || 'NGN'
+    }).format(amount);
+  };
 
   return (
     <>
@@ -157,7 +177,7 @@ export default function AdmissionsPaymentPage() {
               >
                 <div className="flex items-center gap-2">
                   <span className="w-4 h-4 rounded-full border border-gray-400 flex items-center justify-center">
-                    👤
+                    💳
                   </span>
                   <span>Payment Method</span>
                 </div>
@@ -172,9 +192,8 @@ export default function AdmissionsPaymentPage() {
           {selectedPane === "transaction" ? (
             <div className="bg-white border rounded shadow-sm p-6">
               <div className="flex items-center justify-between mb-4">
-                <h4 className="font-semibold text-black">Transactions history</h4>
+                <h4 className="font-semibold text-black">Payment history</h4>
                 <button
-                  onClick={clearRecords}
                   className="text-sm text-red-600 hover:underline"
                   aria-label="Clear transactions"
                 >
@@ -201,24 +220,22 @@ export default function AdmissionsPaymentPage() {
 
                 {/* Loading State */}
               {loading && (
-                <div className="py-12 text-center text-gray-500">
-                  Loading transactions...
+                <div className="py-12 text-center text-sm text-gray-500">
+                  Loading payments...
                 </div>
               )}
 
               {/* Empty State */}
-              {!loading && filteredTransactions.length === 0 && (
-                <div className="py-12 text-center text-gray-400">
-                  No transactions found.
+               {!loading && filteredPayments.length === 0 && (
+                <div className="py-12 text-center text-sm text-gray-400">
+                  No payments found.
                 </div>
               )}
-
-              {/* Transaction list */}
-              {!loading && filteredTransactions.length > 0 && (
+              {!loading && filteredPayments.length > 0 && (
                 <ul className="space-y-4">
-                  {filteredTransactions.map((t) => (
+                  {filteredPayments.map((payment) => (
                     <li
-                      key={t.id}
+                      key={payment.id}
                       className="flex items-center justify-between border-t pt-3 first:border-t-0 first:pt-0"
                     >
                       <div className="flex items-start gap-3">
@@ -227,30 +244,44 @@ export default function AdmissionsPaymentPage() {
                         </div>
                         <div>
                           <p className="text-sm font-medium text-gray-800">
-                            {t.description || t.type_display}{" "}
+                            {payment.payment_method_display}{" "}
                             <span
                               className={
-                                t.status === "success"
+                                payment.status === "completed"
                                   ? "text-green-600 font-semibold"
-                                  : t.status === "pending"
+                                  : payment.status === "pending"
                                   ? "text-yellow-600 font-semibold"
                                   : "text-red-600 font-semibold"
                               }
                             >
-                              {t.amount_display || t.amount}
+                              {formatAmount(payment.amount, payment.currency)}
                             </span>
                           </p>
                           <p className="text-xs text-gray-500">
-                            {new Date(t.created_at).toLocaleString()}
+                            {new Date(payment.initiated_at).toLocaleString()}
                           </p>
                           <p className="text-xs text-gray-400">
-                            Status: {t.status_display || t.status}
+                            Status: {payment.status_display} via {payment.payment_gateway}
+                          </p>
+                          <p className="text-xs text-gray-400">
+                            Ref: {payment.payment_reference}
                           </p>
                         </div>
                       </div>
-                      <button className="px-3 py-1 border rounded text-sm text-gray-700 hover:bg-gray-50">
-                        Download receipt
-                      </button>
+                      {payment.receipt_url ? (
+                        <a
+                          href={payment.receipt_url}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="px-3 py-1 border rounded text-sm text-gray-700 hover:bg-gray-50"
+                        >
+                          Download receipt
+                        </a>
+                      ) : (
+                        <button className="px-3 py-1 border rounded text-sm text-gray-400 cursor-not-allowed">
+                          No receipt
+                        </button>
+                      )}
                     </li>
                   ))}
                 </ul>
