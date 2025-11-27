@@ -36,15 +36,6 @@ type Payment = {
   notes: string;
 };
 
-type PaymentMethod = {
-  id: number;
-  name: string;
-  code: string;
-  is_active: boolean;
-  requires_pin: boolean;
-  supports_partial: boolean;
-};
-
 
 
 const TABS = [
