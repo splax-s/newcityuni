@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import AdmissionsSidebar from "@/components/AdmissionsSidebar";
-import Image from "next/image";
 import { Send, ChevronRight } from "lucide-react";
 import { getAdmissionPayments } from "@/services/api";
 
@@ -46,18 +44,15 @@ const TABS = [
 ];
 
 export default function AdmissionsPaymentPage() {
-  const router = useRouter();
   const [records, setRecords] = useState<PaymentRecord[]>([]);
-  const [selectedMethod, setSelectedMethod] = useState<string>("paystack");
   const [selectedPane, setSelectedPane] = useState<"transaction" | "method">(
     "transaction"
   );
-  const [selectedPaymentType, setSelectedPaymentType] = useState<
-    "gateway" | "bank"
-  >("gateway");
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState<string>("all");
+  const [apiError, setApiError] = useState<string | null>(null);
+
 
   useEffect(() => {
     try {
@@ -77,35 +72,27 @@ export default function AdmissionsPaymentPage() {
   }, [records]);
 
   
-  useEffect(() => {
-    setLoading(true);
-    getAdmissionPayments()
-      .then((res) => {
-        // Handle single payment object or array
-        if (Array.isArray(res)) {
-          setPayments(res);
-        } else if (res) {
-          setPayments([res]);
-        }
-      })
-      .catch(() => {
+ useEffect(() => {
+  setLoading(true);
+  setApiError(null);
+  getAdmissionPayments()
+    .then((res) => {
+      if (res && typeof res === "object" && "id" in res && "amount" in res) {
+        setPayments([res]);
+      } else if (res && Array.isArray(res.available_payment_methods)) {
+        // No payment, only available methods
         setPayments([]);
-      })
-      .finally(() => setLoading(false));
-  }, []);
-
-  function addDemoPayment() {
-    const p: PaymentRecord = {
-      id: `${Date.now()}`,
-      method: selectedMethod,
-      amount: 50000,
-      date: new Date().toISOString(),
-      status: "pending",
-    };
-    setRecords((s) => [p, ...s]);
-    // route to step-5 which is the payment flow placeholder
-    router.push("/admissions/form/step-5");
-  }
+      } else {
+        setPayments([]);
+      }
+    })
+    .catch((err) => {
+      console.error("Error fetching payments:", err);
+      setPayments([]);
+      setApiError("No application found. Please start your application first.");
+    })
+    .finally(() => setLoading(false));
+}, []);
 
 
   const filteredPayments =
@@ -290,102 +277,52 @@ export default function AdmissionsPaymentPage() {
           ) : (
            <div className="bg-white border rounded shadow-sm p-6">
       <h4 className="font-semibold text-[#61213C] mb-3">Payment Status</h4>
-      {/* Check if user has a completed payment */}
-      {payments.some((p) => p.status === "completed") ? (
-        <div className="bg-green-50 border border-green-200 rounded p-4 mb-4">
-          <div className="flex items-center gap-3">
-            <span className="text-green-600 text-2xl">✔️</span>
-            <div>
-              <p className="font-semibold text-green-700 mb-1">Payment Completed</p>
-              <p className="text-sm text-green-800">
-                Thank you! Your payment has been received.
-              </p>
-              <div className="mt-2 text-xs text-gray-600">
-                {payments
-                  .filter((p) => p.status === "completed")
-                  .map((p) => (
-                    <div key={p.id} className="mb-2">
-                      <div>
-                        <span className="font-medium">{p.payment_method_display}</span>{" "}
-                        • {formatAmount(p.amount, p.currency)}
-                      </div>
-                      <div>
-                        Ref: <span className="text-gray-500">{p.payment_reference}</span>
-                      </div>
-                      <div>
-                        Date:{" "}
-                        <span className="text-gray-500">
-                          {new Date(p.completed_at || p.initiated_at).toLocaleString()}
-                        </span>
-                      </div>
-                    </div>
-                  ))}
-              </div>
-            </div>
-          </div>
-        </div>
-      ) : (
-        <>
-          <div className="mb-2">
-            <p className="text-gray-700 mb-3">Please select a payment method to complete your application fee:</p>
-            <div className="flex gap-2 mb-4">
-              <button
-                onClick={() => setSelectedPaymentType("gateway")}
-                className={`flex-1 px-3 py-2 rounded border ${
-                  selectedPaymentType === "gateway"
-                    ? "border-[#8B1C3D] bg-[#F4E6EA] text-[#8B1C3D]"
-                    : "border-gray-300 bg-white text-gray-700"
-                }`}
-              >
-                <div className="flex flex-col items-center justify-center gap-2">
-                  <Image src="/icons/link.svg" width={24} height={24} alt="Gateway icon" />
-                  <span className="text-sm font-medium">Payment Gateway</span>
+          {/* Check if user has a completed payment */}
+            {loading ? (
+          <div className="py-12 text-center text-gray-500">Loading...</div>
+        ) : apiError ? (
+          <div className="py-12 text-center text-sm text-gray-500">{apiError}</div>
+          ) : 
+          payments.some((p) => p.status === "completed") ? (
+            <div className="bg-green-50 border border-green-200 rounded p-4 mb-4">
+              <div className="flex items-center gap-3">
+                <span className="text-green-600 text-2xl">✔️</span>
+                <div>
+                  <p className="font-semibold text-green-700 mb-1">Payment Completed</p>
+                  <p className="text-sm text-green-800">
+                    Thank you! Your payment has been received.
+                  </p>
+                  <div className="mt-2 text-xs text-gray-600">
+                    {payments
+                      .filter((p) => p.status === "completed")
+                      .map((p) => (
+                        <div key={p.id} className="mb-2">
+                          <div>
+                            <span className="font-medium">{p.payment_method_display}</span>{" "}
+                            • {formatAmount(p.amount, p.currency)}
+                          </div>
+                          <div>
+                            Ref: <span className="text-gray-500">{p.payment_reference}</span>
+                          </div>
+                          <div>
+                            Date:{" "}
+                            <span className="text-gray-500">
+                              {new Date(p.completed_at || p.initiated_at).toLocaleString()}
+                            </span>
+                          </div>
+                        </div>
+                      ))}
+                  </div>
                 </div>
-              </button>
-            </div>
-           
-              <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
-                <button
-                  onClick={() => setSelectedMethod("paystack")}
-                  className={`flex items-center gap-3 p-3 rounded border ${
-                    selectedMethod === "paystack"
-                      ? "border-[#61213C] bg-[#FFF7F7]"
-                      : "hover:bg-gray-50"
-                  }`}
-                >
-                  <Image src="/paystack.svg" width={96} height={24} alt="Paystack" />
-                </button>
-                <button
-                  onClick={() => setSelectedMethod("flutterwave")}
-                  className={`flex items-center gap-3 p-3 rounded border ${
-                    selectedMethod === "flutterwave"
-                      ? "border-[#61213C] bg-[#FFF7F7]"
-                      : "hover:bg-gray-50"
-                  }`}
-                >
-                  <Image src="/flutterwave.svg" width={96} height={24} alt="Flutterwave" />
-                </button>
-                <button
-                  onClick={() => setSelectedMethod("remita")}
-                  className={`flex items-center gap-3 p-3 rounded border ${
-                    selectedMethod === "remita"
-                      ? "border-[#61213C] bg-[#FFF7F7]"
-                      : "hover:bg-gray-50"
-                  }`}
-                >
-                  <Image src="/remita.svg" width={96} height={24} alt="Remita" />
-                </button>
               </div>
-            
-            <button
-              onClick={addDemoPayment}
-              className="w-full bg-[#61213C] mt-5 text-white font-semibold py-3 rounded-md"
-            >
-              Proceed to pay
-            </button>
-          </div>
-        </>
-      )}
+            </div>
+          ) : (
+            <>
+             <div className="py-12 text-center text-sm text-gray-400">
+              No payment methods available at this time.
+            </div>
+            </>
+         )}
     </div>
           )}
         </aside>

@@ -359,7 +359,7 @@ export default function AdmissionsDashboardClient() {
               </div>
               <div className="flex flex-col">
                 <p className="font-medium text-gray-500">Deadline Date:</p>
-                <p className="text-gray-800">{deadlineDisplay ?? '22/10/2025'}</p>
+                <p className="text-gray-800">{deadlineDisplay ?? '—'}</p>
               </div>
             </div>
           </div>
