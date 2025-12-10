@@ -1,11 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import AdmissionsSidebar from "@/components/AdmissionsSidebar";
-import Image from "next/image";
 import { Send, ChevronRight } from "lucide-react";
 import { getAdmissionPayments } from "@/services/api";
 
@@ -46,15 +44,10 @@ const TABS = [
 ];
 
 export default function AdmissionsPaymentPage() {
-  const router = useRouter();
   const [records, setRecords] = useState<PaymentRecord[]>([]);
-  const [selectedMethod, setSelectedMethod] = useState<string>("paystack");
   const [selectedPane, setSelectedPane] = useState<"transaction" | "method">(
     "transaction"
   );
-  const [selectedPaymentType, setSelectedPaymentType] = useState<
-    "gateway" | "bank"
-  >("gateway");
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState<string>("all");
@@ -94,24 +87,12 @@ export default function AdmissionsPaymentPage() {
       }
     })
     .catch((err) => {
+      console.error("Error fetching payments:", err);
       setPayments([]);
       setApiError("No application found. Please start your application first.");
     })
     .finally(() => setLoading(false));
 }, []);
-
-  function addDemoPayment() {
-    const p: PaymentRecord = {
-      id: `${Date.now()}`,
-      method: selectedMethod,
-      amount: 50000,
-      date: new Date().toISOString(),
-      status: "pending",
-    };
-    setRecords((s) => [p, ...s]);
-    // route to step-5 which is the payment flow placeholder
-    router.push("/admissions/form/step-5");
-  }
 
 
   const filteredPayments =
