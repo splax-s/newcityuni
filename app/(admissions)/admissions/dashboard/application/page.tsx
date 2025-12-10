@@ -831,8 +831,8 @@ export default function AdmissionsDashboardApplicationPage() {
         </div>
       ) : (
         <div className="bg-white border rounded shadow-sm p-6">
-    {loading ? (
-      <div className="py-12 text-center text-gray-500">
+         {loading ? (
+            <div className="py-12 text-center text-gray-500">
         Loading application status...
               </div>
             ) : reviewData ? (
@@ -942,8 +942,8 @@ export default function AdmissionsDashboardApplicationPage() {
                 )}
               </>
             ) : (
-              <div className="py-12 text-center text-gray-500">
-                Failed to load application data.
+              <div className="py-12 text-center text-sm text-gray-500">
+                No application data found.
               </div>
             )}
           </div>
