@@ -71,25 +71,42 @@ export default function AdmissionsPaymentPage() {
   }, [records]);
 
   
+//  useEffect(() => {
+//   setLoading(true);
+//   getAdmissionPayments()
+//     .then((res) => {
+//       if (res && typeof res === "object" && "id" in res && "amount" in res) {
+//         setPayments([res]);
+//       } else if (res && Array.isArray(res.available_payment_methods)) {
+//         // No payment, only available methods
+//         setPayments([]);
+//       } else {
+//         setPayments([]);
+//       }
+//     })
+//     .catch((err: Error) => {
+//       console.error("Error fetching payments:", err);
+//       setPayments([]);
+//     })
+//     .finally(() => setLoading(false));
+// }, []);
+
  useEffect(() => {
-  setLoading(true);
-  getAdmissionPayments()
-    .then((res) => {
-      if (res && typeof res === "object" && "id" in res && "amount" in res) {
-        setPayments([res]);
-      } else if (res && Array.isArray(res.available_payment_methods)) {
-        // No payment, only available methods
+    setLoading(true);
+    getAdmissionPayments()
+      .then((res) => {
+        // Handle single payment object or array
+        if (Array.isArray(res)) {
+          setPayments(res);
+        } else if (res) {
+          setPayments([res]);
+        }
+      })
+      .catch(() => {
         setPayments([]);
-      } else {
-        setPayments([]);
-      }
-    })
-    .catch((err: Error) => {
-      console.error("Error fetching payments:", err);
-      setPayments([]);
-    })
-    .finally(() => setLoading(false));
-}, []);
+      })
+      .finally(() => setLoading(false));
+  }, []);
 
 
   const filteredPayments =
