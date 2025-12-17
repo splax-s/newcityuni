@@ -8,6 +8,8 @@ import { getUserName, getApplicationSummary, getAdmissionNotifications } from "@
 import { useAppSelector } from '../../../../store/hooks';
 import { useSearchParams } from 'next/navigation';
 import { programs } from '@/data/programs';
+import { getReviewSubmit } from "@/services/api";
+import { link } from "fs";
 
 
 type NotificationItem = {
@@ -20,6 +22,124 @@ type NotificationItem = {
   priority_display: string;
   is_read: boolean;
   created_at: string;
+};
+
+type ApplicationStep = {
+  id: number;
+  step_name: string;
+  step_display: string;
+  status: string;
+  status_display: string;
+  completed_at?: string;
+  notes?: string;
+};
+
+type UploadedDocument = {
+  name?: string;
+  url?: string;
+  status?: string;
+};
+
+type ProgramDetails = {
+  academic_level: string;
+  faculty: string;
+  department: string;
+  program_name: string;
+  mode_of_study: string;
+};
+
+type PersonalInfo = {
+  basic_information: {
+    first_name: string;
+    middle_name: string;
+    last_name: string;
+    phone: string;
+    email: string;
+    date_of_birth: string;
+  };
+  residency_information: {
+    address: string;
+    country: string;
+    state: string;
+    local_government_area: string;
+  };
+  state_of_origin_information: {
+    state: string;
+    local_government_area: string;
+    nationality: string;
+  };
+  health_information: {
+    blood_group: string;
+    gender: string;
+    genotype: string;
+    disability: string;
+    health_issue: string;
+  };
+  next_of_kin_information: {
+    full_name: string;
+    address: string;
+    phone: string;
+  };
+};
+
+type AcademicInfo = {
+  senior_secondary_school: {
+    school_name: string;
+    year_enrolled?: string;
+    year_completed?: string;
+    certificate?: string;
+  };
+  junior_secondary_school: {
+    school_name: string;
+    year_enrolled?: string;
+    year_completed?: string;
+    certificate?: string;
+  };
+  results: {
+    jamb: { subject: string; grade: string }[];
+    waec: { subject: string; grade: string }[];
+  };
+};
+
+type Payment = {
+  id: number;
+  amount: number;
+  currency: string;
+  payment_method: string;
+  payment_method_display: string;
+  status: string;
+  status_display: string;
+  transaction_id: string;
+  payment_reference: string;
+  payment_gateway: string;
+  initiated_at: string;
+  completed_at?: string;
+  failed_at?: string;
+  failure_reason: string;
+  receipt_url: string;
+  notes: string;
+};
+
+type ApplicationData = {
+  status: string;
+  status_display: string;
+  rejection_reason?: string;
+  steps: ApplicationStep[];
+  program_details: ProgramDetails;
+  personal_info: PersonalInfo;
+  academic_info: AcademicInfo;
+  uploaded_documents: UploadedDocument[];
+};
+
+type ReviewSubmitResponse = {
+  application_data: ApplicationData;
+  progress: {
+    completed_steps: number;
+    total_steps: number;
+    progress_percentage: number;
+  };
+  payment?: Payment;
+  payment_completed?: boolean;
 };
 
 export default function AdmissionsDashboardClient() {
@@ -35,6 +155,9 @@ export default function AdmissionsDashboardClient() {
   const searchParamsString = searchParams ? searchParams.toString() : '';
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [loadingNotifications, setLoadingNotifications] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
+  const [reviewData, setReviewData] = useState<ReviewSubmitResponse | null>(null);
+  
 
   // Initialize userName from Redux auth if available
   useEffect(() => {
@@ -58,6 +181,20 @@ export default function AdmissionsDashboardClient() {
     // otherwise leave existing effect to call API below
   }, [auth]);
 
+     // Fetch application data on mount
+    useEffect(() => {
+      setLoading(true);
+      getReviewSubmit()
+        .then((res) => {
+          setReviewData(res);
+        })
+        .catch((err) => {
+          console.error("Failed to fetch application data:", err);
+          setReviewData(null);
+        })
+        .finally(() => setLoading(false));
+    }, []);
+
   // derive selected program from query param (e.g. ?program=program-slug)
   useEffect(() => {
     try {
@@ -73,6 +210,46 @@ export default function AdmissionsDashboardClient() {
       // ignore if searchParams not available for some reason
     }
   }, [searchParamsString]);
+
+  const statusClass = (s: "completed" | "in_progress" | "not_started" | "unknown") => {
+  switch (s) {
+    case "completed": return "bg-green-100 text-green-800";
+    case "in_progress": return "bg-yellow-100 text-yellow-800";
+    case "not_started": return "bg-gray-100 text-gray-600";
+    default: return "bg-gray-100 text-gray-600";
+  }
+};
+
+
+// derive step status helper
+const stepStatus = (stepName: string) => {
+  const steps = reviewData?.application_data?.steps ?? [];
+  const step = steps.find((s) => s.step_name === stepName);
+  if (!step) return { statusLabel: "Not started", statusKey: "not_started" as const };
+  if (step.status === "completed") return { statusLabel: "Completed", statusKey: "completed" as const };
+  if (step.status === "pending" || step.status === "in_progress") return { statusLabel: "In Progress", statusKey: "in_progress" as const };
+  return { statusLabel: step.status_display ?? step.status ?? "Unknown", statusKey: "unknown" as const };
+};
+
+// overall progress helper (for "Complete Application" card)
+const overallStatus = () => {
+  const completed = reviewData?.progress?.completed_steps ?? 0;
+  const total = reviewData?.progress?.total_steps ?? 6;
+  if (completed >= total) return { statusLabel: "Completed", statusKey: "completed" as const };
+  if (completed === 0) return { statusLabel: "Not started", statusKey: "not_started" as const };
+  return { statusLabel: "In Progress", statusKey: "in_progress" as const };
+};
+
+  const getNextStepLink = (): string => {
+  const completed = reviewData?.progress?.completed_steps ?? 0;
+  const total = reviewData?.progress?.total_steps ?? 6;
+  if (completed >= total) {
+    // application complete — route to application summary/tracking
+    return "/admissions/dashboard/application";
+  }
+  const nextStep = Math.max(1, Math.min(completed + 1, total));
+  return `/admissions/form/step-${nextStep}`;
+};
 
   // If Redux doesn't have the selected program (e.g. after refresh), try localStorage
   useEffect(() => {
@@ -182,21 +359,25 @@ export default function AdmissionsDashboardClient() {
     {
       title: "Complete Application",
       desc: "Fill in your personal details, academic history, and program choices to begin your journey.",
-      status: "In Progress",
-      statusColor: "bg-yellow-100 text-yellow-800",
+      status: overallStatus().statusLabel,
+      statusColor: statusClass(overallStatus().statusKey),
       icon: "display-icon",
       iconn: "export",
-      link: "/admissions/form/step-1",
+      link: getNextStepLink(),
     },
     {
       title: "Upload Documents",
       desc: "Submit required documents such as transcripts, certificates, and identification.",
+      status: stepStatus("document_upload").statusLabel,
+      statusColor: statusClass(stepStatus("document_upload").statusKey),
       icon: "display-icon",
       iconn: "export",
     },
     {
       title: "Make Payment",
       desc: "Secure your application by paying the non-refundable admission fee.",
+      status: stepStatus("payment").statusLabel,
+      statusColor: statusClass(stepStatus("payment").statusKey),
       borderColor: "border-red-300",
       icon: "display-icon",
       iconn: "export",
@@ -206,6 +387,7 @@ export default function AdmissionsDashboardClient() {
       desc: "Monitor the progress of your application from submission to final decision.",
       icon: "display-icon",
       iconn: "export",
+      link: "/admissions/dashboard/application",
     },
     {
       title: "Support / Contact Admissions",
