@@ -51,7 +51,6 @@ export default function AdmissionsPaymentPage() {
   const [payments, setPayments] = useState<Payment[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedTab, setSelectedTab] = useState<string>("all");
-  const [apiError, setApiError] = useState<string | null>(null);
 
 
   useEffect(() => {
@@ -74,7 +73,6 @@ export default function AdmissionsPaymentPage() {
   
  useEffect(() => {
   setLoading(true);
-  setApiError(null);
   getAdmissionPayments()
     .then((res) => {
       if (res && typeof res === "object" && "id" in res && "amount" in res) {
@@ -89,7 +87,6 @@ export default function AdmissionsPaymentPage() {
     .catch((err: Error) => {
       console.error("Error fetching payments:", err);
       setPayments([]);
-      setApiError("No application found. Please start your application first.");
     })
     .finally(() => setLoading(false));
 }, []);
@@ -150,33 +147,12 @@ export default function AdmissionsPaymentPage() {
                 </div>
                 <ChevronRight className="w-4 h-4 text-gray-400" />
               </li>
-
-              <li
-                role="button"
-                tabIndex={0}
-                onClick={() => setSelectedPane("method")}
-                onKeyDown={(e) =>
-                  e.key === "Enter" && setSelectedPane("method")
-                }
-                className={`flex items-center justify-between px-3 py-2 hover:bg-gray-50 rounded cursor-pointer ${
-                  selectedPane === "method" ? "bg-gray-50" : ""
-                }`}
-              >
-                <div className="flex items-center gap-2">
-                  <span className="w-4 h-4 rounded-full border border-gray-400 flex items-center justify-center">
-                    💳
-                  </span>
-                  <span>Payment Method</span>
-                </div>
-                <ChevronRight className="w-4 h-4 text-gray-400" />
-              </li>
             </ul>
           </div>
         </main>
 
         {/* Right Section: conditional aside */}
         <aside className="md:col-span-5">
-          {selectedPane === "transaction" ? (
             <div className="bg-white border rounded shadow-sm p-6">
               <div className="flex items-center justify-between mb-4">
                 <h4 className="font-semibold text-black">Payment history</h4>
@@ -274,57 +250,6 @@ export default function AdmissionsPaymentPage() {
                 </ul>
               )}
             </div>
-          ) : (
-           <div className="bg-white border rounded shadow-sm p-6">
-      <h4 className="font-semibold text-[#61213C] mb-3">Payment Status</h4>
-          {/* Check if user has a completed payment */}
-            {loading ? (
-          <div className="py-12 text-center text-gray-500">Loading...</div>
-        ) : apiError ? (
-          <div className="py-12 text-center text-sm text-gray-500">{apiError}</div>
-          ) : 
-          payments.some((p) => p.status === "completed") ? (
-            <div className="bg-green-50 border border-green-200 rounded p-4 mb-4">
-              <div className="flex items-center gap-3">
-                <span className="text-green-600 text-2xl">✔️</span>
-                <div>
-                  <p className="font-semibold text-green-700 mb-1">Payment Completed</p>
-                  <p className="text-sm text-green-800">
-                    Thank you! Your payment has been received.
-                  </p>
-                  <div className="mt-2 text-xs text-gray-600">
-                    {payments
-                      .filter((p) => p.status === "completed")
-                      .map((p) => (
-                        <div key={p.id} className="mb-2">
-                          <div>
-                            <span className="font-medium">{p.payment_method_display}</span>{" "}
-                            • {formatAmount(p.amount, p.currency)}
-                          </div>
-                          <div>
-                            Ref: <span className="text-gray-500">{p.payment_reference}</span>
-                          </div>
-                          <div>
-                            Date:{" "}
-                            <span className="text-gray-500">
-                              {new Date(p.completed_at || p.initiated_at).toLocaleString()}
-                            </span>
-                          </div>
-                        </div>
-                      ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-          ) : (
-            <>
-             <div className="py-12 text-center text-sm text-gray-400">
-              No payment methods available at this time.
-            </div>
-            </>
-         )}
-    </div>
-          )}
         </aside>
       </div>
 
