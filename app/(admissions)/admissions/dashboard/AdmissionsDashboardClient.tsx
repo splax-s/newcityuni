@@ -9,7 +9,6 @@ import { useAppSelector } from '../../../../store/hooks';
 import { useSearchParams } from 'next/navigation';
 import { programs } from '@/data/programs';
 import { getReviewSubmit } from "@/services/api";
-import { link } from "fs";
 
 
 type NotificationItem = {
@@ -155,7 +154,6 @@ export default function AdmissionsDashboardClient() {
   const searchParamsString = searchParams ? searchParams.toString() : '';
   const [notifications, setNotifications] = useState<NotificationItem[]>([]);
   const [loadingNotifications, setLoadingNotifications] = useState<boolean>(true);
-  const [loading, setLoading] = useState(true);
   const [reviewData, setReviewData] = useState<ReviewSubmitResponse | null>(null);
   
 
@@ -183,7 +181,6 @@ export default function AdmissionsDashboardClient() {
 
      // Fetch application data on mount
     useEffect(() => {
-      setLoading(true);
       getReviewSubmit()
         .then((res) => {
           setReviewData(res);
@@ -192,7 +189,6 @@ export default function AdmissionsDashboardClient() {
           console.error("Failed to fetch application data:", err);
           setReviewData(null);
         })
-        .finally(() => setLoading(false));
     }, []);
 
   // derive selected program from query param (e.g. ?program=program-slug)
