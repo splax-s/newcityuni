@@ -86,7 +86,7 @@ export default function AdmissionsPaymentPage() {
         setPayments([]);
       }
     })
-    .catch((err) => {
+    .catch((err: Error) => {
       console.error("Error fetching payments:", err);
       setPayments([]);
       setApiError("No application found. Please start your application first.");
